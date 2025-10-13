@@ -1,0 +1,33 @@
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build
+dist/
+build/
+
+# WordPress
+wp-config.php
+.htaccess
+
+# SVN (WordPress.org deploy)
+svn-repo/
+.svn/
+
+# Temporary
+*.tmp
+*.bak
+*.swp
+*~
+
