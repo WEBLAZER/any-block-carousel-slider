@@ -1,4 +1,4 @@
-=== Block Carousel ===
+=== Native Blocks Carousel ===
 Contributors: weblazer
 Donate link: https://weblazer.github.io/
 Tags: carousel, blocks, gallery, slider, css
@@ -13,7 +13,7 @@ Transform any WordPress block into a responsive carousel with pure CSS. Zero Jav
 
 == Description ==
 
-**Block Carousel** is a lightweight plugin that adds carousel functionality to native WordPress blocks without creating custom blocks or adding unnecessary JavaScript.
+**Native Blocks Carousel** is a lightweight plugin that adds carousel functionality to native WordPress blocks without creating custom blocks or adding unnecessary JavaScript.
 
 = Caractéristiques principales =
 
@@ -55,14 +55,14 @@ Le plugin utilise les technologies CSS modernes :
 * `::scroll-marker` pour les indicateurs de position (expérimental)
 * CSS Variables pour la personnalisation automatique
 
-**Note** : Les boutons de navigation utilisent des fonctionnalités CSS expérimentales. Sur les navigateurs non compatibles, le carousel reste fonctionnel avec le défilement tactile/souris, mais sans les boutons visuels.
+**Note** : Les boutons de navigation utilisent des fonctionnalités CSS expérimentales (`::scroll-button`). Sur les navigateurs non compatibles, des boutons visuels inactifs s'affichent pour indiquer qu'il s'agit d'un carousel, et le défilement tactile/souris reste pleinement fonctionnel.
 
 == Installation ==
 
 = Installation automatique =
 
 1. Allez dans "Extensions" > "Ajouter"
-2. Search for "Block Carousel"
+2. Search for "Native Blocks Carousel"
 3. Cliquez sur "Installer" puis "Activer"
 
 = Installation manuelle =
@@ -184,7 +184,7 @@ Version initiale du plugin. Transformez vos blocs Gutenberg en carrousels perfor
 
 = GitHub Repository =
 
-Le code source est disponible sur GitHub : [https://github.com/WEBLAZER/block-carousel](https://github.com/WEBLAZER/block-carousel)
+Le code source est disponible sur GitHub : [https://github.com/WEBLAZER/native-blocks-carousel](https://github.com/WEBLAZER/native-blocks-carousel)
 
 = Contributions =
 

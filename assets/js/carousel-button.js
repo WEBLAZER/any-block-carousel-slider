@@ -1,6 +1,6 @@
 /**
  * Ajoute un bouton "Carousel" dans les paramètres des blocs Group, Post Template et Gallery
- * pour activer/désactiver facilement la classe .bc-carousel
+ * pour activer/désactiver facilement la classe .nbc-carousel
  */
 (function (wp) {
   const { addFilter } = wp.hooks;
@@ -69,20 +69,20 @@
         // Retirer toutes les classes carousel-* existantes (nouvelles ET anciennes)
         const filteredClasses = classArray.filter(
           (cls) =>
-            !cls.startsWith('bc-carousel-cols-') &&
-            cls !== 'bc-carousel-min-width' &&
+            !cls.startsWith('nbc-carousel-cols-') &&
+            cls !== 'nbc-carousel-min-width' &&
             // Retirer aussi les anciennes classes pour migration
             !cls.startsWith('carousel-cols-') &&
             cls !== 'carousel-min-width'
         );
 
         if (enabled) {
-          // Ajouter la classe 'bc-carousel' si elle n'existe pas
-          if (!filteredClasses.includes('bc-carousel')) {
-            filteredClasses.push('bc-carousel');
+          // Ajouter la classe 'nbc-carousel' si elle n'existe pas
+          if (!filteredClasses.includes('nbc-carousel')) {
+            filteredClasses.push('nbc-carousel');
           }
 
-          // Pour les grilles (Group et Post Template), détecter et ajouter la classe bc-carousel-cols-X
+          // Pour les grilles (Group et Post Template), détecter et ajouter la classe nbc-carousel-cols-X
           if (
             (name === 'core/group' || name === 'core/post-template') &&
             attributes.layout?.type === 'grid'
@@ -92,20 +92,20 @@
 
             // Si un nombre de colonnes est défini
             if (columnCount && columnCount >= 1 && columnCount <= 6) {
-              filteredClasses.push(`bc-carousel-cols-${columnCount}`);
+              filteredClasses.push(`nbc-carousel-cols-${columnCount}`);
             }
             // Si une largeur minimale est définie, ajouter une classe spéciale
             else if (minimumColumnWidth) {
-              filteredClasses.push('bc-carousel-min-width');
+              filteredClasses.push('nbc-carousel-min-width');
             }
             // Sinon, utiliser 3 colonnes par défaut
             else {
-              filteredClasses.push('bc-carousel-cols-3');
+              filteredClasses.push('nbc-carousel-cols-3');
             }
           }
         } else {
-          // Retirer la classe 'bc-carousel'
-          const index = filteredClasses.indexOf('bc-carousel');
+          // Retirer la classe 'nbc-carousel'
+          const index = filteredClasses.indexOf('nbc-carousel');
           if (index > -1) {
             filteredClasses.splice(index, 1);
           }
@@ -117,7 +117,7 @@
       };
 
       /**
-       * Synchroniser automatiquement la classe bc-carousel-cols-X
+       * Synchroniser automatiquement la classe nbc-carousel-cols-X
        * quand le nombre de colonnes Grid change
        */
       useEffect(() => {
@@ -130,11 +130,11 @@
           const currentClasses = attributes.className || '';
           const classArray = currentClasses.split(' ').filter(Boolean);
 
-          // Trouver les classes bc-carousel-* actuelles
+          // Trouver les classes nbc-carousel-* actuelles
           const currentColsClass = classArray.find((cls) =>
-            cls.startsWith('bc-carousel-cols-')
+            cls.startsWith('nbc-carousel-cols-')
           );
-          const hasMinWidthClass = classArray.includes('bc-carousel-min-width');
+          const hasMinWidthClass = classArray.includes('nbc-carousel-min-width');
 
           const columnCount = attributes.layout?.columnCount;
           const minimumColumnWidth = attributes.layout?.minimumColumnWidth;
@@ -144,7 +144,7 @@
 
           // Si un nombre de colonnes est défini
           if (columnCount && columnCount >= 1 && columnCount <= 6) {
-            expectedColsClass = `bc-carousel-cols-${columnCount}`;
+            expectedColsClass = `nbc-carousel-cols-${columnCount}`;
             shouldHaveMinWidthClass = false;
           }
           // Si une largeur minimale est définie
@@ -154,7 +154,7 @@
           }
           // Sinon, utiliser 3 colonnes par défaut
           else {
-            expectedColsClass = 'bc-carousel-cols-3';
+            expectedColsClass = 'nbc-carousel-cols-3';
             shouldHaveMinWidthClass = false;
           }
 
@@ -162,8 +162,8 @@
           if (currentColsClass !== expectedColsClass || hasMinWidthClass !== shouldHaveMinWidthClass) {
             const filteredClasses = classArray.filter(
               (cls) =>
-                !cls.startsWith('bc-carousel-cols-') &&
-                cls !== 'bc-carousel-min-width' &&
+                !cls.startsWith('nbc-carousel-cols-') &&
+                cls !== 'nbc-carousel-min-width' &&
                 // Retirer aussi les anciennes classes pour migration
                 !cls.startsWith('carousel-cols-') &&
                 cls !== 'carousel-min-width'
@@ -174,7 +174,7 @@
               filteredClasses.push(expectedColsClass);
             }
             if (shouldHaveMinWidthClass) {
-              filteredClasses.push('bc-carousel-min-width');
+              filteredClasses.push('nbc-carousel-min-width');
             }
 
             setAttributes({
@@ -198,26 +198,26 @@
           createElement(
             PanelBody,
             {
-              title: __('Carousel', 'block-carousel'),
+              title: __('Carousel', 'native-blocks-carousel'),
               initialOpen: true,
             },
             createElement(ToggleControl, {
-              label: __('Activer le carousel', 'block-carousel'),
+              label: __('Activer le carousel', 'native-blocks-carousel'),
               checked: carouselEnabled,
               onChange: toggleCarousel,
               help: carouselEnabled
                 ? (name === 'core/group' || name === 'core/post-template') && attributes.layout?.type === 'grid'
                   ? __(
                     'Le carousel est activé. Le nombre de colonnes visibles est détecté automatiquement depuis les paramètres de la grille.',
-                    'block-carousel'
+                    'native-blocks-carousel'
                   )
                   : __(
                     'Le carousel est activé. Les éléments défilent horizontalement.',
-                    'block-carousel'
+                    'native-blocks-carousel'
                   )
                 : __(
                   'Activez pour transformer ce bloc en carousel avec navigation.',
-                  'block-carousel'
+                  'native-blocks-carousel'
                 ),
             })
           )
@@ -294,19 +294,19 @@
   // Enregistrer les filtres
   addFilter(
     'blocks.registerBlockType',
-    'block-carousel/add-carousel-attribute',
+    'native-blocks-carousel/add-carousel-attribute',
     addCarouselAttribute
   );
 
   addFilter(
     'editor.BlockEdit',
-    'block-carousel/with-carousel-control',
+    'native-blocks-carousel/with-carousel-control',
     withCarouselControl
   );
 
   addFilter(
     'editor.BlockListBlock',
-    'block-carousel/with-carousel-styles',
+    'native-blocks-carousel/with-carousel-styles',
     withCarouselStyles
   );
 })(window.wp);

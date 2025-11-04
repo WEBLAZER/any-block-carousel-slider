@@ -1,11 +1,11 @@
 /**
- * Block Carousel - Styles CSS
+ * Native Blocks Carousel - Styles CSS
  *
- * Transform any WordPress block into a carousel with the .bc-carousel class
+ * Transform any WordPress block into a carousel with the .nbc-carousel class
  * Compatible with post loops and all WordPress blocks
  * Compatible with Block Editor and frontend
  *
- * @package BlockCarousel
+ * @package NativeBlocksCarousel
  * @version 1.0.1
  * @author weblazer35
  */
@@ -38,13 +38,13 @@
 /* Force TOUS les parents contenant un carousel à avoir position: relative */
 /* Nécessaire pour que ::scroll-button et ::scroll-marker se positionnent correctement */
 /* ::scroll-button semble se positionner par rapport à un ancêtre éloigné, pas au carousel lui-même */
-:has(.bc-carousel) {
+:has(.nbc-carousel) {
 	position: relative !important;
 }
 
-.bc-carousel,
-.block-editor-block-list__layout .bc-carousel,
-.editor-styles-wrapper .bc-carousel {
+.nbc-carousel,
+.block-editor-block-list__layout .nbc-carousel,
+.editor-styles-wrapper .nbc-carousel {
 	/* Layout */
 	position: relative !important;
 	width: 100%;
@@ -52,7 +52,6 @@
 	flex-flow: row nowrap;
 	align-items: stretch;
 	justify-content: flex-start;
-	/* gap: 0; */
 	gap: var(--wp--style--block-gap);
 	padding: 1rem 0;
 
@@ -83,9 +82,9 @@
    ÉLÉMENTS DU CAROUSEL
    ========================================================================== */
 
-.bc-carousel>*,
-.block-editor-block-list__layout .bc-carousel>*,
-.editor-styles-wrapper .bc-carousel>* {
+.nbc-carousel>*,
+.block-editor-block-list__layout .nbc-carousel>*,
+.editor-styles-wrapper .nbc-carousel>* {
 	/* Layout */
 	position: relative;
 	flex: 0 0 auto;
@@ -93,25 +92,24 @@
 	height: auto;
 
 	/* Scroll snap */
-	scroll-snap-align: center;
+	scroll-snap-align: start;
 	scroll-snap-stop: normal;
 
 	/* Spacing */
 	margin: 0 !important;
-	/* padding: calc(var(--wp--style--block-gap, 1rem) / 2); */
 	padding: 0;
 }
 
-.bc-carousel>*:first-child,
-.block-editor-block-list__layout .bc-carousel>*:first-child,
-.editor-styles-wrapper .bc-carousel>*:first-child {
+.nbc-carousel>*:first-child,
+.block-editor-block-list__layout .nbc-carousel>*:first-child,
+.editor-styles-wrapper .nbc-carousel>*:first-child {
 	scroll-snap-align: center;
 }
 
 /* Arrière-plans */
-.bc-carousel .has-background,
-.block-editor-block-list__layout .bc-carousel .has-background,
-.editor-styles-wrapper .bc-carousel .has-background {
+.nbc-carousel .has-background,
+.block-editor-block-list__layout .nbc-carousel .has-background,
+.editor-styles-wrapper .nbc-carousel .has-background {
 	height: 100%;
 }
 
@@ -120,29 +118,29 @@
    ========================================================================== */
 
 /* Désactiver le flex-wrap et le système de colonnes de la galerie */
-.wp-block-gallery.bc-carousel,
-.block-editor-block-list__layout .wp-block-gallery.bc-carousel,
-.editor-styles-wrapper .wp-block-gallery.bc-carousel {
+.wp-block-gallery.nbc-carousel,
+.block-editor-block-list__layout .wp-block-gallery.nbc-carousel,
+.editor-styles-wrapper .wp-block-gallery.nbc-carousel {
 	flex-wrap: nowrap !important;
 	columns: auto !important;
 }
 
 /* Chaque figure dans la galerie carousel */
-.wp-block-gallery.bc-carousel>.wp-block-image,
-.block-editor-block-list__layout .wp-block-gallery.bc-carousel>.wp-block-image,
-.editor-styles-wrapper .wp-block-gallery.bc-carousel>.wp-block-image {
+.wp-block-gallery.nbc-carousel>.wp-block-image,
+.block-editor-block-list__layout .wp-block-gallery.nbc-carousel>.wp-block-image,
+.editor-styles-wrapper .wp-block-gallery.nbc-carousel>.wp-block-image {
 	flex: 0 0 auto;
 	/* Largeur par défaut : 6 images visibles sur desktop large (> 1280px) */
 	width: calc(16.666% - var(--wp--style--block-gap, 1rem) * 5 / 6);
 	min-width: calc(16.666% - var(--wp--style--block-gap, 1rem) * 5 / 6);
 	max-width: 100%;
-	scroll-snap-align: center;
+	scroll-snap-align: start;
 }
 
 /* Images dans la galerie carousel */
-.wp-block-gallery.bc-carousel>.wp-block-image img,
-.block-editor-block-list__layout .wp-block-gallery.bc-carousel>.wp-block-image img,
-.editor-styles-wrapper .wp-block-gallery.bc-carousel>.wp-block-image img {
+.wp-block-gallery.nbc-carousel>.wp-block-image img,
+.block-editor-block-list__layout .wp-block-gallery.nbc-carousel>.wp-block-image img,
+.editor-styles-wrapper .wp-block-gallery.nbc-carousel>.wp-block-image img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
@@ -153,9 +151,9 @@
    ========================================================================== */
 
 /* Convertir le CSS Grid en Flexbox pour le carousel */
-.is-layout-grid.bc-carousel,
-.block-editor-block-list__layout .is-layout-grid.bc-carousel,
-.editor-styles-wrapper .is-layout-grid.bc-carousel {
+.is-layout-grid.nbc-carousel,
+.block-editor-block-list__layout .is-layout-grid.nbc-carousel,
+.editor-styles-wrapper .is-layout-grid.nbc-carousel {
 	display: flex !important;
 	grid-template-columns: none !important;
 	flex-wrap: nowrap !important;
@@ -164,9 +162,9 @@
 /* Éléments enfants dans une grille carousel */
 /* Les grilles en carousel affichent les éléments avec une largeur fixe */
 /* Utilisez --carousel-grid-item-width pour personnaliser */
-.is-layout-grid.bc-carousel>*,
-.block-editor-block-list__layout .is-layout-grid.bc-carousel>*,
-.editor-styles-wrapper .is-layout-grid.bc-carousel>* {
+.is-layout-grid.nbc-carousel>*,
+.block-editor-block-list__layout .is-layout-grid.nbc-carousel>*,
+.editor-styles-wrapper .is-layout-grid.nbc-carousel>* {
 	flex: 0 0 auto;
 	/* Largeur par défaut : adapté pour 3 colonnes visibles */
 	width: var(--carousel-grid-item-width, calc(33.333% - var(--wp--style--block-gap, 1rem) * 2 / 3));
@@ -175,60 +173,72 @@
 }
 
 /* Grid Item Position - Respecter grid-column span */
-.is-layout-grid.bc-carousel>*[style*="grid-column-end:span 2"],
-.is-layout-grid.bc-carousel>*[style*="grid-column:span 2"] {
+.is-layout-grid.nbc-carousel>*[style*="grid-column-end:span 2"],
+.is-layout-grid.nbc-carousel>*[style*="grid-column:span 2"] {
 	width: calc(var(--carousel-grid-item-width, 33.333%) * 2 + var(--wp--style--block-gap, 1rem)) !important;
 }
 
-.is-layout-grid.bc-carousel>*[style*="grid-column-end:span 3"],
-.is-layout-grid.bc-carousel>*[style*="grid-column:span 3"] {
+.is-layout-grid.nbc-carousel>*[style*="grid-column-end:span 3"],
+.is-layout-grid.nbc-carousel>*[style*="grid-column:span 3"] {
 	width: calc(var(--carousel-grid-item-width, 33.333%) * 3 + var(--wp--style--block-gap, 1rem) * 2) !important;
 }
 
-.is-layout-grid.bc-carousel>*[style*="grid-column-end:span 4"],
-.is-layout-grid.bc-carousel>*[style*="grid-column:span 4"] {
+.is-layout-grid.nbc-carousel>*[style*="grid-column-end:span 4"],
+.is-layout-grid.nbc-carousel>*[style*="grid-column:span 4"] {
 	width: calc(var(--carousel-grid-item-width, 33.333%) * 4 + var(--wp--style--block-gap, 1rem) * 3) !important;
 }
 
 /* Classes helper pour définir le nombre de colonnes visibles dans le carousel Grid */
 /* Ajoutez ces classes au bloc Grid pour contrôler la largeur des éléments */
 
-/* bc-carousel-cols-1 : 1 élément visible (pleine largeur) */
-.is-layout-grid.bc-carousel.bc-carousel-cols-1>* {
+/* nbc-carousel-cols-1 : 1 élément visible (pleine largeur) */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-1>* {
 	--carousel-grid-item-width: 100%;
+	width: 100%;
+	min-width: 100%;
 }
 
-/* bc-carousel-cols-2 : 2 éléments visibles */
-.is-layout-grid.bc-carousel.bc-carousel-cols-2>* {
+/* nbc-carousel-cols-2 : 2 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-2>* {
 	--carousel-grid-item-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2);
+	width: calc(50% - var(--wp--style--block-gap, 1rem) / 2);
+	min-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2);
 }
 
-/* bc-carousel-cols-3 : 3 éléments visibles (par défaut) */
-.is-layout-grid.bc-carousel.bc-carousel-cols-3>* {
+/* nbc-carousel-cols-3 : 3 éléments visibles (par défaut) */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-3>* {
 	--carousel-grid-item-width: calc(33.333% - var(--wp--style--block-gap, 1rem) * 2 / 3);
+	width: calc(33.333% - var(--wp--style--block-gap, 1rem) * 2 / 3);
+	min-width: calc(33.333% - var(--wp--style--block-gap, 1rem) * 2 / 3);
 }
 
-/* bc-carousel-cols-4 : 4 éléments visibles */
-.is-layout-grid.bc-carousel.bc-carousel-cols-4>* {
+/* nbc-carousel-cols-4 : 4 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-4>* {
 	--carousel-grid-item-width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4);
+	width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4);
+	min-width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4);
 }
 
-/* bc-carousel-cols-5 : 5 éléments visibles */
-.is-layout-grid.bc-carousel.bc-carousel-cols-5>* {
+/* nbc-carousel-cols-5 : 5 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-5>* {
 	--carousel-grid-item-width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5);
+	width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5);
+	min-width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5);
 }
 
-/* bc-carousel-cols-6 : 6 éléments visibles */
-.is-layout-grid.bc-carousel.bc-carousel-cols-6>* {
+/* nbc-carousel-cols-6 : 6 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-6>* {
 	--carousel-grid-item-width: calc(16.666% - var(--wp--style--block-gap, 1rem) * 5 / 6);
+	width: calc(16.666% - var(--wp--style--block-gap, 1rem) * 5 / 6);
+	min-width: calc(16.666% - var(--wp--style--block-gap, 1rem) * 5 / 6);
 }
 
-/* bc-carousel-min-width : Utiliser la largeur minimale définie dans le Grid */
+/* nbc-carousel-min-width : Utiliser la largeur minimale définie dans le Grid */
 /* WordPress génère : grid-template-columns: repeat(auto-fill, minmax(XXXpx, 1fr)) */
 /* On doit extraire cette valeur et l'utiliser comme min-width en mode Flexbox */
-.is-layout-grid.bc-carousel.bc-carousel-min-width>*,
-.block-editor-block-list__layout .is-layout-grid.bc-carousel.bc-carousel-min-width>*,
-.editor-styles-wrapper .is-layout-grid.bc-carousel.bc-carousel-min-width>* {
+.is-layout-grid.nbc-carousel.nbc-carousel-min-width>*,
+.block-editor-block-list__layout .is-layout-grid.nbc-carousel.nbc-carousel-min-width>*,
+.editor-styles-wrapper .is-layout-grid.nbc-carousel.nbc-carousel-min-width>* {
 	/* Largeur flexible avec minimum respecté */
 	flex: 1 1 auto;
 	width: auto;
@@ -241,8 +251,57 @@
    BOUTONS DE NAVIGATION (CSS natif futur)
    ========================================================================== */
 
+/* Fallback : Boutons visuels inactifs pour navigateurs non compatibles */
+/* Ces boutons indiquent visuellement qu'il s'agit d'un carousel */
+/* Ils sont positionnés sur le parent pour rester fixes pendant le scroll */
+/* Ils seront masqués sur les navigateurs qui supportent ::scroll-button */
+:has(> .nbc-carousel)::before,
+:has(> .nbc-carousel)::after {
+	content: '';
+	position: absolute;
+	z-index: var(--carousel-z-index);
+	top: 50%;
+	width: var(--carousel-button-size);
+	height: var(--carousel-button-size);
+	border-radius: 100rem;
+	
+	/* Apparence inactive (grisée) */
+	background-color: var(--carousel-button-bg);
+	border: 2px solid var(--carousel-button-bg);
+	opacity: 0.3;
+	
+	/* Effets */
+	box-shadow: var(--carousel-shadow);
+	pointer-events: none;
+	
+	/* Préparer pour SVG */
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 40% 40%;
+}
+
+/* Bouton gauche fallback - Chevron SVG */
+:has(> .nbc-carousel)::before {
+	left: var(--carousel-button-offset);
+	transform: translate(50%, -50%);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='white' d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z'/%3E%3C/svg%3E");
+}
+
+/* Bouton droit fallback - Chevron SVG */
+:has(> .nbc-carousel)::after {
+	right: var(--carousel-button-offset);
+	transform: translate(-50%, -50%);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='white' d='M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z'/%3E%3C/svg%3E");
+}
+
+/* Sur les navigateurs compatibles, masquer les fallbacks et afficher les vrais boutons */
 @supports selector(::scroll-button(*)) {
-	.bc-carousel::scroll-button(*) {
+	/* Masquer les boutons fallback */
+	:has(> .nbc-carousel)::before,
+	:has(> .nbc-carousel)::after {
+		display: none;
+	}
+	.nbc-carousel::scroll-button(*) {
 		position: absolute;
 		z-index: var(--carousel-z-index);
 		top: 50%;
@@ -270,19 +329,19 @@
 		overflow: hidden;
 	}
 
-	.bc-carousel::scroll-button(*):hover {
+	.nbc-carousel::scroll-button(*):hover {
 		box-shadow: var(--carousel-shadow), 0 6px 20px rgba(0, 0, 0, 0.2);
 		background-color: var(--carousel-button-bg);
 		filter: brightness(1.1);
 	}
 
-	.bc-carousel::scroll-button(*):disabled {
+	.nbc-carousel::scroll-button(*):disabled {
 		opacity: 0.5;
 		cursor: default;
 	}
 
 	/* Bouton gauche - Chevron SVG */
-	.bc-carousel::scroll-button(left) {
+	.nbc-carousel::scroll-button(left) {
 		left: var(--carousel-button-offset);
 		content: '';
 		transform: translate(50%, -50%);
@@ -293,7 +352,7 @@
 	}
 
 	/* Bouton droit - Chevron SVG */
-	.bc-carousel::scroll-button(right) {
+	.nbc-carousel::scroll-button(right) {
 		right: var(--carousel-button-offset);
 		content: '';
 		transform: translate(-50%, -50%);
@@ -309,7 +368,7 @@
    ========================================================================== */
 
 @supports selector(::scroll-marker-group) {
-	.bc-carousel::scroll-marker-group {
+	.nbc-carousel::scroll-marker-group {
 		position: absolute;
 		z-index: var(--carousel-z-index);
 		bottom: var(--carousel-marker-bottom-offset);
@@ -323,7 +382,7 @@
 }
 
 @supports selector(::scroll-marker) {
-	.bc-carousel>*::scroll-marker {
+	.nbc-carousel>*::scroll-marker {
 		position: relative;
 		content: '';
 		width: var(--carousel-marker-size);
@@ -336,99 +395,177 @@
 		cursor: pointer;
 	}
 
-	.bc-carousel>*::scroll-marker:hover {
+	.nbc-carousel>*::scroll-marker:hover {
 		opacity: 0.75;
 	}
 
-	.bc-carousel>*::scroll-marker:target-current {
+	.nbc-carousel>*::scroll-marker:target-current {
 		opacity: 1;
 		cursor: default;
 	}
 }
 
 /* ==========================================================================
-   RESPONSIVE
+   RESPONSIVE DESIGN - HARMONISATION AVEC WORDPRESS
    ========================================================================== */
 
 /* 
- * Système responsive pour les carousels
- * Adapte automatiquement le nombre de colonnes visibles selon la taille d'écran
- * Breakpoints inspirés de WordPress et des standards web
- */
+   Règles basées sur l'analyse des fichiers CSS WordPress :
+   - Breakpoint principal : 600px (mobile/tablette)
+   - Breakpoint secondaire : 782px (tablette/desktop)
+   - Comportement identique aux blocs WordPress natifs
+*/
 
-/* Desktop Large (> 1400px) : comportement par défaut */
-/* Aucune modification nécessaire */
+/* ==========================================================================
+   POST TEMPLATE - Comportement identique à WordPress
+   ========================================================================== */
 
-/* Desktop Standard (< 1280px) */
-@media (max-width: 1280px) {
+/* Mobile (par défaut) - 1 colonne */
+.wp-block-post-template.is-layout-grid.nbc-carousel .wp-block-post {
+	width: 100% !important;
+	min-width: 100% !important;
+}
 
-	/* Limiter les carousels à 5 colonnes max */
-	.is-layout-grid.bc-carousel.bc-carousel-cols-6>* {
-		--carousel-grid-item-width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5);
+/* À partir de 600px - Comportement selon le nombre de colonnes */
+@media (min-width: 600px) {
+	/* 2 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-2 .wp-block-post {
+		width: calc(50% - var(--wp--style--block-gap, 1.25em) / 2) !important;
+		min-width: calc(50% - var(--wp--style--block-gap, 1.25em) / 2) !important;
 	}
 
-	/* Galeries : 5 images visibles sur desktop standard */
-	.wp-block-gallery.bc-carousel>.wp-block-image {
-		width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5);
-		min-width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5);
+	/* 3 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-3 .wp-block-post {
+		width: calc(33.33333% - var(--wp--style--block-gap, 1.25em) * 2 / 3) !important;
+		min-width: calc(33.33333% - var(--wp--style--block-gap, 1.25em) * 2 / 3) !important;
+	}
+
+	/* 4 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-4 .wp-block-post {
+		width: calc(25% - var(--wp--style--block-gap, 1.25em) * 3 / 4) !important;
+		min-width: calc(25% - var(--wp--style--block-gap, 1.25em) * 3 / 4) !important;
+	}
+
+	/* 5 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-5 .wp-block-post {
+		width: calc(20% - var(--wp--style--block-gap, 1.25em) * 4 / 5) !important;
+		min-width: calc(20% - var(--wp--style--block-gap, 1.25em) * 4 / 5) !important;
+	}
+
+	/* 6 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-6 .wp-block-post {
+		width: calc(16.66667% - var(--wp--style--block-gap, 1.25em) * 5 / 6) !important;
+		min-width: calc(16.66667% - var(--wp--style--block-gap, 1.25em) * 5 / 6) !important;
 	}
 }
 
-/* Tablette Paysage (< 1024px) */
-@media (max-width: 1024px) {
-
-	/* Limiter les carousels à 4 colonnes max */
-	.is-layout-grid.bc-carousel.bc-carousel-cols-6>*,
-	.is-layout-grid.bc-carousel.bc-carousel-cols-5>* {
-		--carousel-grid-item-width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4);
-	}
-
-	/* Galeries : 4 images visibles sur tablette paysage */
-	.wp-block-gallery.bc-carousel>.wp-block-image {
-		width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4);
-		min-width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4);
+/* Règle spéciale du thème weblazer pour tablette */
+@media (min-width: 600px) and (max-width: 1200px) {
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-4 .wp-block-post {
+		width: calc(50% - var(--wp--style--block-gap, 1.25em) / 2) !important;
+		min-width: calc(50% - var(--wp--style--block-gap, 1.25em) / 2) !important;
 	}
 }
 
-/* Tablette Portrait / Petit Desktop (< 782px) - Breakpoint WordPress Admin */
+/* ==========================================================================
+   GALLERY - Comportement identique à WordPress
+   ========================================================================== */
+
+/* Mobile (par défaut) - 2 colonnes pour les galeries */
+.wp-block-gallery.nbc-carousel .wp-block-image {
+	width: calc(50% - var(--wp--style--unstable-gallery-gap, 16px) / 2) !important;
+	min-width: calc(50% - var(--wp--style--unstable-gallery-gap, 16px) / 2) !important;
+}
+
+/* À partir de 600px - Comportement selon le nombre de colonnes */
+@media (min-width: 600px) {
+	/* 1 colonne */
+	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-1 .wp-block-image {
+		width: 100% !important;
+		min-width: 100% !important;
+	}
+
+	/* 3 colonnes */
+	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-3 .wp-block-image {
+		width: calc(33.33333% - var(--wp--style--unstable-gallery-gap, 16px) * 2 / 3) !important;
+		min-width: calc(33.33333% - var(--wp--style--unstable-gallery-gap, 16px) * 2 / 3) !important;
+	}
+
+	/* 4 colonnes */
+	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-4 .wp-block-image {
+		width: calc(25% - var(--wp--style--unstable-gallery-gap, 16px) * 3 / 4) !important;
+		min-width: calc(25% - var(--wp--style--unstable-gallery-gap, 16px) * 3 / 4) !important;
+	}
+
+	/* 5 colonnes */
+	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-5 .wp-block-image {
+		width: calc(20% - var(--wp--style--unstable-gallery-gap, 16px) * 4 / 5) !important;
+		min-width: calc(20% - var(--wp--style--unstable-gallery-gap, 16px) * 4 / 5) !important;
+	}
+
+	/* 6 colonnes */
+	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-6 .wp-block-image {
+		width: calc(16.66667% - var(--wp--style--unstable-gallery-gap, 16px) * 5 / 6) !important;
+		min-width: calc(16.66667% - var(--wp--style--unstable-gallery-gap, 16px) * 5 / 6) !important;
+	}
+}
+
+/* ==========================================================================
+   GROUP - Comportement identique à WordPress
+   ========================================================================== */
+
+/* Mobile (par défaut) - 1 colonne */
+.wp-block-group.is-layout-grid.nbc-carousel>* {
+	width: 100% !important;
+	min-width: 100% !important;
+}
+
+/* À partir de 600px - Comportement selon le nombre de colonnes */
+@media (min-width: 600px) {
+	/* 2 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-2>* {
+		width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
+		min-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
+	}
+
+	/* 3 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-3>* {
+		width: calc(33.33333% - var(--wp--style--block-gap, 1rem) * 2 / 3) !important;
+		min-width: calc(33.33333% - var(--wp--style--block-gap, 1rem) * 2 / 3) !important;
+	}
+
+	/* 4 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-4>* {
+		width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4) !important;
+		min-width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4) !important;
+	}
+
+	/* 5 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-5>* {
+		width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5) !important;
+		min-width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5) !important;
+	}
+
+	/* 6 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-6>* {
+		width: calc(16.66667% - var(--wp--style--block-gap, 1rem) * 5 / 6) !important;
+		min-width: calc(16.66667% - var(--wp--style--block-gap, 1rem) * 5 / 6) !important;
+	}
+}
+
+/* ==========================================================================
+   OPTIMISATIONS RESPONSIVE
+   ========================================================================== */
+
+/* Ajustements des boutons et marqueurs selon la taille d'écran */
 @media (max-width: 782px) {
 	:root {
 		--carousel-button-size: 2.75rem;
 		--carousel-button-offset: 0.5rem;
 		--carousel-marker-size: 0.5rem;
 	}
-
-	/* Limiter les carousels à 3 colonnes max */
-	.is-layout-grid.bc-carousel.bc-carousel-cols-6>*,
-	.is-layout-grid.bc-carousel.bc-carousel-cols-5>*,
-	.is-layout-grid.bc-carousel.bc-carousel-cols-4>* {
-		--carousel-grid-item-width: calc(33.333% - var(--wp--style--block-gap, 1rem) * 2 / 3);
-	}
-
-	/* Carousels standards : afficher environ 1.5-2 items */
-	.bc-carousel:not(.is-layout-grid)>* {
-		min-width: 60%;
-		width: 60%;
-	}
-
-	/* Galeries : 2 images visibles sur tablette */
-	.wp-block-gallery.bc-carousel>.wp-block-image {
-		width: calc(50% - var(--wp--style--block-gap, 1rem) / 2);
-		min-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2);
-	}
-
-	/* Carousels avec min-width : limiter à max 2-3 colonnes */
-	.is-layout-grid.bc-carousel.bc-carousel-min-width>* {
-		min-width: min(var(--carousel-min-width, 200px), 45%);
-	}
-
-	/* Réduire le gap pour les petits écrans si aucun gap n'est défini */
-	.bc-carousel {
-		gap: var(--wp--style--block-gap, 0.75rem);
-	}
 }
 
-/* Mobile Paysage / Grande Tablette Portrait (< 600px) - Breakpoint WordPress Mobile */
 @media (max-width: 600px) {
 	:root {
 		--carousel-button-size: 2.5rem;
@@ -437,47 +574,13 @@
 		--carousel-marker-gap: 0.4rem;
 	}
 
-	/* Limiter les carousels à 2 colonnes max */
-	.is-layout-grid.bc-carousel.bc-carousel-cols-6>*,
-	.is-layout-grid.bc-carousel.bc-carousel-cols-5>*,
-	.is-layout-grid.bc-carousel.bc-carousel-cols-4>*,
-	.is-layout-grid.bc-carousel.bc-carousel-cols-3>* {
-		--carousel-grid-item-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2);
-	}
-
-	/* Items par défaut en pleine largeur sauf si spécifié */
-	.bc-carousel:not(.is-layout-grid)>* {
-		width: 100%;
-		min-width: 85%;
-		max-width: 100%;
-	}
-
-	/* Garder 2 colonnes pour les grilles explicites */
-	.is-layout-grid.bc-carousel>* {
-		width: var(--carousel-grid-item-width, calc(50% - var(--wp--style--block-gap, 1rem) / 2));
-		min-width: var(--carousel-grid-item-width, calc(50% - var(--wp--style--block-gap, 1rem) / 2));
-	}
-
-	/* Galeries : 1 image visible (pleine largeur) sur mobile paysage */
-	.wp-block-gallery.bc-carousel>.wp-block-image {
-		width: 100%;
-		min-width: 100%;
-		max-width: 100%;
-	}
-
-	/* Carousels avec min-width : limiter à max 2 colonnes */
-	.is-layout-grid.bc-carousel.bc-carousel-min-width>* {
-		min-width: min(var(--carousel-min-width, 200px), 50%);
-	}
-
 	/* Réduire le gap pour mobile */
-	.bc-carousel {
+	.nbc-carousel {
 		gap: var(--wp--style--block-gap, 0.5rem);
 		padding: 0.75rem 0;
 	}
 }
 
-/* Mobile Portrait (< 480px) */
 @media (max-width: 480px) {
 	:root {
 		--carousel-button-size: 2rem;
@@ -487,54 +590,17 @@
 		--carousel-marker-bottom-offset: -1rem;
 	}
 
-	/* Forcer 1 colonne pour tous les carousels en mode mobile portrait */
-	.is-layout-grid.bc-carousel>*,
-	.is-layout-grid.bc-carousel.bc-carousel-cols-6>*,
-	.is-layout-grid.bc-carousel.bc-carousel-cols-5>*,
-	.is-layout-grid.bc-carousel.bc-carousel-cols-4>*,
-	.is-layout-grid.bc-carousel.bc-carousel-cols-3>*,
-	.is-layout-grid.bc-carousel.bc-carousel-cols-2>* {
-		--carousel-grid-item-width: 100%;
-		width: 100%;
-		min-width: 100%;
-	}
-
-	/* Items en pleine largeur */
-	.bc-carousel>* {
-		width: 100%;
-		min-width: 100%;
-	}
-
-	/* Carousels avec min-width : forcer 1 colonne */
-	.is-layout-grid.bc-carousel.bc-carousel-min-width>* {
-		min-width: 100%;
-		width: 100%;
-	}
-
 	/* Réduire encore le gap */
-	.bc-carousel {
+	.nbc-carousel {
 		gap: var(--wp--style--block-gap, 0.25rem);
 		padding: 0.5rem 0;
 	}
-
-	/* Optionnel : masquer les boutons sur très petits écrans si désiré */
-	/* .bc-carousel::scroll-button(*) {
-		display: none;
-	} */
 }
 
-/* Mobile Très Petit (< 375px) - iPhone SE, etc. */
 @media (max-width: 375px) {
 	:root {
 		--carousel-button-size: 1.75rem;
 		--carousel-marker-size: 0.35rem;
-	}
-
-	/* S'assurer que tout est bien en 1 colonne */
-	.bc-carousel>*,
-	.is-layout-grid.bc-carousel>* {
-		width: 100% !important;
-		min-width: 100% !important;
 	}
 }
 
@@ -543,43 +609,43 @@
    ========================================================================== */
 
 /* Toggle Control */
-.cfg-bc-carousel-toggle-control {
+.cfg-nbc-carousel-toggle-control {
 	margin-bottom: 1rem;
 }
 
-.cfg-bc-carousel-toggle-control .components-base-control__label {
+.cfg-nbc-carousel-toggle-control .components-base-control__label {
 	font-weight: 600;
 	color: #1e1e1e;
 }
 
-.cfg-bc-carousel-toggle-control .components-base-control__help {
+.cfg-nbc-carousel-toggle-control .components-base-control__help {
 	font-size: 12px;
 	color: #757575;
 	margin-top: 4px;
 }
 
-.cfg-bc-carousel-toggle-control .components-toggle-control__label[for*="carousel"] {
+.cfg-nbc-carousel-toggle-control .components-toggle-control__label[for*="carousel"] {
 	color: #007cba;
 	font-weight: 600;
 }
 
 /* Panel Carousel */
-.cfg-bc-carousel-panel .components-panel__body-title {
+.cfg-nbc-carousel-panel .components-panel__body-title {
 	font-weight: 600;
 }
 
-.cfg-bc-carousel-panel-first {
+.cfg-nbc-carousel-panel-first {
 	order: -1000 !important;
 }
 
-.block-editor-block-inspector .cfg-bc-carousel-panel-first {
+.block-editor-block-inspector .cfg-nbc-carousel-panel-first {
 	order: -1000 !important;
 	margin-bottom: 16px;
 }
 
 /* Correction clics éditeur */
-.block-editor-block-list__layout .bc-carousel>*:not(:first-child),
-.editor-styles-wrapper .bc-carousel>*:not(:first-child) {
+.block-editor-block-list__layout .nbc-carousel>*:not(:first-child),
+.editor-styles-wrapper .nbc-carousel>*:not(:first-child) {
 	pointer-events: none;
 }
 
@@ -588,17 +654,17 @@
    ========================================================================== */
 
 /* Optimisation du rendu */
-.bc-carousel,
-.block-editor-block-list__layout .bc-carousel,
-.editor-styles-wrapper .bc-carousel {
+.nbc-carousel,
+.block-editor-block-list__layout .nbc-carousel,
+.editor-styles-wrapper .nbc-carousel {
 	will-change: scroll-position;
 	contain: layout style;
 }
 
 /* Optimisation des éléments */
-.bc-carousel>*,
-.block-editor-block-list__layout .bc-carousel>*,
-.editor-styles-wrapper .bc-carousel>* {
+.nbc-carousel>*,
+.block-editor-block-list__layout .nbc-carousel>*,
+.editor-styles-wrapper .nbc-carousel>* {
 	will-change: transform;
 }
 
@@ -609,30 +675,30 @@
 /* Respect des préférences de mouvement réduit */
 @media (prefers-reduced-motion: reduce) {
 
-	.bc-carousel,
-	.block-editor-block-list__layout .bc-carousel,
-	.editor-styles-wrapper .bc-carousel {
+	.nbc-carousel,
+	.block-editor-block-list__layout .nbc-carousel,
+	.editor-styles-wrapper .nbc-carousel {
 		scroll-behavior: auto;
 	}
 
-	.bc-carousel::scroll-button(*),
-	*:has(>.bc-carousel)::before,
-	*:has(>.bc-carousel)::after {
+	.nbc-carousel::scroll-button(*),
+	*:has(>.nbc-carousel)::before,
+	*:has(>.nbc-carousel)::after {
 		transition: none;
 	}
 
-	.bc-carousel>*::scroll-marker {
+	.nbc-carousel>*::scroll-marker {
 		transition: none;
 	}
 }
 
 /* Mode sombre (si supporté par le thème) */
 @media (prefers-color-scheme: dark) {
-	.cfg-bc-carousel-toggle-control .components-base-control__label {
+	.cfg-nbc-carousel-toggle-control .components-base-control__label {
 		color: #fff;
 	}
 
-	.cfg-bc-carousel-toggle-control .components-base-control__help {
+	.cfg-nbc-carousel-toggle-control .components-base-control__help {
 		color: #ccc;
 	}
 }
@@ -640,13 +706,13 @@
 /* Contraste élevé */
 @media (prefers-contrast: high) {
 
-	.bc-carousel::scroll-button(*),
-	*:has(>.bc-carousel)::before,
-	*:has(>.bc-carousel)::after {
+	.nbc-carousel::scroll-button(*),
+	*:has(>.nbc-carousel)::before,
+	*:has(>.nbc-carousel)::after {
 		border-width: 3px;
 	}
 
-	.bc-carousel>*::scroll-marker {
+	.nbc-carousel>*::scroll-marker {
 		border: 2px solid currentColor;
 	}
 }

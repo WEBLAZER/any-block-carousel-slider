@@ -1,20 +1,20 @@
 <?php
 /**
- * Plugin Name: Block Carousel
- * Plugin URI: https://github.com/WEBLAZER/block-carousel
+ * Plugin Name: Native Blocks Carousel
+ * Plugin URI: https://github.com/WEBLAZER/native-blocks-carousel
  * Description: Transform any WordPress block into a performant carousel with pure CSS. Zero JavaScript, works with Gallery, Grid, Post Template, and Group blocks.
  * Version: 1.0.1
  * Author: weblazer35
  * Author URI: https://weblazer.fr
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: block-carousel
+ * Text Domain: native-blocks-carousel
  * Domain Path: /languages
  * Requires at least: 6.0
  * Tested up to: 6.8
  * Requires PHP: 7.4
  *
- * @package BlockCarousel
+ * @package NativeBlocksCarousel
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if (!defined('ABSPATH')) {
 }
 
 // Constantes du plugin
-define('BLOCK_CAROUSEL_VERSION', '1.0.1');
-define('BLOCK_CAROUSEL_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('BLOCK_CAROUSEL_PLUGIN_PATH', plugin_dir_path(__FILE__));
+define('NATIVE_BLOCKS_CAROUSEL_VERSION', '1.0.1');
+define('NATIVE_BLOCKS_CAROUSEL_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('NATIVE_BLOCKS_CAROUSEL_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 /**
- * Classe principale du plugin Carousel for Gutenberg
+ * Classe principale du plugin Native Blocks Carousel
  */
-class BlockCarousel
+class NativeBlocksCarousel
 {
     /**
      * Instance unique du plugin
@@ -82,10 +82,10 @@ class BlockCarousel
     public function enqueue_block_assets(): void
     {
         wp_enqueue_style(
-            'block-carousel',
-            BLOCK_CAROUSEL_PLUGIN_URL . 'assets/css/carousel.css',
+            'native-blocks-carousel',
+            NATIVE_BLOCKS_CAROUSEL_PLUGIN_URL . 'assets/css/carousel.css',
             [],
-            BLOCK_CAROUSEL_VERSION
+            NATIVE_BLOCKS_CAROUSEL_VERSION
         );
 
         // Injecter les couleurs des boutons du thème
@@ -162,7 +162,7 @@ class BlockCarousel
 
         // Ajouter le CSS inline si des couleurs ont été trouvées
         if (!empty($button_bg) || !empty($button_color)) {
-            wp_add_inline_style('block-carousel', $custom_css);
+            wp_add_inline_style('native-blocks-carousel', $custom_css);
         }
     }
 
@@ -173,8 +173,8 @@ class BlockCarousel
     public function enqueue_editor_scripts(): void
     {
         wp_enqueue_script(
-            'block-carousel-editor',
-            BLOCK_CAROUSEL_PLUGIN_URL . 'assets/js/carousel-button.js',
+            'native-blocks-carousel-editor',
+            NATIVE_BLOCKS_CAROUSEL_PLUGIN_URL . 'assets/js/carousel-button.js',
             [
                 'wp-blocks',
                 'wp-element',
@@ -185,7 +185,7 @@ class BlockCarousel
                 'wp-hooks',
                 'wp-i18n'
             ],
-            BLOCK_CAROUSEL_VERSION . '-' . time(),
+            NATIVE_BLOCKS_CAROUSEL_VERSION . '-' . time(),
             true
         );
     }
@@ -200,9 +200,9 @@ class BlockCarousel
      */
     public function inject_carousel_variables(string $block_content, array $block): string
     {
-        // Vérifier si le bloc a la classe 'bc-carousel'
+        // Vérifier si le bloc a la classe 'nbc-carousel'
         $class_name = $block['attrs']['className'] ?? '';
-        if (strpos($class_name, 'bc-carousel') === false) {
+        if (strpos($class_name, 'nbc-carousel') === false) {
             return $block_content;
         }
 
@@ -211,7 +211,7 @@ class BlockCarousel
         // 1. Injecter --carousel-min-width pour les Grids avec minimumColumnWidth
         if (
             ($block['blockName'] === 'core/group' || $block['blockName'] === 'core/post-template') &&
-            strpos($class_name, 'bc-carousel-min-width') !== false
+            strpos($class_name, 'nbc-carousel-min-width') !== false
         ) {
             $min_width = $block['attrs']['layout']['minimumColumnWidth'] ?? null;
             if ($min_width) {
@@ -251,8 +251,8 @@ class BlockCarousel
         }
 
         // Injecter les styles dans le HTML
-        // Chercher la balise avec la classe bc-carousel
-        $pattern = '/(<(?:div|ul|figure)\s+[^>]*class="[^"]*\bbc-carousel\b[^"]*"[^>]*?)(?:\s+style="([^"]*)")?(\s*>)/i';
+        // Chercher la balise avec la classe nbc-carousel
+        $pattern = '/(<(?:div|ul|figure)\s+[^>]*class="[^"]*\bnbc-carousel\b[^"]*"[^>]*?)(?:\s+style="([^"]*)")?(\s*>)/i';
 
         $replacement = function($matches) use ($styles_string) {
             $tag_start = $matches[1];
@@ -280,21 +280,21 @@ class BlockCarousel
 /**
  * Fonction d'activation du plugin
  */
-function carousel_for_gutenberg_activate(): void
+function native_blocks_carousel_activate(): void
 {
     // Vérifier la version de WordPress
     if (version_compare(get_bloginfo('version'), '6.0', '<')) {
         wp_die(
-            esc_html__('Ce plugin nécessite WordPress 6.0 ou plus récent.', 'block-carousel'),
-            esc_html__('Version WordPress insuffisante', 'block-carousel')
+            esc_html__('Ce plugin nécessite WordPress 6.0 ou plus récent.', 'native-blocks-carousel'),
+            esc_html__('Version WordPress insuffisante', 'native-blocks-carousel')
         );
     }
 
     // Vérifier la version de PHP
     if (version_compare(PHP_VERSION, '7.4', '<')) {
         wp_die(
-            esc_html__('Ce plugin nécessite PHP 7.4 ou plus récent.', 'block-carousel'),
-            esc_html__('Version PHP insuffisante', 'block-carousel')
+            esc_html__('Ce plugin nécessite PHP 7.4 ou plus récent.', 'native-blocks-carousel'),
+            esc_html__('Version PHP insuffisante', 'native-blocks-carousel')
         );
     }
 }
@@ -302,14 +302,15 @@ function carousel_for_gutenberg_activate(): void
 /**
  * Fonction de désactivation du plugin
  */
-function carousel_for_gutenberg_deactivate(): void
+function native_blocks_carousel_deactivate(): void
 {
     // Nettoyage si nécessaire
 }
 
 // Hooks d'activation et de désactivation
-register_activation_hook(__FILE__, 'carousel_for_gutenberg_activate');
-register_deactivation_hook(__FILE__, 'carousel_for_gutenberg_deactivate');
+register_activation_hook(__FILE__, 'native_blocks_carousel_activate');
+register_deactivation_hook(__FILE__, 'native_blocks_carousel_deactivate');
 
 // Initialiser le plugin
-BlockCarousel::getInstance();
+NativeBlocksCarousel::getInstance();
+
