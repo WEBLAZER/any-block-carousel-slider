@@ -82,6 +82,20 @@
             filteredClasses.push('nbc-carousel');
           }
 
+          // Pour les galeries, détecter et ajouter la classe nbc-carousel-cols-X
+          if (name === 'core/gallery') {
+            const columnCount = attributes.columns;
+
+            // Si un nombre de colonnes est défini (jusqu'à 8 colonnes)
+            if (columnCount && columnCount >= 1 && columnCount <= 8) {
+              filteredClasses.push(`nbc-carousel-cols-${columnCount}`);
+            }
+            // Sinon, utiliser 3 colonnes par défaut
+            else {
+              filteredClasses.push('nbc-carousel-cols-3');
+            }
+          }
+
           // Pour les grilles (Group et Post Template), détecter et ajouter la classe nbc-carousel-cols-X
           if (
             (name === 'core/group' || name === 'core/post-template') &&
@@ -90,8 +104,8 @@
             const columnCount = attributes.layout?.columnCount;
             const minimumColumnWidth = attributes.layout?.minimumColumnWidth;
 
-            // Si un nombre de colonnes est défini
-            if (columnCount && columnCount >= 1 && columnCount <= 6) {
+            // Si un nombre de colonnes est défini (jusqu'à 16 colonnes)
+            if (columnCount && columnCount >= 1 && columnCount <= 16) {
               filteredClasses.push(`nbc-carousel-cols-${columnCount}`);
             }
             // Si une largeur minimale est définie, ajouter une classe spéciale
@@ -118,32 +132,49 @@
 
       /**
        * Synchroniser automatiquement la classe nbc-carousel-cols-X
-       * quand le nombre de colonnes Grid change
+       * quand le nombre de colonnes change
        */
       useEffect(() => {
-        // Seulement si le carousel est activé et que c'est un Grid (Group ou Post Template)
+        if (!carouselEnabled) {
+          return;
+        }
+
+        const currentClasses = attributes.className || '';
+        const classArray = currentClasses.split(' ').filter(Boolean);
+
+        // Trouver la classe nbc-carousel-cols-* actuelle
+        const currentColsClass = classArray.find((cls) =>
+          cls.startsWith('nbc-carousel-cols-')
+        );
+        const hasMinWidthClass = classArray.includes('nbc-carousel-min-width');
+
+        let expectedColsClass = null;
+        let shouldHaveMinWidthClass = false;
+
+        // Gestion des galeries
+        if (name === 'core/gallery') {
+          const columnCount = attributes.columns;
+
+          // Si un nombre de colonnes est défini (jusqu'à 8 colonnes)
+          if (columnCount && columnCount >= 1 && columnCount <= 8) {
+            expectedColsClass = `nbc-carousel-cols-${columnCount}`;
+          }
+          // Sinon, utiliser 3 colonnes par défaut
+          else {
+            expectedColsClass = 'nbc-carousel-cols-3';
+          }
+        }
+
+        // Gestion des grilles (Group et Post Template)
         if (
-          carouselEnabled &&
           (name === 'core/group' || name === 'core/post-template') &&
           attributes.layout?.type === 'grid'
         ) {
-          const currentClasses = attributes.className || '';
-          const classArray = currentClasses.split(' ').filter(Boolean);
-
-          // Trouver les classes nbc-carousel-* actuelles
-          const currentColsClass = classArray.find((cls) =>
-            cls.startsWith('nbc-carousel-cols-')
-          );
-          const hasMinWidthClass = classArray.includes('nbc-carousel-min-width');
-
           const columnCount = attributes.layout?.columnCount;
           const minimumColumnWidth = attributes.layout?.minimumColumnWidth;
 
-          let expectedColsClass = null;
-          let shouldHaveMinWidthClass = false;
-
-          // Si un nombre de colonnes est défini
-          if (columnCount && columnCount >= 1 && columnCount <= 6) {
+          // Si un nombre de colonnes est défini (jusqu'à 16 colonnes)
+          if (columnCount && columnCount >= 1 && columnCount <= 16) {
             expectedColsClass = `nbc-carousel-cols-${columnCount}`;
             shouldHaveMinWidthClass = false;
           }
@@ -157,35 +188,36 @@
             expectedColsClass = 'nbc-carousel-cols-3';
             shouldHaveMinWidthClass = false;
           }
+        }
 
-          // Si les classes ne correspondent pas, les mettre à jour
-          if (currentColsClass !== expectedColsClass || hasMinWidthClass !== shouldHaveMinWidthClass) {
-            const filteredClasses = classArray.filter(
-              (cls) =>
-                !cls.startsWith('nbc-carousel-cols-') &&
-                cls !== 'nbc-carousel-min-width' &&
-                // Retirer aussi les anciennes classes pour migration
-                !cls.startsWith('carousel-cols-') &&
-                cls !== 'carousel-min-width'
-            );
+        // Si les classes ne correspondent pas, les mettre à jour
+        if (currentColsClass !== expectedColsClass || hasMinWidthClass !== shouldHaveMinWidthClass) {
+          const filteredClasses = classArray.filter(
+            (cls) =>
+              !cls.startsWith('nbc-carousel-cols-') &&
+              cls !== 'nbc-carousel-min-width' &&
+              // Retirer aussi les anciennes classes pour migration
+              !cls.startsWith('carousel-cols-') &&
+              cls !== 'carousel-min-width'
+          );
 
-            // Ajouter la nouvelle classe si nécessaire
-            if (expectedColsClass) {
-              filteredClasses.push(expectedColsClass);
-            }
-            if (shouldHaveMinWidthClass) {
-              filteredClasses.push('nbc-carousel-min-width');
-            }
-
-            setAttributes({
-              className: filteredClasses.join(' ').trim(),
-            });
+          // Ajouter la nouvelle classe si nécessaire
+          if (expectedColsClass) {
+            filteredClasses.push(expectedColsClass);
           }
+          if (shouldHaveMinWidthClass) {
+            filteredClasses.push('nbc-carousel-min-width');
+          }
+
+          setAttributes({
+            className: filteredClasses.join(' ').trim(),
+          });
         }
       }, [
         carouselEnabled,
         name,
-        layoutKey,
+        attributes.columns, // Pour les galeries
+        layoutKey, // Pour les grids
       ]);
 
       return createElement(
@@ -206,7 +238,12 @@
               checked: carouselEnabled,
               onChange: toggleCarousel,
               help: carouselEnabled
-                ? (name === 'core/group' || name === 'core/post-template') && attributes.layout?.type === 'grid'
+                ? name === 'core/gallery'
+                  ? __(
+                    'Le carousel est activé. Le nombre de colonnes visibles est détecté automatiquement depuis les paramètres de la galerie.',
+                    'native-blocks-carousel'
+                  )
+                  : (name === 'core/group' || name === 'core/post-template') && attributes.layout?.type === 'grid'
                   ? __(
                     'Le carousel est activé. Le nombre de colonnes visibles est détecté automatiquement depuis les paramètres de la grille.',
                     'native-blocks-carousel'

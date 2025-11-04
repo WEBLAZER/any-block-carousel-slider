@@ -233,6 +233,76 @@
 	min-width: calc(16.666% - var(--wp--style--block-gap, 1rem) * 5 / 6);
 }
 
+/* nbc-carousel-cols-7 : 7 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-7>* {
+	--carousel-grid-item-width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7);
+	width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7);
+	min-width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7);
+}
+
+/* nbc-carousel-cols-8 : 8 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-8>* {
+	--carousel-grid-item-width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8);
+	width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8);
+	min-width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8);
+}
+
+/* nbc-carousel-cols-9 : 9 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-9>* {
+	--carousel-grid-item-width: calc(11.111% - var(--wp--style--block-gap, 1rem) * 8 / 9);
+	width: calc(11.111% - var(--wp--style--block-gap, 1rem) * 8 / 9);
+	min-width: calc(11.111% - var(--wp--style--block-gap, 1rem) * 8 / 9);
+}
+
+/* nbc-carousel-cols-10 : 10 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-10>* {
+	--carousel-grid-item-width: calc(10% - var(--wp--style--block-gap, 1rem) * 9 / 10);
+	width: calc(10% - var(--wp--style--block-gap, 1rem) * 9 / 10);
+	min-width: calc(10% - var(--wp--style--block-gap, 1rem) * 9 / 10);
+}
+
+/* nbc-carousel-cols-11 : 11 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-11>* {
+	--carousel-grid-item-width: calc(9.090% - var(--wp--style--block-gap, 1rem) * 10 / 11);
+	width: calc(9.090% - var(--wp--style--block-gap, 1rem) * 10 / 11);
+	min-width: calc(9.090% - var(--wp--style--block-gap, 1rem) * 10 / 11);
+}
+
+/* nbc-carousel-cols-12 : 12 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-12>* {
+	--carousel-grid-item-width: calc(8.333% - var(--wp--style--block-gap, 1rem) * 11 / 12);
+	width: calc(8.333% - var(--wp--style--block-gap, 1rem) * 11 / 12);
+	min-width: calc(8.333% - var(--wp--style--block-gap, 1rem) * 11 / 12);
+}
+
+/* nbc-carousel-cols-13 : 13 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-13>* {
+	--carousel-grid-item-width: calc(7.692% - var(--wp--style--block-gap, 1rem) * 12 / 13);
+	width: calc(7.692% - var(--wp--style--block-gap, 1rem) * 12 / 13);
+	min-width: calc(7.692% - var(--wp--style--block-gap, 1rem) * 12 / 13);
+}
+
+/* nbc-carousel-cols-14 : 14 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-14>* {
+	--carousel-grid-item-width: calc(7.142% - var(--wp--style--block-gap, 1rem) * 13 / 14);
+	width: calc(7.142% - var(--wp--style--block-gap, 1rem) * 13 / 14);
+	min-width: calc(7.142% - var(--wp--style--block-gap, 1rem) * 13 / 14);
+}
+
+/* nbc-carousel-cols-15 : 15 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-15>* {
+	--carousel-grid-item-width: calc(6.666% - var(--wp--style--block-gap, 1rem) * 14 / 15);
+	width: calc(6.666% - var(--wp--style--block-gap, 1rem) * 14 / 15);
+	min-width: calc(6.666% - var(--wp--style--block-gap, 1rem) * 14 / 15);
+}
+
+/* nbc-carousel-cols-16 : 16 éléments visibles */
+.is-layout-grid.nbc-carousel.nbc-carousel-cols-16>* {
+	--carousel-grid-item-width: calc(6.25% - var(--wp--style--block-gap, 1rem) * 15 / 16);
+	width: calc(6.25% - var(--wp--style--block-gap, 1rem) * 15 / 16);
+	min-width: calc(6.25% - var(--wp--style--block-gap, 1rem) * 15 / 16);
+}
+
 /* nbc-carousel-min-width : Utiliser la largeur minimale définie dans le Grid */
 /* WordPress génère : grid-template-columns: repeat(auto-fill, minmax(XXXpx, 1fr)) */
 /* On doit extraire cette valeur et l'utiliser comme min-width en mode Flexbox */
@@ -457,11 +527,86 @@
 		width: calc(16.66667% - var(--wp--style--block-gap, 1.25em) * 5 / 6) !important;
 		min-width: calc(16.66667% - var(--wp--style--block-gap, 1.25em) * 5 / 6) !important;
 	}
+
+	/* 7 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-7 .wp-block-post {
+		width: calc(14.285% - var(--wp--style--block-gap, 1.25em) * 6 / 7) !important;
+		min-width: calc(14.285% - var(--wp--style--block-gap, 1.25em) * 6 / 7) !important;
+	}
+
+	/* 8 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-8 .wp-block-post {
+		width: calc(12.5% - var(--wp--style--block-gap, 1.25em) * 7 / 8) !important;
+		min-width: calc(12.5% - var(--wp--style--block-gap, 1.25em) * 7 / 8) !important;
+	}
+
+	/* 9 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-9 .wp-block-post {
+		width: calc(11.111% - var(--wp--style--block-gap, 1.25em) * 8 / 9) !important;
+		min-width: calc(11.111% - var(--wp--style--block-gap, 1.25em) * 8 / 9) !important;
+	}
+
+	/* 10 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-10 .wp-block-post {
+		width: calc(10% - var(--wp--style--block-gap, 1.25em) * 9 / 10) !important;
+		min-width: calc(10% - var(--wp--style--block-gap, 1.25em) * 9 / 10) !important;
+	}
+
+	/* 11 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-11 .wp-block-post {
+		width: calc(9.090% - var(--wp--style--block-gap, 1.25em) * 10 / 11) !important;
+		min-width: calc(9.090% - var(--wp--style--block-gap, 1.25em) * 10 / 11) !important;
+	}
+
+	/* 12 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-12 .wp-block-post {
+		width: calc(8.333% - var(--wp--style--block-gap, 1.25em) * 11 / 12) !important;
+		min-width: calc(8.333% - var(--wp--style--block-gap, 1.25em) * 11 / 12) !important;
+	}
+
+	/* 13 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-13 .wp-block-post {
+		width: calc(7.692% - var(--wp--style--block-gap, 1.25em) * 12 / 13) !important;
+		min-width: calc(7.692% - var(--wp--style--block-gap, 1.25em) * 12 / 13) !important;
+	}
+
+	/* 14 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-14 .wp-block-post {
+		width: calc(7.142% - var(--wp--style--block-gap, 1.25em) * 13 / 14) !important;
+		min-width: calc(7.142% - var(--wp--style--block-gap, 1.25em) * 13 / 14) !important;
+	}
+
+	/* 15 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-15 .wp-block-post {
+		width: calc(6.666% - var(--wp--style--block-gap, 1.25em) * 14 / 15) !important;
+		min-width: calc(6.666% - var(--wp--style--block-gap, 1.25em) * 14 / 15) !important;
+	}
+
+	/* 16 colonnes */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-16 .wp-block-post {
+		width: calc(6.25% - var(--wp--style--block-gap, 1.25em) * 15 / 16) !important;
+		min-width: calc(6.25% - var(--wp--style--block-gap, 1.25em) * 15 / 16) !important;
+	}
 }
 
-/* Règle spéciale du thème weblazer pour tablette */
+/* Comportement responsive natif WordPress pour tablette */
+/* Entre 600px et 1200px, Post Template affiche toujours 2 colonnes */
 @media (min-width: 600px) and (max-width: 1200px) {
-	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-4 .wp-block-post {
+	/* 3 colonnes et plus : forcer 2 colonnes sur tablette */
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-3 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-4 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-5 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-6 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-7 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-8 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-9 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-10 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-11 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-12 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-13 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-14 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-15 .wp-block-post,
+	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-16 .wp-block-post {
 		width: calc(50% - var(--wp--style--block-gap, 1.25em) / 2) !important;
 		min-width: calc(50% - var(--wp--style--block-gap, 1.25em) / 2) !important;
 	}
@@ -473,8 +618,8 @@
 
 /* Mobile (par défaut) - 2 colonnes pour les galeries */
 .wp-block-gallery.nbc-carousel .wp-block-image {
-	width: calc(50% - var(--wp--style--unstable-gallery-gap, 16px) / 2) !important;
-	min-width: calc(50% - var(--wp--style--unstable-gallery-gap, 16px) / 2) !important;
+	width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
+	min-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
 }
 
 /* À partir de 600px - Comportement selon le nombre de colonnes */
@@ -485,28 +630,46 @@
 		min-width: 100% !important;
 	}
 
+	/* 2 colonnes */
+	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-2 .wp-block-image {
+		width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
+		min-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
+	}
+
 	/* 3 colonnes */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-3 .wp-block-image {
-		width: calc(33.33333% - var(--wp--style--unstable-gallery-gap, 16px) * 2 / 3) !important;
-		min-width: calc(33.33333% - var(--wp--style--unstable-gallery-gap, 16px) * 2 / 3) !important;
+		width: calc(33.33333% - var(--wp--style--block-gap, 1rem) * 2 / 3) !important;
+		min-width: calc(33.33333% - var(--wp--style--block-gap, 1rem) * 2 / 3) !important;
 	}
 
 	/* 4 colonnes */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-4 .wp-block-image {
-		width: calc(25% - var(--wp--style--unstable-gallery-gap, 16px) * 3 / 4) !important;
-		min-width: calc(25% - var(--wp--style--unstable-gallery-gap, 16px) * 3 / 4) !important;
+		width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4) !important;
+		min-width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4) !important;
 	}
 
 	/* 5 colonnes */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-5 .wp-block-image {
-		width: calc(20% - var(--wp--style--unstable-gallery-gap, 16px) * 4 / 5) !important;
-		min-width: calc(20% - var(--wp--style--unstable-gallery-gap, 16px) * 4 / 5) !important;
+		width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5) !important;
+		min-width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5) !important;
 	}
 
 	/* 6 colonnes */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-6 .wp-block-image {
-		width: calc(16.66667% - var(--wp--style--unstable-gallery-gap, 16px) * 5 / 6) !important;
-		min-width: calc(16.66667% - var(--wp--style--unstable-gallery-gap, 16px) * 5 / 6) !important;
+		width: calc(16.66667% - var(--wp--style--block-gap, 1rem) * 5 / 6) !important;
+		min-width: calc(16.66667% - var(--wp--style--block-gap, 1rem) * 5 / 6) !important;
+	}
+
+	/* 7 colonnes */
+	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-7 .wp-block-image {
+		width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7) !important;
+		min-width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7) !important;
+	}
+
+	/* 8 colonnes */
+	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-8 .wp-block-image {
+		width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8) !important;
+		min-width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8) !important;
 	}
 }
 
@@ -550,6 +713,89 @@
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-6>* {
 		width: calc(16.66667% - var(--wp--style--block-gap, 1rem) * 5 / 6) !important;
 		min-width: calc(16.66667% - var(--wp--style--block-gap, 1rem) * 5 / 6) !important;
+	}
+
+	/* 7 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-7>* {
+		width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7) !important;
+		min-width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7) !important;
+	}
+
+	/* 8 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-8>* {
+		width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8) !important;
+		min-width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8) !important;
+	}
+
+	/* 9 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-9>* {
+		width: calc(11.111% - var(--wp--style--block-gap, 1rem) * 8 / 9) !important;
+		min-width: calc(11.111% - var(--wp--style--block-gap, 1rem) * 8 / 9) !important;
+	}
+
+	/* 10 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-10>* {
+		width: calc(10% - var(--wp--style--block-gap, 1rem) * 9 / 10) !important;
+		min-width: calc(10% - var(--wp--style--block-gap, 1rem) * 9 / 10) !important;
+	}
+
+	/* 11 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-11>* {
+		width: calc(9.090% - var(--wp--style--block-gap, 1rem) * 10 / 11) !important;
+		min-width: calc(9.090% - var(--wp--style--block-gap, 1rem) * 10 / 11) !important;
+	}
+
+	/* 12 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-12>* {
+		width: calc(8.333% - var(--wp--style--block-gap, 1rem) * 11 / 12) !important;
+		min-width: calc(8.333% - var(--wp--style--block-gap, 1rem) * 11 / 12) !important;
+	}
+
+	/* 13 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-13>* {
+		width: calc(7.692% - var(--wp--style--block-gap, 1rem) * 12 / 13) !important;
+		min-width: calc(7.692% - var(--wp--style--block-gap, 1rem) * 12 / 13) !important;
+	}
+
+	/* 14 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-14>* {
+		width: calc(7.142% - var(--wp--style--block-gap, 1rem) * 13 / 14) !important;
+		min-width: calc(7.142% - var(--wp--style--block-gap, 1rem) * 13 / 14) !important;
+	}
+
+	/* 15 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-15>* {
+		width: calc(6.666% - var(--wp--style--block-gap, 1rem) * 14 / 15) !important;
+		min-width: calc(6.666% - var(--wp--style--block-gap, 1rem) * 14 / 15) !important;
+	}
+
+	/* 16 colonnes */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-16>* {
+		width: calc(6.25% - var(--wp--style--block-gap, 1rem) * 15 / 16) !important;
+		min-width: calc(6.25% - var(--wp--style--block-gap, 1rem) * 15 / 16) !important;
+	}
+}
+
+/* Comportement responsive natif WordPress pour tablette - GROUP */
+/* Entre 600px et 1200px, Group Grid affiche toujours 2 colonnes */
+@media (min-width: 600px) and (max-width: 1200px) {
+	/* 3 colonnes et plus : forcer 2 colonnes sur tablette */
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-3>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-4>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-5>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-6>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-7>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-8>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-9>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-10>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-11>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-12>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-13>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-14>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-15>*,
+	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-16>* {
+		width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
+		min-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
 	}
 }
 
