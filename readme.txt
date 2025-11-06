@@ -178,7 +178,7 @@ Le système responsive est automatique, mais vous pouvez le personnaliser via CS
 
 == Changelog ==
 
-= 1.0.2 - 2025-01-XX =
+= 1.0.1 - 2025-01-XX =
 * ✨ **NOUVEAU** : Support complet du mode "Auto" (Minimum column width) pour Grid et Post Template
 * ✨ Deux modes disponibles : Manual (nombre de colonnes fixe) et Auto (largeur fixe en pixels)
 * 🎯 Détection automatique du mode choisi par l'utilisateur dans les paramètres du bloc
@@ -187,25 +187,15 @@ Le système responsive est automatique, mais vous pouvez le personnaliser via CS
 * 📱 Utilisation de min() pour éviter que les slides dépassent sur mobile
 * 💬 Messages d'aide améliorés dans l'éditeur pour expliquer les deux modes
 * 📖 Documentation enrichie avec guide détaillé sur les deux modes
-* 🐛 Correction du comportement des slides en mode "Minimum column width"
-* 🐛 Correction du comportement responsive : pas de responsive forcé en mode Auto
-* 🎨 **NOUVEAU** : Gestion intelligente du padding horizontal
-* 🎨 Le padding horizontal est converti en espacement via pseudo-éléments
-* 🎨 Plus de bandes blanches lors du scroll avec du padding
-* 🎨 Les slides gardent leur largeur correcte même avec du padding
-* 🚀 Script JavaScript frontend pour injecter --carousel-min-width depuis le CSS généré par WordPress
-
-= 1.0.1 - 2025-01-XX =
-* 📱 **NOUVEAU** : Système responsive complet avec adaptation automatique des colonnes
-* 📱 Breakpoints WordPress standards (1280px, 1024px, 782px, 600px, 480px, 375px)
-* 📱 Adaptation progressive : 6 colonnes → 5 → 4 → 3 → 2 → 1 selon la taille d'écran
-* 📱 Boutons de navigation responsive (48px → 32px sur mobile)
-* 📱 Marqueurs responsive avec tailles adaptées
-* 📱 Espacements adaptatifs selon la taille d'écran
-* 📱 Support responsive pour galeries et layouts fluides
-* 🎨 Optimisation GPU avec transform et contain
-* ♿ Amélioration accessibilité avec respect des préférences utilisateur
-* 📖 Documentation complète du système responsive (RESPONSIVE.md)
+* 🎨 **NOUVEAU** : Gestion intelligente du padding horizontal et vertical
+* 🎨 Les boutons de navigation respectent automatiquement le padding horizontal du carousel
+* 🎨 Les marqueurs de scroll respectent automatiquement le padding-bottom du carousel
+* 🎨 Support complet du padding personnalisé (top, right, bottom, left)
+* 🎨 Détection automatique du padding depuis les attributs du bloc ou le style inline
+* 🚀 Script JavaScript frontend optimisé pour injecter les variables CSS nécessaires
+* 🎨 Amélioration de la visibilité des boutons inactifs (opacité augmentée)
+* 🐛 Correction du positionnement des boutons avec padding personnalisé
+* 🐛 Correction du positionnement des marqueurs avec padding-bottom personnalisé
 
 = 1.0.0 - 2025-01-XX =
 * 🎉 Version initiale
@@ -214,18 +204,24 @@ Le système responsive est automatique, mais vous pouvez le personnaliser via CS
 * Support des presets WordPress pour les espacements
 * Gestion du Block Spacing (y compris gap horizontal/vertical pour Gallery)
 * Détection automatique des colonnes pour Grid
-* Support de "Minimum column width" pour layouts fluides
+* Système responsive complet avec adaptation automatique des colonnes
+* Breakpoints WordPress standards (1280px, 1024px, 782px, 600px, 480px, 375px)
+* Adaptation progressive : 6 colonnes → 5 → 4 → 3 → 2 → 1 selon la taille d'écran
+* Boutons de navigation responsive (48px → 32px sur mobile)
+* Marqueurs responsive avec tailles adaptées
+* Espacements adaptatifs selon la taille d'écran
+* Support responsive pour galeries et layouts fluides
+* Optimisation GPU avec transform et contain
+* Amélioration accessibilité avec respect des préférences utilisateur
 * 100% CSS, zéro JavaScript côté public
 * Navigation accessible au clavier
 * Compatible mobile avec défilement tactile
 
+
 == Upgrade Notice ==
 
 = 1.0.1 =
-Système responsive complet ! Les carousels s'adaptent maintenant automatiquement à toutes les tailles d'écran avec des breakpoints WordPress standards. Mise à jour fortement recommandée pour une meilleure expérience mobile.
-
-= 1.0.0 =
-Version initiale du plugin. Transformez vos blocs Gutenberg en carrousels performants !
+Nouvelle version avec support complet du mode Auto (largeur fixe), gestion intelligente du padding personnalisé, et amélioration de la visibilité des boutons. Mise à jour recommandée pour une meilleure expérience utilisateur.
 
 == Developer Notes ==
 
@@ -252,6 +248,10 @@ Le plugin utilise les variables CSS suivantes (personnalisables via CSS) :
 * `--wp--style--block-gap` - Espacement entre les éléments (adaptatif responsive)
 * `--carousel-min-width` - Largeur minimale pour les Grids en mode fluide
 * `--carousel-grid-item-width` - Largeur des items dans les grilles (adaptatif responsive)
+* `--carousel-padding-left` - Padding gauche du carousel (défini automatiquement)
+* `--carousel-padding-right` - Padding droit du carousel (défini automatiquement)
+* `--carousel-padding-top` - Padding haut du carousel (défini automatiquement)
+* `--carousel-padding-bottom` - Padding bas du carousel (défini automatiquement)
 
 **Boutons de Navigation :**
 * `--carousel-button-bg` - Couleur de fond des boutons (auto-détectée depuis le thème)

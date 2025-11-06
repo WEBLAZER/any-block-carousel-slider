@@ -3,7 +3,7 @@
  * Injecte les variables CSS manquantes pour le mode minimumColumnWidth
  *
  * @package NativeBlocksCarousel
- * @version 1.0.2
+ * @version 1.0.1
  * @author weblazer35
  */
 
@@ -102,19 +102,100 @@
 		});
 	}
 
-	// Exécuter au chargement du DOM
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', function () {
-			injectMinWidthVariables();
+	/**
+	 * Injecte les variables de padding en lisant directement le padding calculé
+	 * Solution optimale : lire le padding calculé par le navigateur (qui inclut tous les styles)
+	 * et l'injecter comme variable CSS. Cela fonctionne même si PHP n'a pas réussi à extraire le padding.
+	 */
+	function injectPaddingVariables() {
+		const carousels = document.querySelectorAll('.nbc-carousel');
+		
+		carousels.forEach(function (carousel) {
+			const computedStyle = window.getComputedStyle(carousel);
+			
+			// Lire le padding calculé directement (fonctionne même si défini via style inline)
+			const paddingLeft = computedStyle.paddingLeft;
+			const paddingRight = computedStyle.paddingRight;
+			const paddingTop = computedStyle.paddingTop;
+			const paddingBottom = computedStyle.paddingBottom;
+			
+			// Toujours définir les variables, même si le padding est 0
+			// Utiliser '0px' au lieu de '0' pour éviter les problèmes avec calc()
+			const paddingLeftValue = paddingLeft === '0px' ? '0px' : paddingLeft || '0px';
+			const paddingRightValue = paddingRight === '0px' ? '0px' : paddingRight || '0px';
+			const paddingTopValue = paddingTop === '0px' ? '0px' : paddingTop || '1rem';
+			const paddingBottomValue = paddingBottom === '0px' ? '0px' : paddingBottom || '1rem';
+			
+			// Injecter sur le carousel
+			carousel.style.setProperty('--carousel-padding-left', paddingLeftValue);
+			carousel.style.setProperty('--carousel-padding-right', paddingRightValue);
+			carousel.style.setProperty('--carousel-padding-top', paddingTopValue);
+			carousel.style.setProperty('--carousel-padding-bottom', paddingBottomValue);
+			carousel.style.setProperty('--carousel-scroll-padding-left', paddingLeftValue);
+			carousel.style.setProperty('--carousel-scroll-padding-right', paddingRightValue);
+			
+			// Copier sur le parent pour les boutons fallback
+			const parent = carousel.parentElement;
+			if (parent) {
+				parent.style.setProperty('--carousel-padding-left', paddingLeftValue);
+				parent.style.setProperty('--carousel-padding-right', paddingRightValue);
+			}
 		});
-	} else {
-		// DOM déjà chargé
-		injectMinWidthVariables();
 	}
+
+	// Fonction d'initialisation principale
+	// Le padding est maintenant géré en PHP, mais on utilise JavaScript comme fallback
+	// pour lire le padding calculé directement (plus fiable que d'essayer de l'extraire en PHP)
+	function initCarousel() {
+		injectMinWidthVariables();
+		injectPaddingVariables();
+	}
+
+	// Exécuter au chargement du DOM
+	// Utiliser requestAnimationFrame pour s'assurer que le CSS est chargé
+	function initWhenReady() {
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', function () {
+				// Attendre que le CSS soit appliqué
+				requestAnimationFrame(function () {
+					requestAnimationFrame(initCarousel);
+				});
+			});
+		} else {
+			// DOM déjà chargé, attendre que le CSS soit appliqué
+			requestAnimationFrame(function () {
+				requestAnimationFrame(initCarousel);
+			});
+		}
+	}
+
+	initWhenReady();
 
 	// Ré-exécuter après le chargement complet (au cas où des styles seraient chargés en différé)
 	window.addEventListener('load', function () {
-		injectMinWidthVariables();
+		// Vérifier si --carousel-min-width est manquant pour certains carousels
+		const carousels = document.querySelectorAll('.nbc-carousel.nbc-carousel-min-width');
+		let needsMinWidthUpdate = false;
+		carousels.forEach(function (carousel) {
+			const computedStyle = window.getComputedStyle(carousel);
+			const minWidth = computedStyle.getPropertyValue('--carousel-min-width');
+			if (!minWidth || minWidth.trim() === '') {
+				needsMinWidthUpdate = true;
+			}
+		});
+		
+		// Toujours ré-injecter les variables de padding au cas où des styles seraient chargés en différé
+		// Cela garantit que les variables sont toujours à jour
+		if (needsMinWidthUpdate) {
+			requestAnimationFrame(function () {
+				requestAnimationFrame(initCarousel);
+			});
+		} else {
+			// Si seulement le padding doit être mis à jour
+			requestAnimationFrame(function () {
+				requestAnimationFrame(injectPaddingVariables);
+			});
+		}
 	});
 
 })();

@@ -3,7 +3,7 @@
  * Plugin Name: Native Blocks Carousel
  * Plugin URI: https://github.com/WEBLAZER/native-blocks-carousel
  * Description: Transform any WordPress block into a performant carousel with pure CSS. Zero JavaScript, works with Gallery, Grid, Post Template, and Group blocks.
- * Version: 1.0.2
+ * Version: 1.0.1
  * Author: weblazer35
  * Author URI: https://weblazer.fr
  * License: GPL v2 or later
@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Constantes du plugin
-define('NATIVE_BLOCKS_CAROUSEL_VERSION', '1.0.2');
+define('NATIVE_BLOCKS_CAROUSEL_VERSION', '1.0.1');
 define('NATIVE_BLOCKS_CAROUSEL_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('NATIVE_BLOCKS_CAROUSEL_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -70,7 +70,8 @@ class NativeBlocksCarousel
         add_action('enqueue_block_editor_assets', [$this, 'enqueue_editor_scripts']);
 
         // Filtrer le rendu des blocs pour injecter les variables CSS
-        add_filter('render_block', [$this, 'inject_carousel_variables'], 10, 2);
+        // Priorité 20 pour s'exécuter après WordPress qui applique les styles (priorité 10)
+        add_filter('render_block', [$this, 'inject_carousel_variables'], 20, 2);
 
         // Les traductions sont automatiquement chargées par WordPress.org
     }
@@ -196,7 +197,7 @@ class NativeBlocksCarousel
                 'wp-hooks',
                 'wp-i18n'
             ],
-            NATIVE_BLOCKS_CAROUSEL_VERSION . '-' . time(),
+            NATIVE_BLOCKS_CAROUSEL_VERSION,
             true
         );
     }
@@ -270,6 +271,124 @@ class NativeBlocksCarousel
             $custom_styles['--wp--style--block-gap'] = ($block_gap === '0' || $block_gap === 0) ? '0px' : $block_gap;
         }
 
+        // 3. Injecter les variables de padding pour scroll-padding et positionnement des boutons
+        $spacing = $block['attrs']['style']['spacing'] ?? [];
+        $padding = $spacing['padding'] ?? null;
+        
+        // Extraire padding-left, padding-right, padding-top et padding-bottom
+        $padding_left = null;
+        $padding_right = null;
+        $padding_top = null;
+        $padding_bottom = null;
+        
+        if (is_array($padding)) {
+            $padding_left = $padding['left'] ?? null;
+            $padding_right = $padding['right'] ?? null;
+            $padding_top = $padding['top'] ?? null;
+            $padding_bottom = $padding['bottom'] ?? null;
+        } elseif (is_string($padding) && $padding !== '') {
+            // Si c'est une valeur unique (appliquée à tous les côtés)
+            $padding_left = $padding;
+            $padding_right = $padding;
+            $padding_top = $padding;
+            $padding_bottom = $padding;
+        }
+        
+        // Fallback : si le padding n'est pas dans les attributs, essayer de l'extraire depuis le style inline
+        // WordPress peut appliquer le padding directement dans le style inline (ex: "padding: 2rem;")
+        if ($padding_left === null && $padding_right === null && $padding_top === null && $padding_bottom === null) {
+            // Chercher spécifiquement dans l'élément avec la classe nbc-carousel
+            if (preg_match('/(<(?:div|ul|figure)[^>]*class="[^"]*\bnbc-carousel\b[^"]*"[^>]*?)(?:\s+style="([^"]*)")?/i', $block_content, $carousel_matches)) {
+                $style_attr = $carousel_matches[2] ?? '';
+                
+                if (!empty($style_attr)) {
+                    // Extraire padding-left
+                    if (preg_match('/padding-left:\s*([^;]+)/i', $style_attr, $matches)) {
+                        $padding_left = trim($matches[1]);
+                    }
+                    
+                    // Extraire padding-right
+                    if (preg_match('/padding-right:\s*([^;]+)/i', $style_attr, $matches)) {
+                        $padding_right = trim($matches[1]);
+                    }
+                    
+                    // Extraire padding-top
+                    if (preg_match('/padding-top:\s*([^;]+)/i', $style_attr, $matches)) {
+                        $padding_top = trim($matches[1]);
+                    }
+                    
+                    // Extraire padding-bottom
+                    if (preg_match('/padding-bottom:\s*([^;]+)/i', $style_attr, $matches)) {
+                        $padding_bottom = trim($matches[1]);
+                    }
+                    
+                    // Si c'est un padding unique (ex: "padding: 2rem;")
+                    if ($padding_left === null && $padding_right === null && $padding_top === null && $padding_bottom === null) {
+                        if (preg_match('/padding:\s*([^;]+)/i', $style_attr, $matches)) {
+                            $padding_value = trim($matches[1]);
+                            // Vérifier si c'est une valeur unique (pas de format "top right bottom left")
+                            if (!preg_match('/\s/', $padding_value)) {
+                                $padding_left = $padding_value;
+                                $padding_right = $padding_value;
+                                $padding_top = $padding_value;
+                                $padding_bottom = $padding_value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Gérer les presets WordPress pour le padding
+        $convert_preset = function($value) {
+            if (is_string($value) && strpos($value, 'var:preset|spacing|') === 0) {
+                $preset_slug = str_replace('var:preset|spacing|', '', $value);
+                return "var(--wp--preset--spacing--{$preset_slug})";
+            }
+            return $value;
+        };
+        
+        if ($padding_left !== null) {
+            $padding_left = $convert_preset($padding_left);
+            // Toujours définir avec unité (0px au lieu de 0)
+            $custom_styles['--carousel-scroll-padding-left'] = ($padding_left === '0' || $padding_left === 0) ? '0px' : $padding_left;
+            $custom_styles['--carousel-padding-left'] = ($padding_left === '0' || $padding_left === 0) ? '0px' : $padding_left;
+        } else {
+            // Valeurs par défaut
+            $custom_styles['--carousel-scroll-padding-left'] = '0px';
+            $custom_styles['--carousel-padding-left'] = '0px';
+        }
+        
+        if ($padding_right !== null) {
+            $padding_right = $convert_preset($padding_right);
+            // Toujours définir avec unité (0px au lieu de 0)
+            $custom_styles['--carousel-scroll-padding-right'] = ($padding_right === '0' || $padding_right === 0) ? '0px' : $padding_right;
+            $custom_styles['--carousel-padding-right'] = ($padding_right === '0' || $padding_right === 0) ? '0px' : $padding_right;
+        } else {
+            // Valeurs par défaut
+            $custom_styles['--carousel-scroll-padding-right'] = '0px';
+            $custom_styles['--carousel-padding-right'] = '0px';
+        }
+        
+        // Injecter padding-top et padding-bottom
+        if ($padding_top !== null) {
+            $padding_top = $convert_preset($padding_top);
+            // Toujours définir avec unité (0px au lieu de 0)
+            $custom_styles['--carousel-padding-top'] = ($padding_top === '0' || $padding_top === 0) ? '0px' : $padding_top;
+        } else {
+            // Valeur par défaut (1rem correspond au padding par défaut du carousel)
+            $custom_styles['--carousel-padding-top'] = '1rem';
+        }
+        
+        if ($padding_bottom !== null) {
+            $padding_bottom = $convert_preset($padding_bottom);
+            // Toujours définir avec unité (0px au lieu de 0)
+            $custom_styles['--carousel-padding-bottom'] = ($padding_bottom === '0' || $padding_bottom === 0) ? '0px' : $padding_bottom;
+        } else {
+            // Valeur par défaut (1rem correspond au padding par défaut du carousel)
+            $custom_styles['--carousel-padding-bottom'] = '1rem';
+        }
+
         // Si aucune variable à injecter, retourner tel quel
         if (empty($custom_styles)) {
             return $block_content;
@@ -278,6 +397,12 @@ class NativeBlocksCarousel
         // Construire la chaîne de styles CSS
         $styles_string = '';
         foreach ($custom_styles as $property => $value) {
+            // S'assurer que les valeurs 0 ont toujours une unité pour les variables de padding
+            if (($property === '--carousel-padding-left' || $property === '--carousel-padding-right' || 
+                 $property === '--carousel-scroll-padding-left' || $property === '--carousel-scroll-padding-right') &&
+                ($value === '0' || $value === 0)) {
+                $value = '0px';
+            }
             $styles_string .= esc_attr($property) . ':' . esc_attr($value) . ';';
         }
 
@@ -304,6 +429,7 @@ class NativeBlocksCarousel
 
         return $modified_content ?: $block_content;
     }
+
 
 
 }
@@ -344,4 +470,3 @@ register_deactivation_hook(__FILE__, 'native_blocks_carousel_deactivate');
 
 // Initialiser le plugin
 NativeBlocksCarousel::getInstance();
-

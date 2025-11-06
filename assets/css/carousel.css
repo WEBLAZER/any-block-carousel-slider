@@ -16,10 +16,10 @@
 
 :root {
 	--carousel-button-size: 3rem;
-	--carousel-button-offset: 0;
+	--carousel-button-offset: 0px;
 	--carousel-marker-size: 0.66rem;
 	--carousel-marker-gap: 0.5rem;
-	--carousel-marker-bottom-offset: -1.5rem;
+	--carousel-marker-bottom-offset: -2rem;
 	--carousel-z-index: 999999;
 	--carousel-transition-duration: 0.3s;
 	--carousel-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
@@ -29,6 +29,14 @@
 	--carousel-button-bg: #007cba;
 	--carousel-button-color: #fff;
 	--carousel-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+	/* Padding du carousel - Défini automatiquement par PHP/JavaScript */
+	--carousel-padding-left: 0px;
+	--carousel-padding-right: 0px;
+	--carousel-padding-top: 0px;
+	/* Padding-top par défaut du carousel */
+	--carousel-padding-bottom: 0px;
+	/* Padding-bottom par défaut du carousel */
 }
 
 /* ==========================================================================
@@ -40,6 +48,21 @@
 /* ::scroll-button semble se positionner par rapport à un ancêtre éloigné, pas au carousel lui-même */
 :has(.nbc-carousel) {
 	position: relative !important;
+}
+
+/* Force aussi le parent direct à être en position relative */
+/* Important pour que les boutons se positionnent correctement par rapport au conteneur */
+.nbc-carousel {
+	position: relative !important;
+}
+
+/* S'assurer que le parent direct du carousel est aussi en position relative */
+/* Double sécurité pour les cas où :has() ne fonctionne pas partout */
+/* IMPORTANT: Le parent doit être le contexte de positionnement pour les boutons */
+*:has(> .nbc-carousel) {
+	position: relative !important;
+	/* S'assurer que le parent peut contenir les boutons positionnés */
+	overflow: visible;
 }
 
 .nbc-carousel,
@@ -62,6 +85,11 @@
 	scroll-snap-type: x mandatory;
 	scroll-behavior: smooth;
 	-webkit-overflow-scrolling: touch;
+
+	/* Scroll padding pour respecter le padding horizontal */
+	/* Défini automatiquement par PHP/JavaScript en fonction du padding-left/right */
+	scroll-padding-left: var(--carousel-scroll-padding-left, 0);
+	scroll-padding-right: var(--carousel-scroll-padding-right, 0);
 
 	/* Masquer les scrollbars */
 	-ms-overflow-style: none;
@@ -99,6 +127,10 @@
 	/* Spacing */
 	margin: 0 !important;
 	padding: 0;
+}
+
+.nbc-carousel .wp-block-group[style*="border-radius"] {
+	overflow: hidden;
 }
 
 /* Arrière-plans */
@@ -333,6 +365,38 @@
 }
 
 /* ==========================================================================
+   SCROLL SNAP POUR MODE AUTO (Grid item position: Auto)
+   ========================================================================== */
+
+/* En mode Auto (nbc-carousel-min-width), le snap se fait sur le centre */
+.nbc-carousel.nbc-carousel-min-width>*,
+.block-editor-block-list__layout .nbc-carousel.nbc-carousel-min-width>*,
+.editor-styles-wrapper .nbc-carousel.nbc-carousel-min-width>* {
+	scroll-snap-align: center !important;
+}
+
+/* Règles spécifiques pour Post Template en mode Auto */
+.wp-block-post-template.nbc-carousel.nbc-carousel-min-width .wp-block-post,
+.block-editor-block-list__layout .wp-block-post-template.nbc-carousel.nbc-carousel-min-width .wp-block-post,
+.editor-styles-wrapper .wp-block-post-template.nbc-carousel.nbc-carousel-min-width .wp-block-post {
+	scroll-snap-align: center !important;
+}
+
+/* Règles spécifiques pour Group en mode Auto */
+.wp-block-group.nbc-carousel.nbc-carousel-min-width>*,
+.block-editor-block-list__layout .wp-block-group.nbc-carousel.nbc-carousel-min-width>*,
+.editor-styles-wrapper .wp-block-group.nbc-carousel.nbc-carousel-min-width>* {
+	scroll-snap-align: center !important;
+}
+
+/* Règles spécifiques pour Gallery en mode Auto */
+.wp-block-gallery.nbc-carousel.nbc-carousel-min-width>.wp-block-image,
+.block-editor-block-list__layout .wp-block-gallery.nbc-carousel.nbc-carousel-min-width>.wp-block-image,
+.editor-styles-wrapper .wp-block-gallery.nbc-carousel.nbc-carousel-min-width>.wp-block-image {
+	scroll-snap-align: center !important;
+}
+
+/* ==========================================================================
    BOUTONS DE NAVIGATION (CSS natif futur)
    ========================================================================== */
 
@@ -349,43 +413,46 @@
 	width: var(--carousel-button-size);
 	height: var(--carousel-button-size);
 	border-radius: 100rem;
-	
-	/* Apparence inactive (grisée) */
+
+	/* Apparence inactive (grisée mais visible) */
 	background-color: var(--carousel-button-bg);
 	border: 2px solid var(--carousel-button-bg);
-	opacity: 0.3;
-	
+	opacity: 0.67;
+	/* Rendre le bouton inactif plus visible mais différent de l'actif */
+	filter: grayscale(0) brightness(1);
+
 	/* Effets */
 	box-shadow: var(--carousel-shadow);
 	pointer-events: none;
-	
+
 	/* Préparer pour SVG */
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 40% 40%;
 }
 
-/* Bouton gauche fallback - Chevron SVG */
+/* Boutons fallback - Prendre en compte le padding pour TOUS les carrousels */
 :has(> .nbc-carousel)::before {
-	left: var(--carousel-button-offset);
+	left: calc(var(--carousel-padding-left, 0px) + var(--carousel-button-offset, 0px));
 	transform: translate(50%, -50%);
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='white' d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z'/%3E%3C/svg%3E");
 }
 
-/* Bouton droit fallback - Chevron SVG */
 :has(> .nbc-carousel)::after {
-	right: var(--carousel-button-offset);
+	right: calc(var(--carousel-padding-right, 0px) + var(--carousel-button-offset, 0px));
 	transform: translate(-50%, -50%);
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='white' d='M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z'/%3E%3C/svg%3E");
 }
 
 /* Sur les navigateurs compatibles, masquer les fallbacks et afficher les vrais boutons */
 @supports selector(::scroll-button(*)) {
+
 	/* Masquer les boutons fallback */
 	:has(> .nbc-carousel)::before,
 	:has(> .nbc-carousel)::after {
 		display: none;
 	}
+
 	.nbc-carousel::scroll-button(*) {
 		position: absolute;
 		z-index: var(--carousel-z-index);
@@ -412,6 +479,10 @@
 		/* Préparer pour SVG */
 		font-size: 0;
 		overflow: hidden;
+
+		/* S'assurer que left et right ne sont pas définis par défaut */
+		left: auto;
+		right: auto;
 	}
 
 	.nbc-carousel::scroll-button(*):hover {
@@ -421,13 +492,17 @@
 	}
 
 	.nbc-carousel::scroll-button(*):disabled {
-		opacity: 0.5;
+		opacity: 0.67;
 		cursor: default;
+		/* Rendre le bouton inactif plus visible mais différent de l'actif */
+		filter: grayscale(0) brightness(1);
 	}
 
-	/* Bouton gauche - Chevron SVG */
+	/* Boutons - Prendre en compte le padding pour TOUS les carrousels */
+	/* Solution simple : utiliser directement les variables de padding définies par JavaScript */
+	/* Le calcul se fait dans le CSS avec calc() */
 	.nbc-carousel::scroll-button(left) {
-		left: var(--carousel-button-offset);
+		left: calc(var(--carousel-padding-left, 0px) + var(--carousel-button-offset, 0px));
 		content: '';
 		transform: translate(50%, -50%);
 		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='white' d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z'/%3E%3C/svg%3E");
@@ -436,9 +511,9 @@
 		background-size: 40% 40%;
 	}
 
-	/* Bouton droit - Chevron SVG */
 	.nbc-carousel::scroll-button(right) {
-		right: var(--carousel-button-offset);
+		right: calc(var(--carousel-padding-right, 0px) + var(--carousel-button-offset, 0px));
+		left: auto;
 		content: '';
 		transform: translate(-50%, -50%);
 		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='white' d='M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z'/%3E%3C/svg%3E");
@@ -456,8 +531,11 @@
 	.nbc-carousel::scroll-marker-group {
 		position: absolute;
 		z-index: var(--carousel-z-index);
-		bottom: var(--carousel-marker-bottom-offset);
-		left: 0;
+		/* Positionner par rapport au contenu, en ignorant le padding-bottom */
+		/* bottom: offset + padding-bottom pour compenser le padding du carousel */
+		/* La variable --carousel-padding-bottom est définie dynamiquement par PHP/JavaScript */
+		bottom: calc(var(--carousel-marker-bottom-offset) + var(--carousel-padding-bottom, 1rem));
+		left: var(--carousel-padding-left, 0);
 		display: flex;
 		justify-content: center;
 		gap: var(--carousel-marker-gap);
@@ -514,6 +592,7 @@
 
 /* À partir de 600px - Comportement selon le nombre de colonnes */
 @media (min-width: 600px) {
+
 	/* 2 colonnes */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-2 .wp-block-post {
 		width: calc(50% - var(--wp--style--block-gap, 1.25em) / 2) !important;
@@ -608,6 +687,7 @@
 /* Comportement responsive natif WordPress pour tablette */
 /* Entre 600px et 1200px, Post Template affiche toujours 2 colonnes */
 @media (min-width: 600px) and (max-width: 1200px) {
+
 	/* 3 colonnes et plus : forcer 2 colonnes sur tablette */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-3 .wp-block-post,
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-4 .wp-block-post,
@@ -640,6 +720,7 @@
 
 /* À partir de 600px - Comportement selon le nombre de colonnes */
 @media (min-width: 600px) {
+
 	/* 1 colonne */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-1 .wp-block-image {
 		width: 100% !important;
@@ -702,6 +783,7 @@
 
 /* À partir de 600px - Comportement selon le nombre de colonnes */
 @media (min-width: 600px) {
+
 	/* 2 colonnes */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-2>* {
 		width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
@@ -796,6 +878,7 @@
 /* Comportement responsive natif WordPress pour tablette - GROUP */
 /* Entre 600px et 1200px, Group Grid affiche toujours 2 colonnes */
 @media (min-width: 600px) and (max-width: 1200px) {
+
 	/* 3 colonnes et plus : forcer 2 colonnes sur tablette */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-3>*,
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-4>*,

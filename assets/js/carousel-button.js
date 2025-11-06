@@ -254,24 +254,24 @@
                     'native-blocks-carousel'
                   )
                   : (name === 'core/group' || name === 'core/post-template') && attributes.layout?.type === 'grid'
-                  ? attributes.layout?.minimumColumnWidth
-                    ? __(
-                      'Le carousel est activé en mode Auto. La largeur des slides est définie par la "Largeur minimale de colonne" (' + attributes.layout.minimumColumnWidth + ').',
-                      'native-blocks-carousel'
-                    )
-                    : attributes.layout?.columnCount
-                    ? __(
-                      'Le carousel est activé en mode Manual. Le nombre de colonnes visibles (' + attributes.layout.columnCount + ') est détecté depuis les paramètres de la grille.',
-                      'native-blocks-carousel'
-                    )
+                    ? attributes.layout?.minimumColumnWidth
+                      ? __(
+                        'Le carousel est activé en mode Auto. La largeur des slides est définie par la "Largeur minimale de colonne" (' + attributes.layout.minimumColumnWidth + ').',
+                        'native-blocks-carousel'
+                      )
+                      : attributes.layout?.columnCount
+                        ? __(
+                          'Le carousel est activé en mode Manual. Le nombre de colonnes visibles (' + attributes.layout.columnCount + ') est détecté depuis les paramètres de la grille.',
+                          'native-blocks-carousel'
+                        )
+                        : __(
+                          'Le carousel est activé. Configurez le nombre de colonnes ou la largeur minimale dans les paramètres de la grille.',
+                          'native-blocks-carousel'
+                        )
                     : __(
-                      'Le carousel est activé. Configurez le nombre de colonnes ou la largeur minimale dans les paramètres de la grille.',
+                      'Le carousel est activé. Les éléments défilent horizontalement.',
                       'native-blocks-carousel'
                     )
-                  : __(
-                    'Le carousel est activé. Les éléments défilent horizontalement.',
-                    'native-blocks-carousel'
-                  )
                 : __(
                   'Activez pour transformer ce bloc en carousel avec navigation. Vous pouvez ensuite choisir entre le mode Manual (nombre de colonnes) ou Auto (largeur minimale de colonne).',
                   'native-blocks-carousel'
@@ -366,4 +366,116 @@
     'native-blocks-carousel/with-carousel-styles',
     withCarouselStyles
   );
+
+  /**
+   * Applique scroll-padding-left et scroll-padding-right dans l'éditeur
+   * en fonction du padding du carousel
+   */
+  function applyScrollPaddingInEditor() {
+    function updateScrollPadding() {
+      const carousels = document.querySelectorAll('.nbc-carousel');
+      carousels.forEach(function (carousel) {
+        const computedStyle = window.getComputedStyle(carousel);
+        const paddingLeft = computedStyle.getPropertyValue('padding-left');
+        const paddingRight = computedStyle.getPropertyValue('padding-right');
+
+        // Appliquer scroll-padding pour tous les carousels
+        if (paddingLeft && paddingLeft !== '0px' && paddingLeft !== '0') {
+          carousel.style.setProperty('--carousel-scroll-padding-left', paddingLeft);
+        } else {
+          carousel.style.setProperty('--carousel-scroll-padding-left', '0px');
+        }
+
+        if (paddingRight && paddingRight !== '0px' && paddingRight !== '0') {
+          carousel.style.setProperty('--carousel-scroll-padding-right', paddingRight);
+        } else {
+          carousel.style.setProperty('--carousel-scroll-padding-right', '0px');
+        }
+
+        // Injecter les variables de padding pour les boutons pour TOUS les carrousels
+        // Solution simple : définir directement les variables avec les valeurs du padding
+        // Le CSS fera le calcul avec var(--carousel-button-offset)
+        if (paddingLeft && paddingLeft !== '0px' && paddingLeft !== '0') {
+          carousel.style.setProperty('--carousel-padding-left', paddingLeft);
+        } else {
+          carousel.style.setProperty('--carousel-padding-left', '0px');
+        }
+
+        if (paddingRight && paddingRight !== '0px' && paddingRight !== '0') {
+          carousel.style.setProperty('--carousel-padding-right', paddingRight);
+        } else {
+          carousel.style.setProperty('--carousel-padding-right', '0px');
+        }
+
+        // Injecter aussi les variables sur le parent pour les boutons fallback
+        const parent = carousel.parentElement;
+        if (parent) {
+          if (paddingLeft && paddingLeft !== '0px' && paddingLeft !== '0') {
+            parent.style.setProperty('--carousel-padding-left', paddingLeft);
+          } else {
+            parent.style.setProperty('--carousel-padding-left', '0px');
+          }
+
+          if (paddingRight && paddingRight !== '0px' && paddingRight !== '0') {
+            parent.style.setProperty('--carousel-padding-right', paddingRight);
+          } else {
+            parent.style.setProperty('--carousel-padding-right', '0px');
+          }
+        }
+      });
+    }
+
+    // Exécuter après le rendu initial
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', updateScrollPadding);
+    } else {
+      updateScrollPadding();
+    }
+
+    // Observer les mutations DOM dans l'éditeur
+    if (window.MutationObserver) {
+      let timeout;
+      const observer = new MutationObserver(function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(updateScrollPadding, 50);
+      });
+
+      // Observer le body de l'éditeur
+      const editorBody = document.querySelector('.editor-styles-wrapper') || document.body;
+      if (editorBody) {
+        observer.observe(editorBody, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['style', 'class']
+        });
+      }
+
+      // Observer aussi les carousels individuellement pour les changements de style
+      function observeCarousels() {
+        const carousels = document.querySelectorAll('.nbc-carousel');
+        carousels.forEach(function (carousel) {
+          observer.observe(carousel, {
+            attributes: true,
+            attributeFilter: ['style', 'class']
+          });
+        });
+      }
+
+      // Initialiser l'observation des carousels
+      setTimeout(observeCarousels, 100);
+
+      // Ré-observer périodiquement pour les nouveaux carousels
+      setInterval(function () {
+        observeCarousels();
+      }, 1000);
+    }
+  }
+
+  // Initialiser pour l'éditeur
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyScrollPaddingInEditor);
+  } else {
+    applyScrollPaddingInEditor();
+  }
 })(window.wp);
