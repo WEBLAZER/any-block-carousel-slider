@@ -327,6 +327,73 @@
         customStyles['--wp--style--block-gap'] = (blockGap === '0' || blockGap === 0) ? '0px' : blockGap;
       }
 
+      // 3. Injecter les variables de padding depuis les attributs du bloc
+      const spacing = attributes.style?.spacing || {};
+      const padding = spacing.padding || null;
+
+      // Fonction pour convertir les presets WordPress
+      const convertPreset = (value) => {
+        if (typeof value === 'string' && value.startsWith('var:preset|spacing|')) {
+          const presetSlug = value.replace('var:preset|spacing|', '');
+          return `var(--wp--preset--spacing--${presetSlug})`;
+        }
+        return value;
+      };
+
+      // Extraire padding-left, padding-right, padding-top et padding-bottom
+      let paddingLeft = null;
+      let paddingRight = null;
+      let paddingTop = null;
+      let paddingBottom = null;
+
+      if (padding) {
+        if (typeof padding === 'object' && padding !== null) {
+          paddingLeft = padding.left || null;
+          paddingRight = padding.right || null;
+          paddingTop = padding.top || null;
+          paddingBottom = padding.bottom || null;
+        } else if (typeof padding === 'string' && padding !== '') {
+          // Si c'est une valeur unique (appliquée à tous les côtés)
+          paddingLeft = padding;
+          paddingRight = padding;
+          paddingTop = padding;
+          paddingBottom = padding;
+        }
+      }
+
+      // Injecter les variables de padding
+      if (paddingLeft !== null) {
+        paddingLeft = convertPreset(paddingLeft);
+        customStyles['--carousel-padding-left'] = (paddingLeft === '0' || paddingLeft === 0) ? '0px' : paddingLeft;
+        customStyles['--carousel-scroll-padding-left'] = (paddingLeft === '0' || paddingLeft === 0) ? '0px' : paddingLeft;
+      } else {
+        customStyles['--carousel-padding-left'] = '0px';
+        customStyles['--carousel-scroll-padding-left'] = '0px';
+      }
+
+      if (paddingRight !== null) {
+        paddingRight = convertPreset(paddingRight);
+        customStyles['--carousel-padding-right'] = (paddingRight === '0' || paddingRight === 0) ? '0px' : paddingRight;
+        customStyles['--carousel-scroll-padding-right'] = (paddingRight === '0' || paddingRight === 0) ? '0px' : paddingRight;
+      } else {
+        customStyles['--carousel-padding-right'] = '0px';
+        customStyles['--carousel-scroll-padding-right'] = '0px';
+      }
+
+      if (paddingTop !== null) {
+        paddingTop = convertPreset(paddingTop);
+        customStyles['--carousel-padding-top'] = (paddingTop === '0' || paddingTop === 0) ? '0px' : paddingTop;
+      } else {
+        customStyles['--carousel-padding-top'] = '1rem';
+      }
+
+      if (paddingBottom !== null) {
+        paddingBottom = convertPreset(paddingBottom);
+        customStyles['--carousel-padding-bottom'] = (paddingBottom === '0' || paddingBottom === 0) ? '0px' : paddingBottom;
+      } else {
+        customStyles['--carousel-padding-bottom'] = '1rem';
+      }
+
       // Si aucun style à injecter, retourner le bloc tel quel
       if (Object.keys(customStyles).length === 0) {
         return createElement(BlockListBlock, props);
@@ -368,76 +435,56 @@
   );
 
   /**
-   * Applique scroll-padding-left et scroll-padding-right dans l'éditeur
-   * en fonction du padding du carousel
+   * Copie les variables CSS de padding du carousel vers le parent
+   * (nécessaire pour les boutons fallback qui sont sur le parent)
+   * Les variables sont déjà injectées depuis les attributs React via withCarouselStyles
+   */
+  function copyPaddingVariablesToParent() {
+    const carousels = document.querySelectorAll('.nbc-carousel');
+    carousels.forEach(function (carousel) {
+      const computedStyle = window.getComputedStyle(carousel);
+
+      // Lire les variables CSS déjà injectées depuis les attributs React
+      const paddingLeft = computedStyle.getPropertyValue('--carousel-padding-left').trim() || '0px';
+      const paddingRight = computedStyle.getPropertyValue('--carousel-padding-right').trim() || '0px';
+
+      // Copier les variables sur le parent pour les boutons fallback
+      const parent = carousel.parentElement;
+      if (parent) {
+        parent.style.setProperty('--carousel-padding-left', paddingLeft);
+        parent.style.setProperty('--carousel-padding-right', paddingRight);
+      }
+    });
+  }
+
+  /**
+   * Initialise la copie des variables de padding dans l'éditeur
    */
   function applyScrollPaddingInEditor() {
-    function updateScrollPadding() {
-      const carousels = document.querySelectorAll('.nbc-carousel');
-      carousels.forEach(function (carousel) {
-        const computedStyle = window.getComputedStyle(carousel);
-        const paddingLeft = computedStyle.getPropertyValue('padding-left');
-        const paddingRight = computedStyle.getPropertyValue('padding-right');
 
-        // Appliquer scroll-padding pour tous les carousels
-        if (paddingLeft && paddingLeft !== '0px' && paddingLeft !== '0') {
-          carousel.style.setProperty('--carousel-scroll-padding-left', paddingLeft);
-        } else {
-          carousel.style.setProperty('--carousel-scroll-padding-left', '0px');
-        }
-
-        if (paddingRight && paddingRight !== '0px' && paddingRight !== '0') {
-          carousel.style.setProperty('--carousel-scroll-padding-right', paddingRight);
-        } else {
-          carousel.style.setProperty('--carousel-scroll-padding-right', '0px');
-        }
-
-        // Injecter les variables de padding pour les boutons pour TOUS les carrousels
-        // Solution simple : définir directement les variables avec les valeurs du padding
-        // Le CSS fera le calcul avec var(--carousel-button-offset)
-        if (paddingLeft && paddingLeft !== '0px' && paddingLeft !== '0') {
-          carousel.style.setProperty('--carousel-padding-left', paddingLeft);
-        } else {
-          carousel.style.setProperty('--carousel-padding-left', '0px');
-        }
-
-        if (paddingRight && paddingRight !== '0px' && paddingRight !== '0') {
-          carousel.style.setProperty('--carousel-padding-right', paddingRight);
-        } else {
-          carousel.style.setProperty('--carousel-padding-right', '0px');
-        }
-
-        // Injecter aussi les variables sur le parent pour les boutons fallback
-        const parent = carousel.parentElement;
-        if (parent) {
-          if (paddingLeft && paddingLeft !== '0px' && paddingLeft !== '0') {
-            parent.style.setProperty('--carousel-padding-left', paddingLeft);
-          } else {
-            parent.style.setProperty('--carousel-padding-left', '0px');
-          }
-
-          if (paddingRight && paddingRight !== '0px' && paddingRight !== '0') {
-            parent.style.setProperty('--carousel-padding-right', paddingRight);
-          } else {
-            parent.style.setProperty('--carousel-padding-right', '0px');
-          }
-        }
+    // Exécuter après le rendu initial avec requestAnimationFrame
+    function runUpdate() {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(copyPaddingVariablesToParent);
       });
     }
 
-    // Exécuter après le rendu initial
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', updateScrollPadding);
+      document.addEventListener('DOMContentLoaded', runUpdate);
     } else {
-      updateScrollPadding();
+      runUpdate();
     }
 
-    // Observer les mutations DOM dans l'éditeur
+    // Observer les mutations DOM dans l'éditeur pour copier les variables quand elles changent
     if (window.MutationObserver) {
       let timeout;
       const observer = new MutationObserver(function () {
         clearTimeout(timeout);
-        timeout = setTimeout(updateScrollPadding, 50);
+        timeout = setTimeout(function () {
+          requestAnimationFrame(function () {
+            requestAnimationFrame(copyPaddingVariablesToParent);
+          });
+        }, 50);
       });
 
       // Observer le body de l'éditeur
@@ -450,32 +497,31 @@
           attributeFilter: ['style', 'class']
         });
       }
-
-      // Observer aussi les carousels individuellement pour les changements de style
-      function observeCarousels() {
-        const carousels = document.querySelectorAll('.nbc-carousel');
-        carousels.forEach(function (carousel) {
-          observer.observe(carousel, {
-            attributes: true,
-            attributeFilter: ['style', 'class']
-          });
-        });
-      }
-
-      // Initialiser l'observation des carousels
-      setTimeout(observeCarousels, 100);
-
-      // Ré-observer périodiquement pour les nouveaux carousels
-      setInterval(function () {
-        observeCarousels();
-      }, 1000);
     }
   }
 
   // Initialiser pour l'éditeur
-  if (document.readyState === 'loading') {
+  // Utiliser un hook WordPress pour s'assurer que les blocs sont rendus
+  if (wp && wp.domReady) {
+    wp.domReady(applyScrollPaddingInEditor);
+  } else if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', applyScrollPaddingInEditor);
   } else {
-    applyScrollPaddingInEditor();
+    // Attendre un peu pour que WordPress applique les styles
+    setTimeout(applyScrollPaddingInEditor, 100);
+  }
+
+  // Écouter les changements de blocs dans l'éditeur WordPress avec debounce
+  // Pour copier les variables sur le parent quand les attributs changent
+  if (wp && wp.data && wp.data.subscribe) {
+    let debounceTimeout;
+    wp.data.subscribe(function () {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(function () {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(copyPaddingVariablesToParent);
+        });
+      }, 300);
+    });
   }
 })(window.wp);
