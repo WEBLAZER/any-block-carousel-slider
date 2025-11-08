@@ -196,6 +196,7 @@ Le système responsive est automatique, mais vous pouvez le personnaliser via CS
 * 🎨 Amélioration de la visibilité des boutons inactifs (opacité augmentée)
 * 🐛 Correction du positionnement des boutons avec padding personnalisé
 * 🐛 Correction du positionnement des marqueurs avec padding-bottom personnalisé
+* 🛠️ Refactor interne : autoloading PSR-4, services modulaires, séparation des styles éditeur/frontend et service dédié aux traductions
 
 = 1.0.0 - 2025-01-XX =
 * 🎉 Version initiale

@@ -1050,17 +1050,6 @@
 	}
 }
 
-/* Mode sombre (si supporté par le thème) */
-@media (prefers-color-scheme: dark) {
-	.cfg-nbc-carousel-toggle-control .components-base-control__label {
-		color: #fff;
-	}
-
-	.cfg-nbc-carousel-toggle-control .components-base-control__help {
-		color: #ccc;
-	}
-}
-
 /* Contraste élevé */
 @media (prefers-contrast: high) {
 

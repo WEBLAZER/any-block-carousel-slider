@@ -15,17 +15,19 @@
    */
   const SUPPORTED_BLOCKS = ['core/group', 'core/post-template', 'core/gallery'];
 
-  const DEFAULT_ARROW_STYLE = 'chevron';
+  const SHARED = window.NativeBlocksCarouselShared || {};
+  const FALLBACK_DEFAULT_ARROW_STYLE = 'chevron';
+  const DEFAULT_ARROW_STYLE = SHARED.DEFAULT_ARROW_STYLE || FALLBACK_DEFAULT_ARROW_STYLE;
 
-  const ICON_BASE = {
+  const FALLBACK_ICON_BASE = {
     chevron: {
       viewBox: '0 0 320 512',
       paths: {
         left: {
-          d: 'M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z'
+          d: 'M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5 45.3 0l-160 160z'
         },
         right: {
-          d: 'M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z'
+          d: 'M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l-160 160z'
         }
       }
     },
@@ -43,30 +45,68 @@
     }
   };
 
-  const ICON_ALIASES = {
+  const FALLBACK_ICON_ALIASES = {
     classic: 'chevron',
     'solid-full': 'arrow',
     arrowfull: 'arrow',
   };
 
-  const ARROW_ICONS = {
-    ...ICON_BASE,
-    classic: ICON_BASE.chevron,
-    'solid-full': ICON_BASE.arrow,
+  const FALLBACK_ARROW_ICONS = {
+    ...FALLBACK_ICON_BASE,
+    classic: FALLBACK_ICON_BASE.chevron,
+    'solid-full': FALLBACK_ICON_BASE.arrow,
   };
 
-  const normalizeStyleKey = (styleKey) => {
+  const fallbackNormalizeStyleKey = (styleKey) => {
     if (!styleKey) {
-      return DEFAULT_ARROW_STYLE;
+      return FALLBACK_DEFAULT_ARROW_STYLE;
     }
-    if (ICON_BASE[styleKey]) {
+    if (FALLBACK_ICON_BASE[styleKey]) {
       return styleKey;
     }
-    if (ICON_ALIASES[styleKey]) {
-      return ICON_ALIASES[styleKey];
+    if (FALLBACK_ICON_ALIASES[styleKey]) {
+      return FALLBACK_ICON_ALIASES[styleKey];
     }
-    return DEFAULT_ARROW_STYLE;
+    return FALLBACK_DEFAULT_ARROW_STYLE;
   };
+
+  const normalizeStyleKey = typeof SHARED.normalizeStyleKey === 'function'
+    ? (styleKey) => SHARED.normalizeStyleKey(styleKey)
+    : fallbackNormalizeStyleKey;
+
+  const getIconDefinition = typeof SHARED.getIconDefinition === 'function'
+    ? (styleKey) => SHARED.getIconDefinition(styleKey)
+    : (styleKey) => FALLBACK_ARROW_ICONS[fallbackNormalizeStyleKey(styleKey)];
+
+  const fallbackBuildSvg = (direction, color, styleKey, toDataUrl = false) => {
+    const normalizedKey = fallbackNormalizeStyleKey(styleKey);
+    const icon = FALLBACK_ARROW_ICONS[normalizedKey] || FALLBACK_ARROW_ICONS[FALLBACK_DEFAULT_ARROW_STYLE];
+    const directionKey = direction === 'left' ? 'left' : 'right';
+    const pathConfig = icon.paths[directionKey] || icon.paths.right;
+    const attributes = [`fill='${color}'`, `d='${pathConfig.d}'`];
+
+    if (pathConfig.transform) {
+      attributes.push(`transform='${pathConfig.transform}'`);
+    }
+
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='${icon.viewBox}'><path ${attributes.join(' ')} /></svg>`;
+
+    if (toDataUrl) {
+      return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+    }
+
+    return svg;
+  };
+
+  const generateArrowSvg = typeof SHARED.generateArrowSvg === 'function'
+    ? (direction, color, styleKey) => SHARED.generateArrowSvg(direction, color, styleKey)
+    : (direction, color, styleKey) => fallbackBuildSvg(direction, color, styleKey, true);
+
+  const generateArrowMarkup = typeof SHARED.generateArrowMarkup === 'function'
+    ? (direction, color, styleKey) => SHARED.generateArrowMarkup(direction, color, styleKey)
+    : (direction, color, styleKey) => fallbackBuildSvg(direction, color, styleKey, false);
+
+  const isValidArrowStyle = (styleKey) => !!getIconDefinition(styleKey);
 
   /**
    * Ajoute l'attribut 'carouselEnabled' aux blocs supportés
@@ -128,16 +168,7 @@
       ];
 
       const buildIconSvg = (styleKey) => {
-        const normalizedKey = normalizeStyleKey(styleKey);
-        const icon = ARROW_ICONS[normalizedKey] || ARROW_ICONS[DEFAULT_ARROW_STYLE];
-        const pathConfig = icon.paths.right || icon.paths[Object.keys(icon.paths)[0]];
-        const attributes = [`fill='currentColor'`, `d='${pathConfig.d}'`];
-
-        if (pathConfig.transform) {
-          attributes.push(`transform='${pathConfig.transform}'`);
-        }
-
-        return `<svg xmlns='http://www.w3.org/2000/svg' viewBox='${icon.viewBox}' aria-hidden='true'><path ${attributes.join(' ')} /></svg>`;
+        return generateArrowMarkup('right', 'currentColor', styleKey);
       };
 
       // Mémoriser la sérialisation du layout pour éviter les re-renders inutiles
@@ -955,20 +986,26 @@
       return DEFAULT_ARROW_STYLE;
     }
 
-    if (element.dataset && element.dataset.nbcCarouselArrowStyle && ARROW_ICONS[element.dataset.nbcCarouselArrowStyle]) {
-      return element.dataset.nbcCarouselArrowStyle;
+    if (element.dataset && element.dataset.nbcCarouselArrowStyle) {
+      const normalizedDatasetStyle = normalizeStyleKey(element.dataset.nbcCarouselArrowStyle);
+      if (isValidArrowStyle(normalizedDatasetStyle)) {
+        return normalizedDatasetStyle;
+      }
     }
 
     const parentWithData = element.closest('[data-nbc-carousel-arrow-style]');
-    if (parentWithData && parentWithData.dataset && ARROW_ICONS[parentWithData.dataset.nbcCarouselArrowStyle]) {
-      return parentWithData.dataset.nbcCarouselArrowStyle;
+    if (parentWithData && parentWithData.dataset && parentWithData.dataset.nbcCarouselArrowStyle) {
+      const normalizedParentStyle = normalizeStyleKey(parentWithData.dataset.nbcCarouselArrowStyle);
+      if (isValidArrowStyle(normalizedParentStyle)) {
+        return normalizedParentStyle;
+      }
     }
 
     const iconClass = Array.from(element.classList).find((cls) => cls.startsWith('nbc-carousel-icon-'));
 
     if (iconClass) {
-      const styleKey = iconClass.replace('nbc-carousel-icon-', '');
-      if (ARROW_ICONS[styleKey]) {
+      const styleKey = normalizeStyleKey(iconClass.replace('nbc-carousel-icon-', ''));
+      if (isValidArrowStyle(styleKey)) {
         return styleKey;
       }
     }
@@ -1062,8 +1099,9 @@
         arrowColor = resolveArrowColor(color, carouselDoc);
         arrowColorCache.set(carouselDoc, arrowColor);
       }
-      const styleKey = overrideConfig && overrideConfig.styleKey && ARROW_ICONS[overrideConfig.styleKey]
-        ? overrideConfig.styleKey
+      const overrideStyle = overrideConfig && overrideConfig.styleKey ? normalizeStyleKey(overrideConfig.styleKey) : null;
+      const styleKey = overrideStyle && isValidArrowStyle(overrideStyle)
+        ? overrideStyle
         : resolveCarouselArrowStyleFromElement(carousel);
       const leftArrowSvg = generateArrowSvg('left', arrowColor, styleKey);
       const rightArrowSvg = generateArrowSvg('right', arrowColor, styleKey);
@@ -1084,21 +1122,6 @@
         parent.style.setProperty('--carousel-button-arrow-right', `url("${rightArrowSvg}")`);
       }
     });
-  }
-
-  // Fonction utilitaire pour générer le SVG d'une flèche
-  function generateArrowSvg(direction, color, iconKey) {
-    const icon = ARROW_ICONS[iconKey] || ARROW_ICONS[DEFAULT_ARROW_STYLE];
-    const directionKey = direction === 'left' ? 'left' : 'right';
-    const pathConfig = icon.paths[directionKey] || icon.paths.right;
-    const attributes = [`fill='${color}'`, `d='${pathConfig.d}'`];
-
-    if (pathConfig.transform) {
-      attributes.push(`transform='${pathConfig.transform}'`);
-    }
-
-    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='${icon.viewBox}'><path ${attributes.join(' ')} /></svg>`;
-    return `data:image/svg+xml,${encodeURIComponent(svg)}`;
   }
 
   /**

@@ -10,17 +10,19 @@
 (function () {
 	'use strict';
 
-	const DEFAULT_ARROW_STYLE = 'chevron';
+	const SHARED = window.NativeBlocksCarouselShared || {};
+	const FALLBACK_DEFAULT_ARROW_STYLE = 'chevron';
+	const DEFAULT_ARROW_STYLE = SHARED.DEFAULT_ARROW_STYLE || FALLBACK_DEFAULT_ARROW_STYLE;
 
-	const ICON_BASE = {
+	const FALLBACK_ICON_BASE = {
 		chevron: {
 			viewBox: '0 0 320 512',
 			paths: {
 				left: {
-					d: 'M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z'
+					d: 'M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5 45.3 0l-160 160z'
 				},
 				right: {
-					d: 'M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z'
+					d: 'M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l-160 160z'
 				}
 			}
 		},
@@ -38,30 +40,68 @@
 		}
 	};
 
-	const ICON_ALIASES = {
+	const FALLBACK_ICON_ALIASES = {
 		classic: 'chevron',
 		'solid-full': 'arrow',
 		arrowfull: 'arrow'
 	};
 
-	const ARROW_ICONS = {
-		...ICON_BASE,
-		classic: ICON_BASE.chevron,
-		'solid-full': ICON_BASE.arrow,
+	const FALLBACK_ARROW_ICONS = {
+		...FALLBACK_ICON_BASE,
+		classic: FALLBACK_ICON_BASE.chevron,
+		'solid-full': FALLBACK_ICON_BASE.arrow,
 	};
 
-	const normalizeStyleKey = (styleKey) => {
+	const fallbackNormalizeStyleKey = (styleKey) => {
 		if (!styleKey) {
-			return DEFAULT_ARROW_STYLE;
+			return FALLBACK_DEFAULT_ARROW_STYLE;
 		}
-		if (ICON_BASE[styleKey]) {
+		if (FALLBACK_ICON_BASE[styleKey]) {
 			return styleKey;
 		}
-		if (ICON_ALIASES[styleKey]) {
-			return ICON_ALIASES[styleKey];
+		if (FALLBACK_ICON_ALIASES[styleKey]) {
+			return FALLBACK_ICON_ALIASES[styleKey];
 		}
-		return DEFAULT_ARROW_STYLE;
+		return FALLBACK_DEFAULT_ARROW_STYLE;
 	};
+
+	const normalizeStyleKey = typeof SHARED.normalizeStyleKey === 'function'
+		? (styleKey) => SHARED.normalizeStyleKey(styleKey)
+		: fallbackNormalizeStyleKey;
+
+	const getIconDefinition = typeof SHARED.getIconDefinition === 'function'
+		? (styleKey) => SHARED.getIconDefinition(styleKey)
+		: (styleKey) => FALLBACK_ARROW_ICONS[fallbackNormalizeStyleKey(styleKey)];
+
+	const fallbackBuildSvg = (direction, color, styleKey, toDataUrl = false) => {
+		const normalizedKey = fallbackNormalizeStyleKey(styleKey);
+		const icon = FALLBACK_ARROW_ICONS[normalizedKey] || FALLBACK_ARROW_ICONS[FALLBACK_DEFAULT_ARROW_STYLE];
+		const directionKey = direction === 'left' ? 'left' : 'right';
+		const pathConfig = icon.paths[directionKey] || icon.paths.right;
+		const attributes = [`fill='${color}'`, `d='${pathConfig.d}'`];
+
+		if (pathConfig.transform) {
+			attributes.push(`transform='${pathConfig.transform}'`);
+		}
+
+		const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='${icon.viewBox}'><path ${attributes.join(' ')} /></svg>`;
+
+		if (toDataUrl) {
+			return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+		}
+
+		return svg;
+	};
+
+	const generateArrowSvg = typeof SHARED.generateArrowSvg === 'function'
+		? (direction, color, styleKey) => SHARED.generateArrowSvg(direction, color, styleKey)
+		: (direction, color, styleKey) => fallbackBuildSvg(direction, color, styleKey, true);
+
+	const generateArrowMarkup = typeof SHARED.generateArrowMarkup === 'function'
+		? (direction, color, styleKey) => SHARED.generateArrowMarkup(direction, color, styleKey)
+		: (direction, color, styleKey) => fallbackBuildSvg(direction, color, styleKey, false);
+
+	const isValidArrowStyle = (styleKey) => !!getIconDefinition(styleKey);
 
 	/**
 	 * Extrait la valeur minimumColumnWidth depuis grid-template-columns
@@ -346,13 +386,14 @@
 			const docForCarousel = carousel && carousel.ownerDocument ? carousel.ownerDocument : baseDoc;
 			const explicitStyle = overrideConfig && overrideConfig.styleKey ? overrideConfig.styleKey : null;
 			const normalizedKey = normalizeStyleKey(explicitStyle || resolveCarouselArrowStyleFromElement(carousel));
+			const styleKey = isValidArrowStyle(normalizedKey) ? normalizedKey : DEFAULT_ARROW_STYLE;
 			let arrowColor = arrowColorCache.get(docForCarousel);
 			if (!arrowColor) {
 				arrowColor = resolveArrowColor(color, docForCarousel);
 				arrowColorCache.set(docForCarousel, arrowColor);
 			}
-			const leftArrowSvg = generateArrowSvg('left', arrowColor, normalizedKey);
-			const rightArrowSvg = generateArrowSvg('right', arrowColor, normalizedKey);
+			const leftArrowSvg = generateArrowSvg('left', arrowColor, styleKey);
+			const rightArrowSvg = generateArrowSvg('right', arrowColor, styleKey);
 
 			carousel.style.setProperty('--carousel-button-arrow-left', 'url("' + leftArrowSvg + '")');
 			carousel.style.setProperty('--carousel-button-arrow-right', 'url("' + rightArrowSvg + '")');
@@ -363,24 +404,6 @@
 				parent.style.setProperty('--carousel-button-arrow-right', 'url("' + rightArrowSvg + '")');
 			}
 		});
-	}
-
-	/**
-	 * Génère le SVG d'une flèche avec la couleur spécifiée
-	 */
-	function generateArrowSvg(direction, color, iconKey) {
-		const normalizedKey = normalizeStyleKey(iconKey);
-		const icon = ARROW_ICONS[normalizedKey] || ARROW_ICONS[DEFAULT_ARROW_STYLE];
-		const directionKey = direction === 'left' ? 'left' : 'right';
-		const pathConfig = icon.paths[directionKey] || icon.paths.right;
-		const attributes = ["fill='" + color + "'", "d='" + pathConfig.d + "'"];
-
-		if (pathConfig.transform) {
-			attributes.push("transform='" + pathConfig.transform + "'");
-		}
-
-		const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='" + icon.viewBox + "'><path " + attributes.join(' ') + " /></svg>";
-		return 'data:image/svg+xml,' + encodeURIComponent(svg);
 	}
 
 	/**
