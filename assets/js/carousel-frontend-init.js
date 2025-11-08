@@ -218,12 +218,24 @@
 			const paddingTop = computedStyle.paddingTop;
 			const paddingBottom = computedStyle.paddingBottom;
 
-			// Toujours définir les variables, même si le padding est 0
-			// Utiliser '0px' au lieu de '0' pour éviter les problèmes avec calc()
-			const paddingLeftValue = paddingLeft === '0px' ? '0px' : paddingLeft || '0px';
-			const paddingRightValue = paddingRight === '0px' ? '0px' : paddingRight || '0px';
-			const paddingTopValue = paddingTop === '0px' ? '0px' : paddingTop || '1rem';
-			const paddingBottomValue = paddingBottom === '0px' ? '0px' : paddingBottom || '1rem';
+			const parent = carousel.parentElement;
+			const parentStyle = parent ? window.getComputedStyle(parent) : null;
+
+			const normalizePadding = (value, fallback, axis) => {
+				if (value && value !== '0px') {
+					return value;
+				}
+				const parentValue = parentStyle ? parentStyle[axis] : null;
+				if (parentValue && parentValue !== '0px') {
+					return parentValue;
+				}
+				return fallback;
+			};
+
+			const paddingLeftValue = normalizePadding(paddingLeft, '0px', 'paddingLeft');
+			const paddingRightValue = normalizePadding(paddingRight, '0px', 'paddingRight');
+			const paddingTopValue = normalizePadding(paddingTop, '1rem', 'paddingTop');
+			const paddingBottomValue = normalizePadding(paddingBottom, '1rem', 'paddingBottom');
 
 			// Injecter sur le carousel
 			carousel.style.setProperty('--carousel-padding-left', paddingLeftValue);
@@ -234,10 +246,10 @@
 			carousel.style.setProperty('--carousel-scroll-padding-right', paddingRightValue);
 
 			// Copier sur le parent pour les boutons fallback
-			const parent = carousel.parentElement;
 			if (parent) {
 				parent.style.setProperty('--carousel-padding-left', paddingLeftValue);
 				parent.style.setProperty('--carousel-padding-right', paddingRightValue);
+				parent.style.setProperty('--carousel-padding-bottom', paddingBottomValue);
 			}
 		});
 	}
