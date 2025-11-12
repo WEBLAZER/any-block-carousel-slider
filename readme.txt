@@ -1,7 +1,7 @@
 === Native Blocks Carousel ===
 Contributors: weblazer
 Donate link: https://weblazer.github.io/
-Tags: carousel, blocks, gallery, slider, css
+Tags: carousel, gutenberg, query-loop, woocommerce, css-only
 Requires at least: 6.0
 Tested up to: 6.8
 Stable tag: 1.0.1
@@ -9,271 +9,219 @@ Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Transform any WordPress block into a responsive carousel with pure CSS. Zero JavaScript, maximum performance.
+Transform any WordPress block into a responsive Gutenberg carousel with pure CSS. Works with Query Loop, Gallery, WooCommerce Products, and custom blocks. Zero JavaScript, maximum performance.
 
 == Description ==
 
-**Native Blocks Carousel** is a lightweight plugin that adds carousel functionality to native WordPress blocks without creating custom blocks or adding unnecessary JavaScript.
+**Native Blocks Carousel** instantly converts any native WordPress block (Gallery, Group, Grid, Query Loop, Post Template, WooCommerce Products, etc.) into a responsive carousel without adding a dedicated block or loading a JavaScript library. Simply enable the "Carousel" toggle in the editor: your content stays 100% native, your DOM stays lightweight, and your Lighthouse performance scores remain intact.
 
-= Caractéristiques principales =
+Unlike all-in-one carousel blocks like **Carousel Slider v2** that require you to add a "Carousel" block and manually recreate each slide ([see official listing](https://wordpress.org/plugins/carousel-block/)), **Native Blocks Carousel** hooks directly into the blocks you're already using. Result: a WordPress loop, image gallery, or product grid can become a slider in one click, without content duplication or extra maintenance.
 
-* **100% CSS** - Carousel entièrement en CSS (zéro JavaScript côté public)
-* **Responsive complet** - Adaptation automatique du nombre de colonnes selon la taille d'écran
-* **Blocs natifs** - Fonctionne avec Gallery, Grid, Group et Post Template
-* **Détection automatique** - Reconnaissance automatique des colonnes pour les layouts Grid
-* **Presets WordPress** - Support complet des espacements WordPress (Small, Medium, Large, etc.)
-* **Intégration thème** - Détection automatique des couleurs de boutons du thème
-* **Accessibilité** - Navigation au clavier native et respect des préférences utilisateur
-* **Mobile-friendly** - Défilement tactile optimisé, boutons adaptés aux écrans tactiles
-* **Performance** - Aucun impact sur les performances (CSS natif du navigateur, GPU accelerated)
+= Why Native Blocks Carousel instead of a dedicated carousel block? =
 
-= Blocs supportés =
+* **WordPress loops without friction** – Transform Query Loop and Post Template blocks into a "loop slider" without creating a block per slide.
+* **Familiar editorial experience** – Content editors keep the Gutenberg interface they know (patterns, global styles, alignments, inner blocks).
+* **Zero JavaScript on the frontend** – Native scroll, `scroll-snap`, GPU-friendly, no Swiper/Slick bundle to load.
+* **Full compatibility** – Works with classic themes (including Uncode) and block themes, plus WooCommerce, ACF Blocks, custom CPTs.
+* **Accessibility + SEO** – Keyboard navigation, respects `prefers-reduced-motion` preferences, clean DOM for crawling.
 
-* **Gallery** - Transformez vos galeries en carrousels élégants
-* **Grid** - Blocs Group avec layout Grid
-* **Post Template** - Boucles de posts en mode Grid
-* **Group** - Blocs de groupe standards
+= What you can do in 30 seconds =
 
-= Comment ça marche ? =
+* **Blog / Magazine**: Display your latest posts in a Query Loop carousel with native filters and badges.
+* **Portfolios & testimonials**: Keep your Group, Cover, Media & Text blocks and make them scrollable without rebuilding anything.
+* **WooCommerce**: Transform the Products block into a responsive product carousel (promotions, best-sellers, cross-sell).
+* **Landing pages**: Chain complex sections (image, title, button, Lottie) within the same slider thanks to full inner blocks compatibility.
+* **ACF Blocks / CPT**: If your custom block produces a grid, a simple toggle is enough to offer a carousel version.
 
-1. Créez ou éditez un bloc supporté (Gallery, Grid, Group, Post Template)
-2. Dans les paramètres du bloc, activez le toggle "Carousel"
-3. C'est tout ! Votre bloc devient un carousel
+= Quick comparison =
 
-= Personnalisation =
+| Feature | Native Blocks Carousel | Classic carousel blocks |
+| --- | --- | --- |
+| Activation | Toggle on existing block | Add separate carousel block |
+| WordPress loop | ✅ Query Loop, Post Template, CPT, products | ❌ Requires a block per slide or custom code |
+| Frontend JavaScript | ❌ None | ✅ Swiper/Slick + custom scripts |
+| Performance | Native CSS, no dependencies | Scripts, reflow, additional files |
+| Content maintenance | Single source block | Content duplication in carousel block |
+| Security | No third-party dependencies to update | Dependent library (Swiper/Slick) |
 
-= Deux modes pour définir la largeur des slides =
+= Key features =
 
-**Mode Manual (Nombre de colonnes) :**
-* Définissez un nombre fixe de colonnes visibles (1-16)
-* Idéal pour un contrôle précis du nombre d'éléments visibles
-* Dans les paramètres du bloc Grid/Post Template : "Grid" > "Column count"
-* Exemple : 3 colonnes = chaque slide fait 33% de la largeur du conteneur
+* **100% CSS** – Smooth carousel with `scroll-snap`, `::scroll-button`, and `::scroll-marker`. No script to bundle.
+* **Smart responsive** – Automatically handles visible columns, spacing, and control sizes according to WordPress breakpoints (1280, 1024, 782, 600, 480, 375).
+* **Two width modes** – Manual mode (fixed column count) and Auto mode (fixed width like 320px) with automatic detection.
+* **Block spacing detection** – Respects `gap` and `padding` values defined in the editor, including presets.
+* **Theme colors** – Buttons automatically inherit your theme's colors and radii (via CSS variables).
+* **Intact semantics** – Your block's tags and classes remain unchanged: perfect for SEO, schemas, and E2E testing.
 
-**Mode Auto (Largeur fixe) :**
-* Définissez une largeur fixe pour chaque slide (ex: 300px)
-* La largeur définie est respectée exactement sur tous les écrans
-* Comportement intelligent : si la largeur dépasse la fenêtre (mobile), la slide s'adapte automatiquement
-* Dans les paramètres du bloc Grid/Post Template : "Grid" > "Minimum column width"
-* Exemple : width 300px = chaque slide fait exactement 300px (sauf sur écran plus petit)
+= Native WordPress workflow =
 
-**Autres options :**
-* **Espacement** - Utilisez "Block spacing" pour ajuster l'espace entre les éléments
-* **Couleurs** - Les boutons héritent automatiquement des couleurs de votre thème
+1. Add or edit a supported block (Gallery, Group, Columns, Query Loop/Post Template, WooCommerce Products, arranged patterns).
+2. Enable the **Carousel** option in the sidebar panel (Layout or Block section depending on the block).
+3. Adjust your usual settings (column count, minimum width, spacing, alignment).
+4. Save: your block becomes a touch-friendly, accessible, and SEO-friendly carousel.
 
-= Technique =
+= Advanced customization =
 
-Le plugin utilise les technologies CSS modernes :
-* `scroll-snap` pour le défilement fluide
-* `::scroll-button` pour les boutons de navigation (expérimental)
-* `::scroll-marker` pour les indicateurs de position (expérimental)
-* CSS Variables pour la personnalisation automatique
+* **Manual mode (fixed columns)** – Ideal for article sliders: 1 to 6 columns depending on screen sizes.
+* **Auto mode (fixed width)** – Perfect for product carousels: 280px, 320px, or 360px respected pixel-perfect.
+* **Padding and gaps** – Automatic management via CSS vars `--carousel-padding-*`, `--wp--style--block-gap`.
+* **Themes & `theme.json`** – Override variables to align controls with your design system.
+* **Graceful degradation** – If a browser doesn't support `::scroll-button`, users keep touch and mouse scrolling.
 
-**Note** : Les boutons de navigation utilisent des fonctionnalités CSS expérimentales (`::scroll-button`). Sur les navigateurs non compatibles, des boutons visuels inactifs s'affichent pour indiquer qu'il s'agit d'un carousel, et le défilement tactile/souris reste pleinement fonctionnel.
+= Technical architecture =
+
+* `render_block` hook to inject variables based on context (block type, columns, gaps).
+* Dedicated service for translating labels and help messages.
+* Separate editor/frontend styles for a transparent Gutenberg experience.
+* Code organized by PSR-4 services (see `ARCHITECTURE.md` for details).
 
 == Installation ==
 
-= Installation automatique =
+= Automatic installation =
 
-1. Allez dans "Extensions" > "Ajouter"
-2. Search for "Native Blocks Carousel"
-3. Cliquez sur "Installer" puis "Activer"
+1. Go to "Plugins" → "Add New".
+2. Search for **Native Blocks Carousel**.
+3. Click "Install Now" then "Activate".
 
-= Installation manuelle =
+= Manual installation =
 
-1. Téléchargez le plugin
-2. Uploadez le dossier dans `/wp-content/plugins/`
-3. Activez le plugin via le menu "Extensions"
+1. Download the plugin archive.
+2. Upload the folder to `/wp-content/plugins/`.
+3. Activate it from the "Plugins" menu.
 
-= Utilisation =
+= Usage =
 
-1. Éditez une page ou un article
-2. Ajoutez ou sélectionnez un bloc Gallery, Grid, Group ou Post Template
-3. Dans le panneau latéral, activez l'option "Carousel"
-4. Configurez les colonnes et l'espacement selon vos besoins
-5. Publiez !
+1. Open a page, post, or template.
+2. Select a compatible block (Gallery, Group, Columns, Query Loop, WooCommerce Products, ACF block…).
+3. Enable the **Carousel** button in the settings.
+4. Adjust your columns, minimum width, or spacing.
+5. Publish or update: the carousel is operational.
 
 == Frequently Asked Questions ==
 
-= Est-ce compatible avec tous les thèmes ? =
+= How does Native Blocks Carousel compare to Carousel Slider v2? =
 
-Oui ! Le plugin détecte automatiquement les couleurs de boutons de votre thème et s'adapte.
+Unlike Carousel Slider v2 which requires adding a dedicated "Carousel" block and manually creating each slide, Native Blocks Carousel transforms your existing blocks (Query Loop, Gallery, Products) with a simple toggle. For Query Loops specifically, Carousel Slider v2 would require creating a carousel block, then adding a Query Loop with only 1 post per slide—very impractical. Native Blocks Carousel handles this natively: one toggle, zero duplication, maximum performance.
 
-= Cela nécessite-t-il JavaScript ? =
+= Is it compatible with all themes (block themes, FSE)? =
 
-Non. Aucun JavaScript n'est chargé côté public. L'éditeur utilise un minimum de JS uniquement pour le contrôle toggle.
+Yes. The plugin reads style variables generated by your theme (classic or full site editing) and applies the carousel without breaking the initial grid.
 
-= Quels navigateurs sont supportés ? =
+= Does it require JavaScript on the frontend? =
 
-Tous les navigateurs modernes avec support de `scroll-snap`. Les boutons de navigation utilisent des fonctionnalités expérimentales et peuvent ne pas apparaître sur certains navigateurs, mais le carousel reste fonctionnel.
+No. Everything relies on native CSS. Only a few lines of JavaScript executed in the editor handle the toggle interface. This means zero JavaScript bundle to load (unlike plugins using Swiper.js or Slick), resulting in better Lighthouse scores and Core Web Vitals.
 
-= Puis-je personnaliser les couleurs des boutons ? =
+= How do I transform a Query Loop into a carousel? =
 
-Les boutons héritent automatiquement des couleurs définies dans votre thème (couleur de texte et arrière-plan des boutons). Vous pouvez les personnaliser via le Customizer ou le fichier theme.json de votre thème.
+Enable the Query Loop block (or Post Template), configure your filters and rendering, then check **Carousel**. Posts are automatically aligned on a scrollable line with snap and CSS arrows. This is the main advantage over traditional carousel plugins that don't support Query Loops natively.
 
-= Cela fonctionne-t-il avec les boucles de posts ? =
+= Can I mix images, titles, buttons, and forms in the same carousel? =
 
-Oui ! Utilisez le bloc "Post Template" en mode Grid et activez le carousel. Parfait pour afficher vos derniers articles en carousel.
+Yes. The plugin respects existing inner blocks. A Group block containing image + text + button (or a custom ACF block) is transformed as-is.
 
-= Le plugin ralentit-il mon site ? =
+= WooCommerce compatible? =
 
-Non ! Le carousel utilise uniquement du CSS natif du navigateur. Aucun JavaScript n'est chargé côté public, ce qui garantit des performances optimales.
+The **Products** block (List, Hand-picked Products, On Sale, etc.) works immediately. Add to cart buttons remain interactive.
 
-= Puis-je avoir plusieurs carrousels sur la même page ? =
+= Is there an autoplay mode, infinite loop, or custom arrows? =
 
-Absolument ! Vous pouvez ajouter autant de carrousels que vous le souhaitez sur une même page.
+The plugin focuses on native scroll and performance. You can add a light custom script if you want autoplay, but most sites get a better Core Web Vitals score by keeping native behavior.
 
-= Comment régler le nombre de colonnes visibles ? =
+= Can I have multiple carousels on the same page? =
 
-Le plugin offre deux modes pour contrôler la largeur des slides dans les carousels Grid et Post Template :
+Yes, without limit. Each block manages its own CSS variables.
 
-**Mode 1 : Manual (Nombre de colonnes fixe)**
-1. Dans les paramètres du bloc, allez dans "Grid" > "Grid item position"
-2. Sélectionnez "Manual"
-3. Définissez le nombre de colonnes dans "Column count" (1-16)
-4. Résultat : Le carousel affichera toujours exactement ce nombre de colonnes visibles
+= How do I adjust buttons or position markers? =
 
-**Mode 2 : Auto (Largeur fixe)**
-1. Dans les paramètres du bloc, allez dans "Grid" > "Grid item position"
-2. Sélectionnez "Auto"
-3. Définissez la largeur dans "Minimum column width" (ex: 300px)
-4. Résultat : Chaque slide fera exactement 300px de large (sauf si l'écran est plus petit, auquel cas elle s'adapte)
+In your theme or via a CSS snippets plugin, override the variables:
 
-**Quel mode choisir ?**
-- **Mode Manual** : Vous voulez toujours 3 cartes visibles en proportion (33% chacune)
-- **Mode Auto** : Vous voulez que chaque carte fasse exactement 300px (largeur fixe)
+```css
+.wp-block-group.is-carousel {
+    --carousel-button-bg: var(--wp--preset--color--primary);
+    --carousel-marker-size: 0.8rem;
+}
+```
 
-Le plugin détecte automatiquement le mode choisi et applique les styles appropriés. Aucun réglage supplémentaire nécessaire !
+= What happens if the browser doesn't support `::scroll-button`? =
 
-= Le carousel est-il responsive ? =
-
-Oui, complètement ! Le carousel s'adapte automatiquement à toutes les tailles d'écran avec un système responsive intelligent :
-
-**Desktop (> 1280px)** : jusqu'à 6 colonnes
-**Desktop Standard (< 1280px)** : jusqu'à 5 colonnes
-**Tablette Paysage (< 1024px)** : jusqu'à 4 colonnes
-**Tablette Portrait (< 782px)** : jusqu'à 3 colonnes
-**Mobile Paysage (< 600px)** : jusqu'à 2 colonnes
-**Mobile Portrait (< 480px)** : 1 colonne
-
-**Exemple** : Si vous créez un carousel avec 6 colonnes, il affichera automatiquement 4 colonnes sur tablette, 2 sur mobile paysage, et 1 sur mobile portrait. Aucune configuration nécessaire !
-
-Le système adapte également automatiquement :
-- La taille des boutons de navigation
-- La taille des marqueurs (dots)
-- L'espacement entre les éléments
-- Les marges internes
-
-= Comment personnaliser le comportement responsive ? =
-
-Le système responsive est automatique, mais vous pouvez le personnaliser via CSS si nécessaire. Consultez la documentation complète sur GitHub pour plus de détails.
+Visual arrows remain visible (disabled state) and users navigate via touch scroll or mouse wheel. The experience remains responsive.
 
 == Screenshots ==
 
-1. Toggle "Carousel" dans les paramètres du bloc
-2. Exemple de carousel avec Gallery
-3. Carousel de Post Template (boucle de posts)
-4. Carousel Grid avec colonnes personnalisées
-5. Configuration du nombre de colonnes et espacement
+1. "Carousel" option in the Gutenberg sidebar panel.
+2. Query Loop carousel displaying latest posts.
+3. WooCommerce products carousel 100% CSS.
+4. Mixed carousel (image + testimonial + button).
+5. Custom CSS variables to adapt the design.
 
 == Changelog ==
 
-= 1.0.1 - 2025-01-XX =
-* ✨ **NOUVEAU** : Support complet du mode "Auto" (Minimum column width) pour Grid et Post Template
-* ✨ Deux modes disponibles : Manual (nombre de colonnes fixe) et Auto (largeur fixe en pixels)
-* 🎯 Détection automatique du mode choisi par l'utilisateur dans les paramètres du bloc
-* 🎨 Application automatique de la largeur fixe aux slides en mode Auto
-* 📱 **Mode Auto intelligent** : La largeur définie est respectée exactement, sauf si elle dépasse la fenêtre (mobile)
-* 📱 Utilisation de min() pour éviter que les slides dépassent sur mobile
-* 💬 Messages d'aide améliorés dans l'éditeur pour expliquer les deux modes
-* 📖 Documentation enrichie avec guide détaillé sur les deux modes
-* 🎨 **NOUVEAU** : Gestion intelligente du padding horizontal et vertical
-* 🎨 Les boutons de navigation respectent automatiquement le padding horizontal du carousel
-* 🎨 Les marqueurs de scroll respectent automatiquement le padding-bottom du carousel
-* 🎨 Support complet du padding personnalisé (top, right, bottom, left)
-* 🎨 Détection automatique du padding depuis les attributs du bloc ou le style inline
-* 🚀 Script JavaScript frontend optimisé pour injecter les variables CSS nécessaires
-* 🎨 Amélioration de la visibilité des boutons inactifs (opacité augmentée)
-* 🐛 Correction du positionnement des boutons avec padding personnalisé
-* 🐛 Correction du positionnement des marqueurs avec padding-bottom personnalisé
-* 🛠️ Refactor interne : autoloading PSR-4, services modulaires, séparation des styles éditeur/frontend et service dédié aux traductions
+= 1.0.1 - 2025-01-24 =
+* ✨ Added Auto mode (fixed width) for Grid, Post Template, and WooCommerce Products.
+* ✨ Smart mode selection based on Gutenberg settings.
+* 🎨 Complete horizontal/vertical padding management via CSS variables.
+* 🎨 Buttons and markers automatically adapt to custom spacing.
+* 📱 Fixed width respected even on mobile thanks to `min()` and `clamp()`.
+* 💬 Enhanced contextual messages in the editor to guide mode selection.
+* 🚀 Optimized editor JavaScript service to limit memory footprint.
+* 🐛 Fixed control positioning with asymmetric padding.
+* 🛠️ Internal refactor: PSR-4 autoload, modular services, front/editor separation.
 
-= 1.0.0 - 2025-01-XX =
-* 🎉 Version initiale
-* Support des blocs Gallery, Grid, Group, Post Template
-* Détection automatique des couleurs du thème
-* Support des presets WordPress pour les espacements
-* Gestion du Block Spacing (y compris gap horizontal/vertical pour Gallery)
-* Détection automatique des colonnes pour Grid
-* Système responsive complet avec adaptation automatique des colonnes
-* Breakpoints WordPress standards (1280px, 1024px, 782px, 600px, 480px, 375px)
-* Adaptation progressive : 6 colonnes → 5 → 4 → 3 → 2 → 1 selon la taille d'écran
-* Boutons de navigation responsive (48px → 32px sur mobile)
-* Marqueurs responsive avec tailles adaptées
-* Espacements adaptatifs selon la taille d'écran
-* Support responsive pour galeries et layouts fluides
-* Optimisation GPU avec transform et contain
-* Amélioration accessibilité avec respect des préférences utilisateur
-* 100% CSS, zéro JavaScript côté public
-* Navigation accessible au clavier
-* Compatible mobile avec défilement tactile
-
+= 1.0.0 - 2025-01-10 =
+* 🎉 Initial version available on WordPress.org.
+* ✅ Support for Gallery, Group, Grid, Columns, Query Loop/Post Template, WooCommerce Products blocks.
+* 🎯 Automatic column and block spacing detection.
+* 📱 WordPress standard breakpoints integrated (1280 → 375).
+* 🎨 Responsive buttons and markers (3rem → 1.75rem, 0.66rem → 0.35rem).
+* 🚀 No JavaScript dependencies on frontend (100% native CSS).
+* ♿ Keyboard navigation, respects `prefers-reduced-motion`.
+* 🔄 Multi-carousel compatibility on the same page.
 
 == Upgrade Notice ==
 
 = 1.0.1 =
-Nouvelle version avec support complet du mode Auto (largeur fixe), gestion intelligente du padding personnalisé, et amélioration de la visibilité des boutons. Mise à jour recommandée pour une meilleure expérience utilisateur.
+Recommended update: Auto mode, advanced padding management, alignment fixes, and improved editor performance.
 
 == Developer Notes ==
 
 = GitHub Repository =
 
-Le code source est disponible sur GitHub : [https://github.com/WEBLAZER/native-blocks-carousel](https://github.com/WEBLAZER/native-blocks-carousel)
+Source code is available on GitHub: [https://github.com/WEBLAZER/native-blocks-carousel](https://github.com/WEBLAZER/native-blocks-carousel)
 
 = Contributions =
 
-Les contributions sont les bienvenues ! N'hésitez pas à :
-* Signaler des bugs via GitHub Issues
-* Proposer des améliorations via Pull Requests
-* Traduire le plugin dans votre langue
+Contributions are welcome! You can:
+* Open a GitHub ticket to report a bug or suggest an improvement.
+* Propose a Pull Request.
+* Help with translation (`.po` files available in `languages/`).
 
-= Hooks disponibles =
+= Available hooks =
 
-Le plugin utilise le hook `render_block` pour injecter les variables CSS dynamiques.
+The plugin uses the `render_block` hook to dynamically inject CSS variables based on the current block.
 
-= CSS Variables =
+= Main CSS Variables =
 
-Le plugin utilise les variables CSS suivantes (personnalisables via CSS) :
+**Layout & Spacing:**
+* `--wp--style--block-gap` – Spacing between elements (responsive).
+* `--carousel-min-width` – Minimum width for grids in Auto mode.
+* `--carousel-grid-item-width` – Item width in Manual mode.
+* `--carousel-padding-left`, `--carousel-padding-right`, `--carousel-padding-top`, `--carousel-padding-bottom` – Detected padding.
 
-**Layout & Spacing :**
-* `--wp--style--block-gap` - Espacement entre les éléments (adaptatif responsive)
-* `--carousel-min-width` - Largeur minimale pour les Grids en mode fluide
-* `--carousel-grid-item-width` - Largeur des items dans les grilles (adaptatif responsive)
-* `--carousel-padding-left` - Padding gauche du carousel (défini automatiquement)
-* `--carousel-padding-right` - Padding droit du carousel (défini automatiquement)
-* `--carousel-padding-top` - Padding haut du carousel (défini automatiquement)
-* `--carousel-padding-bottom` - Padding bas du carousel (défini automatiquement)
+**Navigation buttons:**
+* `--carousel-button-bg`, `--carousel-button-color` – Colors auto-detected from theme.
+* `--carousel-button-size` – Button size (3rem → 1.75rem).
+* `--carousel-button-offset` – Lateral offset based on container width.
+* `--carousel-shadow` – Shadow applied to controls.
 
-**Boutons de Navigation :**
-* `--carousel-button-bg` - Couleur de fond des boutons (auto-détectée depuis le thème)
-* `--carousel-button-color` - Couleur du texte des boutons (auto-détectée depuis le thème)
-* `--carousel-button-size` - Taille des boutons (responsive : 3rem → 1.75rem)
-* `--carousel-button-offset` - Décalage des boutons par rapport aux bords (responsive)
-* `--carousel-shadow` - Ombre des boutons et marqueurs
+**Markers (dots):**
+* `--carousel-marker-size` – Marker size.
+* `--carousel-marker-gap` – Horizontal spacing.
+* `--carousel-marker-bottom-offset` – Vertical position.
 
-**Marqueurs (Dots) :**
-* `--carousel-marker-size` - Taille des marqueurs (responsive : 0.66rem → 0.35rem)
-* `--carousel-marker-gap` - Espacement entre les marqueurs (responsive)
-* `--carousel-marker-bottom-offset` - Position verticale des marqueurs (responsive)
-
-**Autres :**
-* `--carousel-z-index` - Z-index des contrôles (défaut : 999999)
-* `--carousel-transition-duration` - Durée des transitions (défaut : 0.3s)
-* `--carousel-transition-easing` - Courbe d'animation (défaut : cubic-bezier)
-
-Toutes les variables marquées "responsive" s'adaptent automatiquement selon les breakpoints définis dans le CSS.
+**Miscellaneous:**
+* `--carousel-z-index` – Display priority (default 999999).
+* `--carousel-transition-duration`, `--carousel-transition-easing` – Animation smoothness.
 
 == Credits ==
 
-Développé avec ❤️ par [Arthur Ballan (WEBLAZER)](https://weblazer.github.io/)
-
+Developed with ❤️ by [Arthur Ballan (WEBLAZER)](https://weblazer.github.io/)
