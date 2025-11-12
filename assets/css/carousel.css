@@ -385,6 +385,17 @@
 	scroll-snap-align: center !important;
 }
 
+/* ==========================================================================
+   SCROLL SNAP POUR POST TEMPLATE EN MODE LIST VIEW
+   ========================================================================== */
+
+/* Post Template en mode list view (sans is-layout-grid) : snap sur le centre */
+.wp-block-post-template.nbc-carousel:not(.is-layout-grid) .wp-block-post,
+.block-editor-block-list__layout .wp-block-post-template.nbc-carousel:not(.is-layout-grid) .wp-block-post,
+.editor-styles-wrapper .wp-block-post-template.nbc-carousel:not(.is-layout-grid) .wp-block-post {
+	scroll-snap-align: center !important;
+}
+
 /* Règles spécifiques pour Post Template en mode Auto */
 .wp-block-post-template.nbc-carousel.nbc-carousel-min-width .wp-block-post,
 .block-editor-block-list__layout .wp-block-post-template.nbc-carousel.nbc-carousel-min-width .wp-block-post,
