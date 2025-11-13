@@ -8,14 +8,16 @@
 		},
 		{
 			"step": "installPlugin",
-			"pluginZipFile": {
+			"pluginData": {
 				"resource": "url",
 				"url": "https://github.com/WEBLAZER/any-block-carousel-slider/archive/refs/heads/main.zip"
-			}
+			},
+			"pluginPath": "any-block-carousel-slider-main"
 		},
 		{
 			"step": "runPHP",
-			"code": "<?php\n// Rename plugin directory from 'any-block-carousel-slider-main' to 'any-block-carousel-slider'\n$old_dir = WP_PLUGIN_DIR . '/any-block-carousel-slider-main';\n$new_dir = WP_PLUGIN_DIR . '/any-block-carousel-slider';\nif (file_exists($old_dir) && !file_exists($new_dir)) {\n    rename($old_dir, $new_dir);\n}\n"
+			"code": "<?php\n// Rename plugin directory from 'any-block-carousel-slider-main' to 'any-block-carousel-slider'\n$old_dir = WP_PLUGIN_DIR . '/any-block-carousel-slider-main';\n$new_dir = WP_PLUGIN_DIR . '/any-block-carousel-slider';\nif (file_exists($old_dir) && !file_exists($new_dir)) {\n    rename($old_dir, $new_dir);\n}\n",
+			"pluginPath": "any-block-carousel-slider-main"
 		},
 		{
 			"step": "activatePlugin",
