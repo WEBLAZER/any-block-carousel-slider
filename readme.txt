@@ -19,7 +19,7 @@ Unlike many all-in-one carousel slider blocks that require you to add a dedicate
 
 = Try it now =
 
-Test **Any Block Carousel Slider** instantly in your browser with [WordPress Playground](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/WEBLAZER/any-block-carousel-slider/main/.wordpress-org/playground-blueprint.json) – no installation required! The demo includes pre-configured examples of Query Loop, Gallery, and Group blocks transformed into smooth, responsive carousels. Simply open the demo page to see the plugin in action.
+Test **Any Block Carousel Slider** instantly in your browser with [WordPress Playground](https://playground.wordpress.net/?blueprint-url=https%3A%2F%2Fraw.githubusercontent.com%2FWEBLAZER%2Fany-block-carousel-slider%2Fmain%2F.wordpress-org%2Fplayground-blueprint.json) – no installation required! The demo includes pre-configured examples of Query Loop, Gallery, and Group blocks transformed into smooth, responsive carousels. Simply open the demo page to see the plugin in action.
 
 = Why Any Block Carousel Slider instead of a dedicated carousel slider block? =
 

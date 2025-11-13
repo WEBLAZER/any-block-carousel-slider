@@ -1,0 +1,39 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"steps": [
+		{
+			"step": "login",
+			"username": "admin",
+			"password": "password"
+		},
+		{
+			"step": "installPlugin",
+			"pluginZipFile": {
+				"resource": "url",
+				"url": "https://github.com/WEBLAZER/any-block-carousel-slider/archive/refs/heads/main.zip"
+			}
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php\n// Rename plugin directory from 'any-block-carousel-slider-main' to 'any-block-carousel-slider'\n$old_dir = WP_PLUGIN_DIR . '/any-block-carousel-slider-main';\n$new_dir = WP_PLUGIN_DIR . '/any-block-carousel-slider';\nif (file_exists($old_dir) && !file_exists($new_dir)) {\n    rename($old_dir, $new_dir);\n}\n"
+		},
+		{
+			"step": "activatePlugin",
+			"pluginName": "any-block-carousel-slider/any-block-carousel-slider.php"
+		},
+		{
+			"step": "importWxr",
+			"file": {
+				"resource": "url",
+				"url": "https://raw.githubusercontent.com/WEBLAZER/any-block-carousel-slider/main/.wordpress-org/demo-content.xml"
+			}
+		},
+		{
+			"step": "setSiteOptions",
+			"options": {
+				"blogname": "Any Block Carousel Slider Demo",
+				"blogdescription": "Demo site showcasing the Any Block Carousel Slider plugin"
+			}
+		}
+	]
+}
