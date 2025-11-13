@@ -1,8 +1,8 @@
 /**
- * Frontend script for Native Blocks Carousel
+ * Frontend script for Any Block Carousel Slider
  * Injects missing CSS variables for the minimumColumnWidth mode.
  *
- * @package NativeBlocksCarousel
+ * @package AnyBlockCarouselSlider
  * @version 1.0.2
  * @author weblazer35
  */
@@ -10,7 +10,7 @@
 (function () {
 	'use strict';
 
-	const SHARED = window.NativeBlocksCarouselShared || {};
+	const SHARED = window.AnyBlockCarouselSliderShared || {};
 	const FALLBACK_DEFAULT_ARROW_STYLE = 'chevron';
 	const DEFAULT_ARROW_STYLE = SHARED.DEFAULT_ARROW_STYLE || FALLBACK_DEFAULT_ARROW_STYLE;
 
@@ -179,8 +179,8 @@
 	 * Injects --carousel-min-width for carousels using minimumColumnWidth mode.
 	 */
 	function injectMinWidthVariables() {
-		// Find all carousels with the nbc-carousel-min-width class
-		const carousels = document.querySelectorAll('.nbc-carousel.nbc-carousel-min-width');
+		// Find all carousels with the abcs-min-width class
+		const carousels = document.querySelectorAll('.abcs.abcs-min-width');
 
 		carousels.forEach(function (carousel) {
 			// Check whether the variable is already defined
@@ -216,7 +216,7 @@
 	 * and inject them as CSS variables. Works even when PHP fails to extract padding.
 	 */
 	function injectPaddingVariables() {
-		const carousels = document.querySelectorAll('.nbc-carousel');
+		const carousels = document.querySelectorAll('.abcs');
 
 		carousels.forEach(function (carousel) {
 			const computedStyle = window.getComputedStyle(carousel);
@@ -323,11 +323,11 @@
 		}
 
 		const iconClass = Array.prototype.find.call(element.classList, function (cls) {
-			return cls.indexOf('nbc-carousel-icon-') === 0;
+			return cls.indexOf('abcs-icon-') === 0;
 		});
 
 		if (iconClass) {
-			const styleKey = iconClass.replace('nbc-carousel-icon-', '');
+			const styleKey = iconClass.replace('abcs-icon-', '');
 			return normalizeStyleKey(styleKey);
 		}
 
@@ -389,7 +389,7 @@
 
 			docsToSearch.forEach((searchDoc) => {
 				try {
-					const found = Array.from(searchDoc.querySelectorAll('.nbc-carousel'));
+					const found = Array.from(searchDoc.querySelectorAll('.abcs'));
 					found.forEach((node) => {
 						if (node) {
 							carousels.push(node);
@@ -416,7 +416,7 @@
 
 			const parent = carousel.parentElement;
 
-			if (carousel.classList && carousel.classList.contains('nbc-carousel-hide-arrows')) {
+			if (carousel.classList && carousel.classList.contains('abcs-hide-arrows')) {
 				carousel.style.setProperty('--carousel-button-arrow-left', 'none');
 				carousel.style.setProperty('--carousel-button-arrow-right', 'none');
 				if (parent) {
@@ -440,8 +440,16 @@
 
 			carousel.style.setProperty('--carousel-button-arrow-left', 'url("' + leftArrowSvg + '")');
 			carousel.style.setProperty('--carousel-button-arrow-right', 'url("' + rightArrowSvg + '")');
+		if (carousel.dataset) {
+			carousel.dataset.abcsCarouselArrowStyle = styleKey;
+			carousel.dataset.abcsArrowStyle = styleKey;
+		}
 
 			if (parent) {
+			if (parent.dataset) {
+				parent.dataset.abcsCarouselArrowStyle = styleKey;
+				parent.dataset.abcsArrowStyle = styleKey;
+			}
 				parent.style.setProperty('--carousel-button-arrow-left', 'url("' + leftArrowSvg + '")');
 				parent.style.setProperty('--carousel-button-arrow-right', 'url("' + rightArrowSvg + '")');
 			}
@@ -520,7 +528,7 @@
 	// Run again after load (in case styles were loaded later)
 	window.addEventListener('load', function () {
 		// Check whether --carousel-min-width is missing on some carousels
-		const carousels = document.querySelectorAll('.nbc-carousel.nbc-carousel-min-width');
+		const carousels = document.querySelectorAll('.abcs.abcs-min-width');
 		let needsMinWidthUpdate = false;
 		carousels.forEach(function (carousel) {
 			const computedStyle = window.getComputedStyle(carousel);
@@ -551,8 +559,8 @@
 	});
 
 	if (typeof window !== 'undefined') {
-		window.nbcCarousel = window.nbcCarousel || {};
-		window.nbcCarousel.applyArrowIconsToCarousels = function (color, context, overrideConfig) {
+		window.abcsCarousel = window.abcsCarousel || {};
+		window.abcsCarousel.applyArrowIconsToCarousels = function (color, context, overrideConfig) {
 			const normalizedConfig = overrideConfig ? {
 				...overrideConfig,
 				styleKey: normalizeStyleKey(overrideConfig.styleKey),

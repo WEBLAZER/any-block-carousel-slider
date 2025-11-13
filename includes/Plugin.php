@@ -1,16 +1,16 @@
 <?php
 /**
- * Main class for the Native Blocks Carousel plugin.
+ * Main class for the Any Block Carousel Slider plugin.
  *
- * @package NativeBlocksCarousel
+ * @package AnyBlockCarouselSlider
  */
 
 declare(strict_types=1);
 
-namespace Weblazer\NativeBlocksCarousel;
+namespace Weblazer\AnyBlockCarouselSlider;
 
-use Weblazer\NativeBlocksCarousel\Contracts\ServiceInterface;
-use Weblazer\NativeBlocksCarousel\Translations;
+use Weblazer\AnyBlockCarouselSlider\Contracts\ServiceInterface;
+use Weblazer\AnyBlockCarouselSlider\Translations;
 
 /**
  * Entry point coordinating the different plugin services.
@@ -53,8 +53,8 @@ class Plugin
             $services = [
                 new Translations(),
                 new Assets(
-                    NATIVE_BLOCKS_CAROUSEL_VERSION,
-                    NATIVE_BLOCKS_CAROUSEL_PLUGIN_URL,
+                    ANY_BLOCK_CAROUSEL_SLIDER_VERSION,
+                    ANY_BLOCK_CAROUSEL_SLIDER_PLUGIN_URL,
                     $theme_styles
                 ),
                 new Renderer(),

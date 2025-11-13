@@ -1,13 +1,13 @@
 <?php
 /**
- * Basic autoloader for Native Blocks Carousel classes.
+ * Basic autoloader for Any Block Carousel Slider classes.
  *
- * @package NativeBlocksCarousel
+ * @package AnyBlockCarouselSlider
  */
 
 declare(strict_types=1);
 
-namespace Weblazer\NativeBlocksCarousel;
+namespace Weblazer\AnyBlockCarouselSlider;
 
 /**
  * Minimal PSR-4 autoloader for the plugin namespace.

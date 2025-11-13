@@ -2,12 +2,12 @@
 /**
  * Contrat pour les services responsables du chargement des traductions.
  *
- * @package NativeBlocksCarousel
+ * @package AnyBlockCarouselSlider
  */
 
 declare(strict_types=1);
 
-namespace Weblazer\NativeBlocksCarousel\Contracts;
+namespace Weblazer\AnyBlockCarouselSlider\Contracts;
 
 interface TranslationServiceInterface extends ServiceInterface
 {

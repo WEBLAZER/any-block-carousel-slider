@@ -1,7 +1,7 @@
 (function (global) {
   'use strict';
 
-  const shared = global.NativeBlocksCarouselShared || {};
+  const shared = global.AnyBlockCarouselSliderShared || {};
 
   const DEFAULT_ARROW_STYLE = 'chevron';
 
@@ -109,6 +109,6 @@
   shared.generateArrowSvg = generateArrowSvg;
   shared.generateArrowMarkup = generateArrowMarkup;
 
-  global.NativeBlocksCarouselShared = shared;
+  global.AnyBlockCarouselSliderShared = shared;
 })(window);
 

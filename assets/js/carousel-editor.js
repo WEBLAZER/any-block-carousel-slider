@@ -1,6 +1,6 @@
 /**
  * Adds a "Carousel" toggle to Group, Post Template and Gallery blocks
- * to easily enable/disable the .nbc-carousel class.
+ * to easily enable/disable the .abcs class.
  */
 (function (wp) {
   const { addFilter } = wp.hooks;
@@ -15,7 +15,7 @@
    */
   const SUPPORTED_BLOCKS = ['core/group', 'core/post-template', 'core/gallery'];
 
-  const SHARED = window.NativeBlocksCarouselShared || {};
+  const SHARED = window.AnyBlockCarouselSliderShared || {};
   const FALLBACK_DEFAULT_ARROW_STYLE = 'chevron';
   const DEFAULT_ARROW_STYLE = SHARED.DEFAULT_ARROW_STYLE || FALLBACK_DEFAULT_ARROW_STYLE;
 
@@ -123,6 +123,52 @@
 
   const isValidArrowStyle = (styleKey) => !!getIconDefinition(styleKey);
 
+  const findBlockWrapperElements = (rootDoc, targetClientId) => {
+    if (!targetClientId) {
+      return [];
+    }
+
+    const results = new Set();
+
+    const collectFromDocument = (searchDoc) => {
+      if (!searchDoc || typeof searchDoc.querySelectorAll !== 'function') {
+        return;
+      }
+      const matches = searchDoc.querySelectorAll(`[data-block="${targetClientId}"]`);
+      matches.forEach((node) => {
+        if (node) {
+          results.add(node);
+        }
+      });
+    };
+
+    collectFromDocument(rootDoc);
+
+    if (rootDoc === document) {
+      const iframeSelectors = [
+        '.editor-canvas iframe',
+        'iframe[name="editor-canvas"]',
+        '.edit-site-visual-editor__editor-canvas',
+      ];
+
+      iframeSelectors.forEach((selector) => {
+        try {
+          const iframe = document.querySelector(selector);
+          if (!iframe) {
+            return;
+          }
+
+          const iframeDoc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document) || null;
+          collectFromDocument(iframeDoc);
+        } catch (error) {
+          // Ignore cross-origin or unavailable iframe documents
+        }
+      });
+    }
+
+    return Array.from(results);
+  };
+
   /**
    * Registers the `carouselEnabled` attribute on supported blocks.
    */
@@ -187,15 +233,15 @@
       const arrowStyleOptions = [
         {
           value: 'chevron',
-          label: __('Chevron', 'native-blocks-carousel'),
+          label: __('Chevron', 'any-block-carousel-slider'),
         },
         {
           value: 'arrow',
-          label: __('Arrow', 'native-blocks-carousel'),
+          label: __('Arrow', 'any-block-carousel-slider'),
         },
         {
           value: 'angles',
-          label: __('Angles', 'native-blocks-carousel'),
+          label: __('Angles', 'any-block-carousel-slider'),
         },
       ];
 
@@ -206,7 +252,7 @@
 
         return createElement(
           'span',
-          { className: 'nbc-arrow-style-icon' },
+          { className: 'abcs-arrow-style-icon' },
           createElement(RawHTML, { children: rightArrow })
         );
       };
@@ -240,37 +286,37 @@
         // Remove all existing carousel-* classes (new and legacy)
         const filteredClasses = classArray.filter(
           (cls) =>
-            !cls.startsWith('nbc-carousel-cols-') &&
-            cls !== 'nbc-carousel-min-width' &&
+            !cls.startsWith('abcs-cols-') &&
+            cls !== 'abcs-min-width' &&
             // Remove legacy classes kept for migration purposes
             !cls.startsWith('carousel-cols-') &&
             cls !== 'carousel-min-width' &&
-            !cls.startsWith('nbc-carousel-icon-') &&
-            cls !== 'nbc-carousel-hide-arrows' &&
-            cls !== 'nbc-carousel-hide-markers'
+            !cls.startsWith('abcs-icon-') &&
+            cls !== 'abcs-hide-arrows' &&
+            cls !== 'abcs-hide-markers'
         );
 
         if (enabled) {
-          // Add the 'nbc-carousel' class if it is not already present
-          if (!filteredClasses.includes('nbc-carousel')) {
-            filteredClasses.push('nbc-carousel');
+          // Add the 'abcs' class if it is not already present
+          if (!filteredClasses.includes('abcs')) {
+            filteredClasses.push('abcs');
           }
 
-          // For galleries, detect and add the nbc-carousel-cols-X class
+          // For galleries, detect and add the abcs-cols-X class
           if (name === 'core/gallery') {
             const columnCount = attributes.columns;
 
             // If a column count is defined (up to 8 columns)
             if (columnCount && columnCount >= 1 && columnCount <= 8) {
-              filteredClasses.push(`nbc-carousel-cols-${columnCount}`);
+              filteredClasses.push(`abcs-cols-${columnCount}`);
             }
             // Otherwise default to 3 columns
             else {
-              filteredClasses.push('nbc-carousel-cols-3');
+              filteredClasses.push('abcs-cols-3');
             }
           }
 
-          // For grids (Group and Post Template), detect and add the nbc-carousel-cols-X class
+          // For grids (Group and Post Template), detect and add the abcs-cols-X class
           if (
             (name === 'core/group' || name === 'core/post-template') &&
             attributes.layout?.type === 'grid'
@@ -285,20 +331,20 @@
 
             // If a column count is defined (up to 16 columns) and we are not in Auto mode
             if (columnCount && columnCount >= 1 && columnCount <= 16 && !isAutoMode) {
-              filteredClasses.push(`nbc-carousel-cols-${columnCount}`);
+              filteredClasses.push(`abcs-cols-${columnCount}`);
             }
             // If a minimum width is defined or we are in Auto mode
             else if (minimumColumnWidth || isAutoMode) {
-              filteredClasses.push('nbc-carousel-min-width');
+              filteredClasses.push('abcs-min-width');
             }
             // Otherwise default to 3 columns
             else {
-              filteredClasses.push('nbc-carousel-cols-3');
+              filteredClasses.push('abcs-cols-3');
             }
           }
         } else {
-          // Remove the 'nbc-carousel' class
-          const index = filteredClasses.indexOf('nbc-carousel');
+          // Remove the 'abcs' class
+          const index = filteredClasses.indexOf('abcs');
           if (index > -1) {
             filteredClasses.splice(index, 1);
           }
@@ -310,7 +356,7 @@
       };
 
       /**
-       * Keep the nbc-carousel-cols-X class in sync when column counts change.
+       * Keep the abcs-cols-X class in sync when column counts change.
        */
       useEffect(() => {
         if (!carouselEnabled) {
@@ -320,11 +366,11 @@
         const currentClasses = attributes.className || '';
         const classArray = currentClasses.split(' ').filter(Boolean);
 
-        // Find the current nbc-carousel-cols-* class
+        // Find the current abcs-cols-* class
         const currentColsClass = classArray.find((cls) =>
-          cls.startsWith('nbc-carousel-cols-')
+          cls.startsWith('abcs-cols-')
         );
-        const hasMinWidthClass = classArray.includes('nbc-carousel-min-width');
+        const hasMinWidthClass = classArray.includes('abcs-min-width');
 
         let expectedColsClass = null;
         let shouldHaveMinWidthClass = false;
@@ -335,11 +381,11 @@
 
           // If a column count is defined (up to 8 columns)
           if (columnCount && columnCount >= 1 && columnCount <= 8) {
-            expectedColsClass = `nbc-carousel-cols-${columnCount}`;
+            expectedColsClass = `abcs-cols-${columnCount}`;
           }
           // Otherwise default to 3 columns
           else {
-            expectedColsClass = 'nbc-carousel-cols-3';
+            expectedColsClass = 'abcs-cols-3';
           }
         }
 
@@ -356,7 +402,7 @@
           // because they may originate from a previous list layout and must not affect manual grids
           if (columnCount && columnCount >= 1 && columnCount <= 16) {
             // Manual grid mode: ignore minimumColumnWidth and gridItemPosition
-            expectedColsClass = `nbc-carousel-cols-${columnCount}`;
+            expectedColsClass = `abcs-cols-${columnCount}`;
             shouldHaveMinWidthClass = false;
           }
           // If no columnCount, check whether we are in Auto mode
@@ -371,7 +417,7 @@
             }
             // Otherwise default to 3 columns
             else {
-              expectedColsClass = 'nbc-carousel-cols-3';
+              expectedColsClass = 'abcs-cols-3';
               shouldHaveMinWidthClass = false;
             }
           }
@@ -381,8 +427,8 @@
         if (currentColsClass !== expectedColsClass || hasMinWidthClass !== shouldHaveMinWidthClass) {
           const filteredClasses = classArray.filter(
             (cls) =>
-              !cls.startsWith('nbc-carousel-cols-') &&
-              cls !== 'nbc-carousel-min-width' &&
+              !cls.startsWith('abcs-cols-') &&
+              cls !== 'abcs-min-width' &&
               // Remove legacy classes kept for migration purposes
               !cls.startsWith('carousel-cols-') &&
               cls !== 'carousel-min-width'
@@ -393,7 +439,7 @@
             filteredClasses.push(expectedColsClass);
           }
           if (shouldHaveMinWidthClass) {
-            filteredClasses.push('nbc-carousel-min-width');
+            filteredClasses.push('abcs-min-width');
           }
 
           setAttributes({
@@ -412,12 +458,12 @@
         const classArray = currentClasses.split(' ').filter(Boolean);
         const baseClasses = classArray.filter(
           (cls) =>
-            !cls.startsWith('nbc-carousel-icon-') &&
-            cls !== 'nbc-carousel-hide-arrows' &&
-            cls !== 'nbc-carousel-hide-markers'
+            !cls.startsWith('abcs-icon-') &&
+            cls !== 'abcs-hide-arrows' &&
+            cls !== 'abcs-hide-markers'
         );
         const normalizedStyle = normalizedArrowStyle;
-        const desiredClass = `nbc-carousel-icon-${normalizedStyle}`;
+        const desiredClass = `abcs-icon-${normalizedStyle}`;
 
         let nextClasses = [...baseClasses];
 
@@ -426,12 +472,12 @@
             if (!nextClasses.includes(desiredClass)) {
               nextClasses.push(desiredClass);
             }
-          } else if (!nextClasses.includes('nbc-carousel-hide-arrows')) {
-            nextClasses.push('nbc-carousel-hide-arrows');
+          } else if (!nextClasses.includes('abcs-hide-arrows')) {
+            nextClasses.push('abcs-hide-arrows');
           }
 
-          if (!carouselShowMarkers && !nextClasses.includes('nbc-carousel-hide-markers')) {
-            nextClasses.push('nbc-carousel-hide-markers');
+          if (!carouselShowMarkers && !nextClasses.includes('abcs-hide-markers')) {
+            nextClasses.push('abcs-hide-markers');
           }
         }
 
@@ -452,31 +498,64 @@
           const doc = document;
           if (doc && typeof requestAnimationFrame === 'function') {
             const runUpdate = () => {
-              const blockWrapper = doc.querySelector(`[data-block="${clientId}"]`);
-              let targetCarousel = null;
-
-              if (blockWrapper) {
-                if (blockWrapper.classList && blockWrapper.classList.contains('nbc-carousel')) {
-                  targetCarousel = blockWrapper;
-                } else {
-                  targetCarousel = blockWrapper.querySelector('.nbc-carousel');
-                }
-              }
-
-              if (!targetCarousel) {
+              const blockWrappers = findBlockWrapperElements(doc, clientId);
+              if (!blockWrappers.length) {
                 return;
               }
 
-              const config = {
-                styleKey: normalizedStyle,
-                elements: [targetCarousel],
-              };
+              const carouselsByDocument = new Map();
 
-              applyArrowIconsToCarousels(null, doc, config);
+              blockWrappers.forEach((wrapper) => {
+                if (!wrapper) {
+                  return;
+                }
 
-              setTimeout(() => {
-                applyArrowIconsToCarousels(null, doc, config);
-              }, 50);
+                const potentialTargets = [];
+
+                if (wrapper.classList && wrapper.classList.contains('abcs')) {
+                  potentialTargets.push(wrapper);
+                }
+
+                const descendants = wrapper.querySelectorAll('.abcs');
+                descendants.forEach((node) => {
+                  potentialTargets.push(node);
+                });
+
+                potentialTargets.forEach((carouselNode) => {
+                  if (!carouselNode) {
+                    return;
+                  }
+
+                  const ownerDocument = carouselNode.ownerDocument || doc;
+                  if (!carouselsByDocument.has(ownerDocument)) {
+                    carouselsByDocument.set(ownerDocument, new Set());
+                  }
+
+                  carouselsByDocument.get(ownerDocument).add(carouselNode);
+                });
+              });
+
+              if (!carouselsByDocument.size) {
+                return;
+              }
+
+              carouselsByDocument.forEach((carouselSet, ownerDocument) => {
+                const elements = Array.from(carouselSet);
+                if (!elements.length) {
+                  return;
+                }
+
+                const config = {
+                  styleKey: normalizedStyle,
+                  elements,
+                };
+
+                applyArrowIconsToCarousels(null, ownerDocument, config);
+
+                setTimeout(() => {
+                  applyArrowIconsToCarousels(null, ownerDocument, config);
+                }, 50);
+              });
             };
 
             requestAnimationFrame(() => {
@@ -491,7 +570,7 @@
           return;
         }
 
-        const styleId = 'nbc-arrow-style-control-styles';
+        const styleId = 'abcs-arrow-style-control-styles';
         if (document.getElementById(styleId)) {
           return;
         }
@@ -500,28 +579,28 @@
         style.id = styleId;
         style.type = 'text/css';
         style.textContent = `
-          .nbc-arrow-style-panel .components-base-control__field,
-          .nbc-arrow-style-panel .components-toggle-group-control {
+          .abcs-arrow-style-panel .components-base-control__field,
+          .abcs-arrow-style-panel .components-toggle-group-control {
             display: grid;
             justify-content: center;
           }
-          .nbc-arrow-style-panel .components-toggle-group-control {
+          .abcs-arrow-style-panel .components-toggle-group-control {
             width: 100%;
           }
-          .nbc-arrow-style-panel .nbc-arrow-style-group {
+          .abcs-arrow-style-panel .abcs-arrow-style-group {
             gap: 8px;
           }
-          .nbc-arrow-style-group.components-toggle-group-control {
+          .abcs-arrow-style-group.components-toggle-group-control {
             display: flex;
             flex-wrap: wrap;
           }
-          .nbc-arrow-style-group .components-toggle-group-control__option {
-            --nbc-arrow-option-size: 44px;
-            width: var(--nbc-arrow-option-size);
-            height: var(--nbc-arrow-option-size);
-            min-width: var(--nbc-arrow-option-size);
-            min-height: var(--nbc-arrow-option-size);
-            flex: 0 0 var(--nbc-arrow-option-size);
+          .abcs-arrow-style-group .components-toggle-group-control__option {
+            --abcs-arrow-option-size: 44px;
+            width: var(--abcs-arrow-option-size);
+            height: var(--abcs-arrow-option-size);
+            min-width: var(--abcs-arrow-option-size);
+            min-height: var(--abcs-arrow-option-size);
+            flex: 0 0 var(--abcs-arrow-option-size);
             padding: 0;
             border-radius: 10px;
             display: flex;
@@ -534,7 +613,7 @@
             transition: box-shadow .2s ease, transform .2s ease, color .2s ease;
             box-sizing: border-box;
           }
-          .nbc-arrow-style-group .components-toggle-group-control__option > span {
+          .abcs-arrow-style-group .components-toggle-group-control__option > span {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -542,25 +621,25 @@
             height: 100%;
             line-height: 0;
           }
-          .nbc-arrow-style-group .components-toggle-group-control__option:hover {
+          .abcs-arrow-style-group .components-toggle-group-control__option:hover {
             box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
             transform: translateY(-1px);
           }
-          .nbc-arrow-style-group .components-toggle-group-control__option.is-selected {
+          .abcs-arrow-style-group .components-toggle-group-control__option.is-selected {
             background: var(--wp-admin-theme-color, #3858e9);
             border-color: var(--wp-admin-theme-color, #3858e9);
             color: #fff;
             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
             transform: none;
           }
-          .nbc-arrow-style-icon {
+          .abcs-arrow-style-icon {
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
             height: 100%;
           }
-          .nbc-arrow-style-icon svg {
+          .abcs-arrow-style-icon svg {
             width: 20px;
             height: 20px;
             display: block;
@@ -582,11 +661,11 @@
           createElement(
             PanelBody,
             {
-              title: __('Carousel', 'native-blocks-carousel'),
+              title: __('Carousel', 'any-block-carousel-slider'),
               initialOpen: true,
             },
             createElement(ToggleControl, {
-              label: __('Enable carousel', 'native-blocks-carousel'),
+              label: __('Enable carousel', 'any-block-carousel-slider'),
               checked: carouselEnabled,
               __nextHasNoMarginBottom: true,
               onChange: toggleCarousel,
@@ -594,35 +673,35 @@
                 ? name === 'core/gallery'
                   ? __(
                     'Carousel is enabled. The number of visible columns is detected automatically from the gallery settings.',
-                    'native-blocks-carousel'
+                    'any-block-carousel-slider'
                   )
                   : (name === 'core/group' || name === 'core/post-template') && attributes.layout?.type === 'grid'
                     ? attributes.layout?.minimumColumnWidth
                       ? __(
                         'Carousel is enabled in Auto mode. Slide width is set by the "Minimum column width" (' + attributes.layout.minimumColumnWidth + ').',
-                        'native-blocks-carousel'
+                        'any-block-carousel-slider'
                       )
                       : attributes.layout?.columnCount
                         ? __(
                           'Carousel is enabled in Manual mode. The number of visible columns (' + attributes.layout.columnCount + ') is taken from the grid settings.',
-                          'native-blocks-carousel'
+                          'any-block-carousel-slider'
                         )
                         : __(
                           'Carousel is enabled. Configure the column count or minimum width in the grid settings.',
-                          'native-blocks-carousel'
+                          'any-block-carousel-slider'
                         )
                     : __(
                       'Carousel is enabled. Items scroll horizontally.',
-                      'native-blocks-carousel'
+                      'any-block-carousel-slider'
                     )
                 : __(
                   'Enable to convert this block into a carousel with navigation. You can then choose Manual mode (column count) or Auto mode (minimum column width).',
-                  'native-blocks-carousel'
+                  'any-block-carousel-slider'
                 ),
             }),
             carouselEnabled
               ? createElement(ToggleControl, {
-                label: __('Display navigation arrows', 'native-blocks-carousel'),
+                label: __('Display navigation arrows', 'any-block-carousel-slider'),
                 checked: carouselShowArrows,
                 __nextHasNoMarginBottom: true,
                 onChange: (value) => {
@@ -631,17 +710,17 @@
                 help: carouselShowArrows
                   ? __(
                     'Navigation arrows are visible on the carousel.',
-                    'native-blocks-carousel'
+                    'any-block-carousel-slider'
                   )
                   : __(
                     'Arrows are hidden. Users can navigate via swipe or scroll.',
-                    'native-blocks-carousel'
+                    'any-block-carousel-slider'
                   ),
               })
               : null,
             carouselEnabled
               ? createElement(ToggleControl, {
-                label: __('Display pagination markers', 'native-blocks-carousel'),
+                label: __('Display pagination markers', 'any-block-carousel-slider'),
                 checked: carouselShowMarkers,
                 __nextHasNoMarginBottom: true,
                 onChange: (value) => {
@@ -650,11 +729,11 @@
                 help: carouselShowMarkers
                   ? __(
                     'Pagination markers are displayed below the carousel.',
-                    'native-blocks-carousel'
+                    'any-block-carousel-slider'
                   )
                   : __(
                     'Pagination markers are hidden for a cleaner layout.',
-                    'native-blocks-carousel'
+                    'any-block-carousel-slider'
                   ),
               })
               : null,
@@ -662,14 +741,14 @@
               ? createElement(
                 PanelBody,
                 {
-                  title: __('Arrow style', 'native-blocks-carousel'),
+                  title: __('Arrow style', 'any-block-carousel-slider'),
                   initialOpen: true,
-                  className: 'nbc-arrow-style-panel',
+                  className: 'abcs-arrow-style-panel',
                 },
                 createElement(
                   ToggleGroupControl,
                   {
-                    className: 'nbc-arrow-style-group',
+                    className: 'abcs-arrow-style-group',
                     value: normalizedArrowStyle,
                     isBlock: false,
                     __next40pxDefaultSize: true,
@@ -685,7 +764,7 @@
                       value: option.value,
                       label: option.label,
                       icon: buildIconElement(option.value),
-                      className: 'nbc-arrow-style-option',
+                      className: 'abcs-arrow-style-option',
                       'aria-label': option.label,
                       showTooltip: true,
                     })
@@ -717,7 +796,7 @@
       // Adjust the gap using the computed value directly
       if (typeof window !== 'undefined' && window.getComputedStyle) {
         const node = props?.clientId ? document.querySelector(`[data-block="${props.clientId}"]`) : null;
-        const carouselNode = node && node.classList.contains('nbc-carousel') ? node : node?.querySelector?.('.nbc-carousel');
+        const carouselNode = node && node.classList.contains('abcs') ? node : node?.querySelector?.('.abcs');
         if (carouselNode) {
           const computedGap = window.getComputedStyle(carouselNode).gap || window.getComputedStyle(carouselNode).columnGap;
           if (computedGap && computedGap !== 'normal') {
@@ -836,7 +915,7 @@
             ...props.wrapperProps?.style,
             ...customStyles,
           },
-          'data-nbc-carousel-arrow-style': attributes.carouselArrowStyle || DEFAULT_ARROW_STYLE,
+          'data-abcs-arrow-style': attributes.carouselArrowStyle || DEFAULT_ARROW_STYLE,
         },
       };
 
@@ -847,19 +926,19 @@
   // Register filters
   addFilter(
     'blocks.registerBlockType',
-    'native-blocks-carousel/add-carousel-attribute',
+    'any-block-carousel-slider/add-carousel-attribute',
     addCarouselAttribute
   );
 
   addFilter(
     'editor.BlockEdit',
-    'native-blocks-carousel/with-carousel-control',
+    'any-block-carousel-slider/with-carousel-control',
     withCarouselControl
   );
 
   addFilter(
     'editor.BlockListBlock',
-    'native-blocks-carousel/with-carousel-styles',
+    'any-block-carousel-slider/with-carousel-styles',
     withCarouselStyles
   );
 
@@ -869,7 +948,7 @@
    * Variables are already injected from React attributes via withCarouselStyles.
    */
   function copyPaddingVariablesToParent() {
-    const carousels = document.querySelectorAll('.nbc-carousel');
+    const carousels = document.querySelectorAll('.abcs');
     carousels.forEach(function (carousel) {
       const computedStyle = window.getComputedStyle(carousel);
 
@@ -1097,25 +1176,25 @@
       return DEFAULT_ARROW_STYLE;
     }
 
-    if (element.dataset && element.dataset.nbcCarouselArrowStyle) {
-      const normalizedDatasetStyle = normalizeStyleKey(element.dataset.nbcCarouselArrowStyle);
+    if (element.dataset && element.dataset.abcsCarouselArrowStyle) {
+      const normalizedDatasetStyle = normalizeStyleKey(element.dataset.abcsCarouselArrowStyle);
       if (isValidArrowStyle(normalizedDatasetStyle)) {
         return normalizedDatasetStyle;
       }
     }
 
-    const parentWithData = element.closest('[data-nbc-carousel-arrow-style]');
-    if (parentWithData && parentWithData.dataset && parentWithData.dataset.nbcCarouselArrowStyle) {
-      const normalizedParentStyle = normalizeStyleKey(parentWithData.dataset.nbcCarouselArrowStyle);
+    const parentWithData = element.closest('[data-abcs-arrow-style]');
+    if (parentWithData && parentWithData.dataset && parentWithData.dataset.abcsCarouselArrowStyle) {
+      const normalizedParentStyle = normalizeStyleKey(parentWithData.dataset.abcsCarouselArrowStyle);
       if (isValidArrowStyle(normalizedParentStyle)) {
         return normalizedParentStyle;
       }
     }
 
-    const iconClass = Array.from(element.classList).find((cls) => cls.startsWith('nbc-carousel-icon-'));
+    const iconClass = Array.from(element.classList).find((cls) => cls.startsWith('abcs-icon-'));
 
     if (iconClass) {
-      const styleKey = normalizeStyleKey(iconClass.replace('nbc-carousel-icon-', ''));
+      const styleKey = normalizeStyleKey(iconClass.replace('abcs-icon-', ''));
       if (isValidArrowStyle(styleKey)) {
         return styleKey;
       }
@@ -1180,7 +1259,7 @@
 
       docsToSearch.forEach((searchDoc) => {
         try {
-          const found = Array.from(searchDoc.querySelectorAll('.nbc-carousel'));
+          const found = Array.from(searchDoc.querySelectorAll('.abcs'));
           if (found.length) {
             found.forEach((node) => {
               if (node) {
@@ -1210,7 +1289,7 @@
 
       const parent = carousel.parentElement;
 
-      if (carousel.classList && carousel.classList.contains('nbc-carousel-hide-arrows')) {
+      if (carousel.classList && carousel.classList.contains('abcs-hide-arrows')) {
         carousel.style.setProperty('--carousel-button-arrow-left', 'none');
         carousel.style.setProperty('--carousel-button-arrow-right', 'none');
         if (parent) {
@@ -1234,7 +1313,8 @@
       const rightArrowSvg = generateArrowSvg('right', arrowColor, styleKey);
 
       if (carousel.dataset) {
-        carousel.dataset.nbcCarouselArrowStyle = styleKey;
+        carousel.dataset.abcsCarouselArrowStyle = styleKey;
+        carousel.dataset.abcsArrowStyle = styleKey;
       }
 
       carousel.style.setProperty('--carousel-button-arrow-left', `url("${leftArrowSvg}")`);
@@ -1242,7 +1322,8 @@
 
       if (parent) {
         if (parent.dataset) {
-          parent.dataset.nbcCarouselArrowStyle = styleKey;
+          parent.dataset.abcsCarouselArrowStyle = styleKey;
+          parent.dataset.abcsArrowStyle = styleKey;
         }
         parent.style.setProperty('--carousel-button-arrow-left', `url("${leftArrowSvg}")`);
         parent.style.setProperty('--carousel-button-arrow-right', `url("${rightArrowSvg}")`);
@@ -1381,7 +1462,7 @@
               if (node.nodeName === 'STYLE' || (node.nodeType === 1 && node.tagName === 'STYLE')) {
                 shouldUpdate = true;
               }
-              if (node.nodeType === 1 && node.classList && node.classList.contains('nbc-carousel')) {
+              if (node.nodeType === 1 && node.classList && node.classList.contains('abcs')) {
                 shouldUpdate = true;
               }
             });
@@ -1536,8 +1617,8 @@
   }
 
   if (typeof window !== 'undefined') {
-    window.nbcCarousel = window.nbcCarousel || {};
-    window.nbcCarousel.applyArrowIconsToCarousels = (color, context, overrideConfig) => {
+    window.abcsCarousel = window.abcsCarousel || {};
+    window.abcsCarousel.applyArrowIconsToCarousels = (color, context, overrideConfig) => {
       const normalizedConfig = overrideConfig ? {
         ...overrideConfig,
         styleKey: normalizeStyleKey(overrideConfig.styleKey),

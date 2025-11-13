@@ -1,13 +1,13 @@
 <?php
 /**
- * Handles theme-inherited styles for Native Blocks Carousel.
+ * Handles theme-inherited styles for Any Block Carousel Slider.
  *
- * @package NativeBlocksCarousel
+ * @package AnyBlockCarouselSlider
  */
 
 declare(strict_types=1);
 
-namespace Weblazer\NativeBlocksCarousel;
+namespace Weblazer\AnyBlockCarouselSlider;
 
 /**
  * Retrieves and injects button colors from the active theme.
@@ -63,7 +63,7 @@ class ThemeStyles
         $custom_css .= '}';
 
         if (!empty($button_bg) || !empty($button_color)) {
-            \wp_add_inline_style('native-blocks-carousel', $custom_css);
+            \wp_add_inline_style('any-block-carousel-slider', $custom_css);
         }
     }
 

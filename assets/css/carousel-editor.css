@@ -1,58 +1,58 @@
 /*
- * Gutenberg editor styles for Native Blocks Carousel
- * @package NativeBlocksCarousel
+ * Gutenberg editor styles for Any Block Carousel Slider
+ * @package AnyBlockCarouselSlider
  */
 
-.cfg-nbc-carousel-toggle-control {
+.cfg-abcs-toggle-control {
 	margin-bottom: 1rem;
 }
 
-.cfg-nbc-carousel-toggle-control .components-base-control__label {
+.cfg-abcs-toggle-control .components-base-control__label {
 	font-weight: 600;
 	color: #1e1e1e;
 }
 
-.cfg-nbc-carousel-toggle-control .components-base-control__help {
+.cfg-abcs-toggle-control .components-base-control__help {
 	font-size: 12px;
 	color: #757575;
 	margin-top: 4px;
 }
 
-.cfg-nbc-carousel-toggle-control .components-toggle-control__label[for*="carousel"] {
+.cfg-abcs-toggle-control .components-toggle-control__label[for*="carousel"] {
 	color: #007cba;
 	font-weight: 600;
 }
 
-.cfg-nbc-carousel-panel .components-panel__body-title {
+.cfg-abcs-panel .components-panel__body-title {
 	font-weight: 600;
 }
 
-.nbc-arrow-style-panel .components-base-control__field,
-.nbc-arrow-style-panel .components-toggle-group-control {
+.abcs-arrow-style-panel .components-base-control__field,
+.abcs-arrow-style-panel .components-toggle-group-control {
 	display: grid;
 	justify-content: center;
 }
 
-.nbc-arrow-style-panel .components-toggle-group-control {
+.abcs-arrow-style-panel .components-toggle-group-control {
 	width: 100%;
 }
 
-.nbc-arrow-style-panel .nbc-arrow-style-group {
+.abcs-arrow-style-panel .abcs-arrow-style-group {
 	gap: 8px;
 }
 
-.nbc-arrow-style-group.components-toggle-group-control {
+.abcs-arrow-style-group.components-toggle-group-control {
 	display: flex;
 	flex-wrap: wrap;
 }
 
-.nbc-arrow-style-group .components-toggle-group-control__option {
-	--nbc-arrow-option-size: 44px;
-	width: var(--nbc-arrow-option-size);
-	height: var(--nbc-arrow-option-size);
-	min-width: var(--nbc-arrow-option-size);
-	min-height: var(--nbc-arrow-option-size);
-	flex: 0 0 var(--nbc-arrow-option-size);
+.abcs-arrow-style-group .components-toggle-group-control__option {
+	--abcs-arrow-option-size: 44px;
+	width: var(--abcs-arrow-option-size);
+	height: var(--abcs-arrow-option-size);
+	min-width: var(--abcs-arrow-option-size);
+	min-height: var(--abcs-arrow-option-size);
+	flex: 0 0 var(--abcs-arrow-option-size);
 	padding: 0;
 	border-radius: 10px;
 	display: flex;
@@ -66,7 +66,7 @@
 	box-sizing: border-box;
 }
 
-.nbc-arrow-style-group .components-toggle-group-control__option>span {
+.abcs-arrow-style-group .components-toggle-group-control__option>span {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -75,12 +75,12 @@
 	line-height: 0;
 }
 
-.nbc-arrow-style-group .components-toggle-group-control__option:hover {
+.abcs-arrow-style-group .components-toggle-group-control__option:hover {
 	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
 	transform: translateY(-1px);
 }
 
-.nbc-arrow-style-group .components-toggle-group-control__option.is-selected {
+.abcs-arrow-style-group .components-toggle-group-control__option.is-selected {
 	background: var(--wp-admin-theme-color, #3858e9);
 	border-color: var(--wp-admin-theme-color, #3858e9);
 	color: #fff;
@@ -88,14 +88,14 @@
 	transform: none;
 }
 
-.nbc-arrow-style-group .components-toggle-group-control__option.is-selected .nbc-arrow-style-icon__button {
+.abcs-arrow-style-group .components-toggle-group-control__option.is-selected .abcs-arrow-style-icon__button {
 	background: rgba(255, 255, 255, 0.2);
 	border-color: rgba(255, 255, 255, 0.7);
 	box-shadow: none;
 	color: #fff;
 }
 
-.nbc-arrow-style-icon {
+.abcs-arrow-style-icon {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -103,49 +103,49 @@
 	height: 100%;
 }
 
-.nbc-arrow-style-icon svg {
+.abcs-arrow-style-icon svg {
 	width: 20px;
 	height: 20px;
 	display: block;
 }
 
 
-.cfg-nbc-carousel-panel-first {
+.cfg-abcs-panel-first {
 	order: -1000 !important;
 }
 
-.block-editor-block-inspector .cfg-nbc-carousel-panel-first {
+.block-editor-block-inspector .cfg-abcs-panel-first {
 	order: -1000 !important;
 	margin-bottom: 16px;
 }
 
-.block-editor-block-list__layout .nbc-carousel>*:not(:first-child),
-.editor-styles-wrapper .nbc-carousel>*:not(:first-child) {
+.block-editor-block-list__layout .abcs>*:not(:first-child),
+.editor-styles-wrapper .abcs>*:not(:first-child) {
 	pointer-events: none;
 }
 
 @media (prefers-color-scheme: dark) {
-	.cfg-nbc-carousel-toggle-control .components-base-control__label {
+	.cfg-abcs-toggle-control .components-base-control__label {
 		color: #fff;
 	}
 
-	.cfg-nbc-carousel-toggle-control .components-base-control__help {
+	.cfg-abcs-toggle-control .components-base-control__help {
 		color: #ccc;
 	}
 }
 
-:has(> .nbc-carousel.nbc-carousel-hide-arrows)::after {
+:has(> .abcs.abcs-hide-arrows)::after {
 	display: none !important;
 	content: none !important;
 }
 
-:has(> .nbc-carousel.nbc-carousel-hide-markers)::after {
+:has(> .abcs.abcs-hide-markers)::after {
 	display: none !important;
 	content: none !important;
 }
 
 @supports selector(::scroll-button(*)) {
-	.nbc-carousel.nbc-carousel-hide-arrows::scroll-button(*) {
+	.abcs.abcs-hide-arrows::scroll-button(*) {
 		display: none !important;
 		opacity: 0 !important;
 		visibility: hidden !important;
@@ -154,7 +154,7 @@
 }
 
 @supports selector(::scroll-marker-group) {
-	.nbc-carousel.nbc-carousel-hide-markers::scroll-marker-group {
+	.abcs.abcs-hide-markers::scroll-marker-group {
 		display: none !important;
 		opacity: 0 !important;
 		visibility: hidden !important;
@@ -163,7 +163,7 @@
 }
 
 @supports selector(::scroll-marker) {
-	.nbc-carousel.nbc-carousel-hide-markers>*::scroll-marker {
+	.abcs.abcs-hide-markers>*::scroll-marker {
 		opacity: 0 !important;
 		cursor: default !important;
 		pointer-events: none !important;

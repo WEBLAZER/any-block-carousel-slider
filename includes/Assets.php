@@ -1,15 +1,15 @@
 <?php
 /**
- * Handles asset loading for Native Blocks Carousel.
+ * Handles asset loading for Any Block Carousel Slider.
  *
- * @package NativeBlocksCarousel
+ * @package AnyBlockCarouselSlider
  */
 
 declare(strict_types=1);
 
-namespace Weblazer\NativeBlocksCarousel;
+namespace Weblazer\AnyBlockCarouselSlider;
 
-use Weblazer\NativeBlocksCarousel\Contracts\ServiceInterface;
+use Weblazer\AnyBlockCarouselSlider\Contracts\ServiceInterface;
 
 /**
  * Loads the plugin styles and scripts.
@@ -72,16 +72,16 @@ class Assets implements ServiceInterface
         $this->registerScripts();
 
         \wp_enqueue_style(
-            'native-blocks-carousel',
+            'any-block-carousel-slider',
             $this->pluginUrl . 'assets/css/carousel.css',
             [],
             $this->version
         );
 
-        \wp_enqueue_script('native-blocks-carousel-shared');
+        \wp_enqueue_script('any-block-carousel-slider-shared');
 
         if (!\is_admin()) {
-            \wp_enqueue_script('native-blocks-carousel-frontend');
+            \wp_enqueue_script('any-block-carousel-slider-frontend');
         }
 
         $this->themeStyles->injectButtonColors();
@@ -96,19 +96,19 @@ class Assets implements ServiceInterface
     {
         $this->registerScripts();
 
-        \wp_enqueue_style('native-blocks-carousel');
+        \wp_enqueue_style('any-block-carousel-slider');
 
-        $editorStylesPath = NATIVE_BLOCKS_CAROUSEL_PLUGIN_PATH . 'assets/css/carousel-editor.css';
+        $editorStylesPath = ANY_BLOCK_CAROUSEL_SLIDER_PLUGIN_PATH . 'assets/css/carousel-editor.css';
         if (\file_exists($editorStylesPath)) {
             $editorStyles = \file_get_contents($editorStylesPath);
             if ($editorStyles) {
-                \wp_add_inline_style('native-blocks-carousel', $editorStyles);
+                \wp_add_inline_style('any-block-carousel-slider', $editorStyles);
             }
         }
 
-        \wp_enqueue_script('native-blocks-carousel-shared');
+        \wp_enqueue_script('any-block-carousel-slider-shared');
 
-        \wp_enqueue_script('native-blocks-carousel-editor');
+        \wp_enqueue_script('any-block-carousel-slider-editor');
     }
 
     /**
@@ -118,9 +118,9 @@ class Assets implements ServiceInterface
      */
     private function registerScripts(): void
     {
-        if (!\wp_script_is('native-blocks-carousel-shared', 'registered')) {
+        if (!\wp_script_is('any-block-carousel-slider-shared', 'registered')) {
             \wp_register_script(
-                'native-blocks-carousel-shared',
+                'any-block-carousel-slider-shared',
                 $this->pluginUrl . 'assets/js/carousel-shared.js',
                 [],
                 $this->version,
@@ -128,22 +128,22 @@ class Assets implements ServiceInterface
             );
         }
 
-        if (!\wp_script_is('native-blocks-carousel-frontend', 'registered')) {
+        if (!\wp_script_is('any-block-carousel-slider-frontend', 'registered')) {
             \wp_register_script(
-                'native-blocks-carousel-frontend',
+                'any-block-carousel-slider-frontend',
                 $this->pluginUrl . 'assets/js/carousel-frontend-init.js',
-                ['native-blocks-carousel-shared'],
+                ['any-block-carousel-slider-shared'],
                 $this->version,
                 true
             );
         }
 
-        if (!\wp_script_is('native-blocks-carousel-editor', 'registered')) {
+        if (!\wp_script_is('any-block-carousel-slider-editor', 'registered')) {
             \wp_register_script(
-                'native-blocks-carousel-editor',
+                'any-block-carousel-slider-editor',
                 $this->pluginUrl . 'assets/js/carousel-editor.js',
                 [
-                    'native-blocks-carousel-shared',
+                    'any-block-carousel-slider-shared',
                     'wp-blocks',
                     'wp-element',
                     'wp-editor',

@@ -1,15 +1,15 @@
 <?php
 /**
- * Service de chargement des traductions pour Native Blocks Carousel.
+ * Service de chargement des traductions pour Any Block Carousel Slider.
  *
- * @package NativeBlocksCarousel
+ * @package AnyBlockCarouselSlider
  */
 
 declare(strict_types=1);
 
-namespace Weblazer\NativeBlocksCarousel;
+namespace Weblazer\AnyBlockCarouselSlider;
 
-use Weblazer\NativeBlocksCarousel\Contracts\TranslationServiceInterface;
+use Weblazer\AnyBlockCarouselSlider\Contracts\TranslationServiceInterface;
 
 class Translations implements TranslationServiceInterface
 {
@@ -27,9 +27,9 @@ class Translations implements TranslationServiceInterface
     public function loadTranslations(): void
     {
         load_plugin_textdomain(
-            'native-blocks-carousel',
+            'any-block-carousel-slider',
             false,
-            dirname(plugin_basename(NATIVE_BLOCKS_CAROUSEL_PLUGIN_FILE)) . '/languages'
+            dirname(plugin_basename(ANY_BLOCK_CAROUSEL_SLIDER_PLUGIN_FILE)) . '/languages'
         );
     }
 }

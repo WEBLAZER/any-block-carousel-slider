@@ -1,13 +1,13 @@
 <?php
 /**
- * Generic contract for Native Blocks Carousel services.
+ * Generic contract for Any Block Carousel Slider services.
  *
- * @package NativeBlocksCarousel
+ * @package AnyBlockCarouselSlider
  */
 
 declare(strict_types=1);
 
-namespace Weblazer\NativeBlocksCarousel\Contracts;
+namespace Weblazer\AnyBlockCarouselSlider\Contracts;
 
 interface ServiceInterface
 {

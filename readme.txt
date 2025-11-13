@@ -1,25 +1,25 @@
-=== Native Blocks Carousel ===
+=== Any Block Carousel Slider ===
 Contributors: weblazer
 Donate link: https://weblazer.github.io/
-Tags: carousel, gutenberg, query-loop, woocommerce, css-only
+Tags: carousel, slider, block, gutenberg, query-loop
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Transform any WordPress block into a responsive Gutenberg carousel with pure CSS. Works with Query Loop, Gallery, WooCommerce Products, and custom blocks. Zero JavaScript, maximum performance.
+Gutenberg carousel slider block: transform any WordPress block into a responsive carousel with pure CSS. Zero JavaScript.
 
 == Description ==
 
-**Native Blocks Carousel** instantly converts any native WordPress block (Gallery, Group, Grid, Query Loop, Post Template, WooCommerce Products, etc.) into a responsive carousel without adding a dedicated block or loading a JavaScript library. Simply enable the "Carousel" toggle in the editor: your content stays 100% native, your DOM stays lightweight, and your Lighthouse performance scores remain intact.
+**Any Block Carousel Slider** is a Gutenberg carousel slider block plugin that instantly converts any native WordPress block (Gallery, Group, Grid, Query Loop, Post Template, WooCommerce Products, etc.) into a responsive carousel slider without adding a dedicated block or loading a JavaScript library. Simply enable the "Carousel" toggle in the Gutenberg editor: your content stays 100% native, your DOM stays lightweight, and your Lighthouse performance scores remain intact.
 
-Unlike all-in-one carousel blocks like **Carousel Slider v2** that require you to add a "Carousel" block and manually recreate each slide ([see official listing](https://wordpress.org/plugins/carousel-block/)), **Native Blocks Carousel** hooks directly into the blocks you're already using. Result: a WordPress loop, image gallery, or product grid can become a slider in one click, without content duplication or extra maintenance.
+Unlike many all-in-one carousel slider blocks that require you to add a dedicated "Carousel" block and rebuild every slide, **Any Block Carousel Slider** hooks straight into the Gutenberg blocks you already use. The result: a WordPress loop, image gallery, or product grid can become a carousel slider in one click, without content duplication or extra maintenance.
 
-= Why Native Blocks Carousel instead of a dedicated carousel block? =
+= Why Any Block Carousel Slider instead of a dedicated carousel slider block? =
 
-* **WordPress loops without friction** – Transform Query Loop and Post Template blocks into a "loop slider" without creating a block per slide.
+* **WordPress loops without friction** – Transform Query Loop and Post Template Gutenberg blocks into a "loop slider" without creating a block per slide.
 * **Familiar editorial experience** – Content editors keep the Gutenberg interface they know (patterns, global styles, alignments, inner blocks).
 * **Zero JavaScript on the frontend** – Native scroll, `scroll-snap`, GPU-friendly, no Swiper/Slick bundle to load.
 * **Full compatibility** – Works with classic themes (including Uncode) and block themes, plus WooCommerce, ACF Blocks, custom CPTs.
@@ -35,35 +35,33 @@ Unlike all-in-one carousel blocks like **Carousel Slider v2** that require you t
 
 = Quick comparison =
 
-| Feature | Native Blocks Carousel | Classic carousel blocks |
-| --- | --- | --- |
-| Activation | Toggle on existing block | Add separate carousel block |
-| WordPress loop | ✅ Query Loop, Post Template, CPT, products | ❌ Requires a block per slide or custom code |
-| Frontend JavaScript | ❌ None | ✅ Swiper/Slick + custom scripts |
-| Performance | Native CSS, no dependencies | Scripts, reflow, additional files |
-| Content maintenance | Single source block | Content duplication in carousel block |
-| Security | No third-party dependencies to update | Dependent library (Swiper/Slick) |
+- **Activation**: Any Block Carousel Slider – toggle an existing Gutenberg block. Classic carousel slider blocks – add a dedicated slider block and rebuild every slide.
+- **WordPress loop**: Any Block Carousel Slider – fonctionne avec Query Loop, Post Template, CPT et produits WooCommerce sans duplication. Les carrousels concurrents – imposent un bloc par diapositive ou du code personnalisé.
+- **Frontend JavaScript**: Any Block Carousel Slider – zéro JavaScript, carousel slider 100 % CSS. Les carrousels concurrents – chargent Swiper/Slick et des scripts additionnels.
+- **Performance**: Any Block Carousel Slider – DOM léger, aucun asset externe. Les carrousels concurrents – multiplient les fichiers, reflow et téléchargements.
+- **Content maintenance**: Any Block Carousel Slider – un seul bloc Gutenberg à mettre à jour. Les carrousels concurrents – dupliquent le contenu dans des slides dédiées.
+- **Security & upkeep**: Any Block Carousel Slider – aucune bibliothèque tierce à surveiller. Les carrousels concurrents – dépendent de librairies JS externes comme Swiper/Slick.
 
 = Key features =
 
-* **100% CSS** – Smooth carousel with `scroll-snap`, `::scroll-button`, and `::scroll-marker`. No script to bundle.
+* **100% CSS** – Smooth carousel slider with `scroll-snap`, `::scroll-button`, and `::scroll-marker`. No script to bundle.
 * **Smart responsive** – Automatically handles visible columns, spacing, and control sizes according to WordPress breakpoints (1280, 1024, 782, 600, 480, 375).
 * **Two width modes** – Manual mode (fixed column count) and Auto mode (fixed width like 320px) with automatic detection.
-* **Block spacing detection** – Respects `gap` and `padding` values defined in the editor, including presets.
+* **Gutenberg block spacing detection** – Respects `gap` and `padding` values defined in the block editor, including presets.
 * **Theme colors** – Buttons automatically inherit your theme's colors and radii (via CSS variables).
-* **Intact semantics** – Your block's tags and classes remain unchanged: perfect for SEO, schemas, and E2E testing.
+* **Intact semantics** – Your Gutenberg block's tags and classes remain unchanged: perfect for SEO, schemas, and E2E testing.
 
-= Native WordPress workflow =
+= Native Gutenberg block workflow =
 
-1. Add or edit a supported block (Gallery, Group, Columns, Query Loop/Post Template, WooCommerce Products, arranged patterns).
-2. Enable the **Carousel** option in the sidebar panel (Layout or Block section depending on the block).
+1. Add or edit a supported Gutenberg block (Gallery, Group, Columns, Query Loop/Post Template, WooCommerce Products, arranged patterns).
+2. Enable the **Carousel** option in the Gutenberg sidebar panel (Layout or Block section depending on the block).
 3. Adjust your usual settings (column count, minimum width, spacing, alignment).
-4. Save: your block becomes a touch-friendly, accessible, and SEO-friendly carousel.
+4. Save: your block becomes a touch-friendly, accessible, and SEO-friendly carousel slider.
 
 = Advanced customization =
 
-* **Manual mode (fixed columns)** – Ideal for article sliders: 1 to 6 columns depending on screen sizes.
-* **Auto mode (fixed width)** – Perfect for product carousels: 280px, 320px, or 360px respected pixel-perfect.
+* **Manual mode (fixed columns)** – Ideal for article carousel sliders: 1 to 6 columns depending on screen sizes.
+* **Auto mode (fixed width)** – Perfect for product carousel sliders: 280px, 320px, or 360px respected pixel-perfect.
 * **Padding and gaps** – Automatic management via CSS vars `--carousel-padding-*`, `--wp--style--block-gap`.
 * **Themes & `theme.json`** – Override variables to align controls with your design system.
 * **Graceful degradation** – If a browser doesn't support `::scroll-button`, users keep touch and mouse scrolling.
@@ -80,7 +78,7 @@ Unlike all-in-one carousel blocks like **Carousel Slider v2** that require you t
 = Automatic installation =
 
 1. Go to "Plugins" → "Add New".
-2. Search for **Native Blocks Carousel**.
+2. Search for **Any Block Carousel Slider**.
 3. Click "Install Now" then "Activate".
 
 = Manual installation =
@@ -91,21 +89,21 @@ Unlike all-in-one carousel blocks like **Carousel Slider v2** that require you t
 
 = Usage =
 
-1. Open a page, post, or template.
-2. Select a compatible block (Gallery, Group, Columns, Query Loop, WooCommerce Products, ACF block…).
-3. Enable the **Carousel** button in the settings.
+1. Open a page, post, or template in the Gutenberg editor.
+2. Select a compatible Gutenberg block (Gallery, Group, Columns, Query Loop, WooCommerce Products, ACF block…).
+3. Enable the **Carousel** button in the block settings.
 4. Adjust your columns, minimum width, or spacing.
-5. Publish or update: the carousel is operational.
+5. Publish or update: the carousel slider is operational.
 
 == Frequently Asked Questions ==
 
-= How does Native Blocks Carousel compare to Carousel Slider v2? =
+= How does Any Block Carousel Slider differ from traditional carousel blocks? =
 
-Unlike Carousel Slider v2 which requires adding a dedicated "Carousel" block and manually creating each slide, Native Blocks Carousel transforms your existing blocks (Query Loop, Gallery, Products) with a simple toggle. For Query Loops specifically, Carousel Slider v2 would require creating a carousel block, then adding a Query Loop with only 1 post per slide—very impractical. Native Blocks Carousel handles this natively: one toggle, zero duplication, maximum performance.
+Unlike traditional carousels that force you to insert a dedicated "Carousel" block and rebuild each slide by hand, Any Block Carousel Slider turns the Gutenberg blocks you already have (Query Loop, Gallery, Products, etc.) into a slider via a simple toggle. With a Query Loop for instance, legacy solutions usually require limiting the loop to one post per slide and duplicating layouts. Here, one block is enough: single action, zero duplication, maximum performance.
 
 = Is it compatible with all themes (block themes, FSE)? =
 
-Yes. The plugin reads style variables generated by your theme (classic or full site editing) and applies the carousel without breaking the initial grid.
+Yes. The Gutenberg carousel slider block plugin reads style variables generated by your theme (classic or full site editing) and applies the carousel slider without breaking the initial grid.
 
 = Does it require JavaScript on the frontend? =
 
@@ -113,15 +111,15 @@ No. Everything relies on native CSS. Only a few lines of JavaScript executed in 
 
 = How do I transform a Query Loop into a carousel? =
 
-Enable the Query Loop block (or Post Template), configure your filters and rendering, then check **Carousel**. Posts are automatically aligned on a scrollable line with snap and CSS arrows. This is the main advantage over traditional carousel plugins that don't support Query Loops natively.
+Enable the Query Loop Gutenberg block (or Post Template), configure your filters and rendering, then check **Carousel**. Posts are automatically aligned on a scrollable line with snap and CSS arrows. This is the main advantage over traditional carousel slider plugins that don't support Query Loops natively.
 
 = Can I mix images, titles, buttons, and forms in the same carousel? =
 
-Yes. The plugin respects existing inner blocks. A Group block containing image + text + button (or a custom ACF block) is transformed as-is.
+Yes. The plugin respects existing inner Gutenberg blocks. A Group block containing image + text + button (or a custom ACF block) is transformed as-is into a carousel slider.
 
 = WooCommerce compatible? =
 
-The **Products** block (List, Hand-picked Products, On Sale, etc.) works immediately. Add to cart buttons remain interactive.
+The **Products** Gutenberg block (List, Hand-picked Products, On Sale, etc.) works immediately as a carousel slider. Add to cart buttons remain interactive.
 
 = Is there an autoplay mode, infinite loop, or custom arrows? =
 
@@ -129,7 +127,7 @@ The plugin focuses on native scroll and performance. You can add a light custom 
 
 = Can I have multiple carousels on the same page? =
 
-Yes, without limit. Each block manages its own CSS variables.
+Yes, without limit. Each Gutenberg block manages its own CSS variables for the carousel slider.
 
 = How do I adjust buttons or position markers? =
 
@@ -148,18 +146,24 @@ Visual arrows remain visible (disabled state) and users navigate via touch scrol
 
 == Screenshots ==
 
-1. "Carousel" option in the Gutenberg sidebar panel.
-2. WooCommerce products carousel rendered with 100% CSS.
-3. Block Grid converted into a responsive carousel.
-4. Native Gallery displayed in carousel mode.
-5. Custom CSS variables to adapt the design.
+1. "Carousel" option in the Gutenberg block sidebar panel.
+2. WooCommerce products carousel slider rendered with 100% CSS.
+3. Gutenberg Block Grid converted into a responsive carousel slider.
+4. Native Gallery block displayed in carousel slider mode.
+5. Custom CSS variables to adapt the carousel slider design.
 
 == Changelog ==
+
+= 1.0.3 - 2025-11-13 =
+* 🔄 Plugin rebranded from "Native Blocks Carousel" to "Any Block Carousel Slider".
+* 🐛 Fixed dynamic arrow style updates in the Gutenberg editor (now works correctly in iframe contexts).
+* 🎨 Improved block detection across editor iframes for better arrow icon synchronization.
+* 🛠️ Enhanced multi-context carousel updates for Site Editor and Block Editor compatibility.
 
 = 1.0.2 - 2025-11-13 =
 * ✨ Added dedicated toggles in the inspector to show or hide arrows and pagination markers independently.
 * 🎯 Introduced `carouselShowArrows` and `carouselShowMarkers` block attributes for fine-grained carousel controls.
-* 🎨 Synced editor and frontend behaviors for the `nbc-carousel-hide-arrows` and `nbc-carousel-hide-markers` classes.
+* 🎨 Synced editor and frontend behaviors for the `abcs-hide-arrows` and `abcs-hide-markers` classes.
 * 🛠️ Bumped plugin version and refreshed asset headers.
 
 = 1.0.1 - 2025-01-24 =
@@ -185,6 +189,9 @@ Visual arrows remain visible (disabled state) and users navigate via touch scrol
 
 == Upgrade Notice ==
 
+= 1.0.3 =
+Recommended update: fixes dynamic arrow style updates in the editor and improves compatibility with Site Editor iframes.
+
 = 1.0.2 =
 Recommended update: manage arrow and marker visibility directly from the editor with consistent styling on both admin and frontend.
 
@@ -192,7 +199,7 @@ Recommended update: manage arrow and marker visibility directly from the editor 
 
 = GitHub Repository =
 
-Source code is available on GitHub: [https://github.com/WEBLAZER/native-blocks-carousel](https://github.com/WEBLAZER/native-blocks-carousel)
+Source code is available on GitHub: [https://github.com/WEBLAZER/any-block-carousel-slider](https://github.com/WEBLAZER/any-block-carousel-slider)
 
 = Contributions =
 

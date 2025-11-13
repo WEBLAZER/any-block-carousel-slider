@@ -2,14 +2,14 @@
 /**
  * Logic responsible for injecting CSS variables into rendered blocks.
  *
- * @package NativeBlocksCarousel
+ * @package AnyBlockCarouselSlider
  */
 
 declare(strict_types=1);
 
-namespace Weblazer\NativeBlocksCarousel;
+namespace Weblazer\AnyBlockCarouselSlider;
 
-use Weblazer\NativeBlocksCarousel\Contracts\ServiceInterface;
+use Weblazer\AnyBlockCarouselSlider\Contracts\ServiceInterface;
 
 /**
  * Adds the CSS variables required for the carousel to operate.
@@ -37,8 +37,8 @@ class Renderer implements ServiceInterface
     public function injectCarouselVariables(string $block_content, array $block): string
     {
         $class_name = $block['attrs']['className'] ?? '';
-        $has_carousel_class = false !== \strpos($class_name, 'nbc-carousel')
-            || false !== \strpos($block_content, 'nbc-carousel');
+        $has_carousel_class = false !== \strpos($class_name, 'abcs')
+            || false !== \strpos($block_content, 'abcs');
 
         if (!$has_carousel_class) {
             return $block_content;
@@ -58,7 +58,7 @@ class Renderer implements ServiceInterface
         if (\class_exists('\\WP_HTML_Tag_Processor')) {
             $processor = new \WP_HTML_Tag_Processor($block_content);
 
-            if ($processor->next_tag(['class_name' => 'nbc-carousel'])) {
+            if ($processor->next_tag(['class_name' => 'abcs'])) {
                 $existing_style = $processor->get_attribute('style');
                 $processor->set_attribute('style', $this->mergeStyleAttribute($existing_style, $styles_string));
 
@@ -70,7 +70,7 @@ class Renderer implements ServiceInterface
             }
         }
 
-        $pattern = '/(<(?:div|ul|figure)\s+[^>]*class="[^"]*\bnbc-carousel\b[^"]*"[^>]*?)(?:\s+style="([^"]*)")?(\s*>)/i';
+        $pattern = '/(<(?:div|ul|figure)\s+[^>]*class="[^"]*\babcs\b[^"]*"[^>]*?)(?:\s+style="([^"]*)")?(\s*>)/i';
 
         $replacement = function (array $matches) use ($styles_string) {
             $tag_start = $matches[1];
@@ -101,7 +101,7 @@ class Renderer implements ServiceInterface
     {
         if (
             ('core/group' !== ($block['blockName'] ?? '') && 'core/post-template' !== ($block['blockName'] ?? ''))
-            || false === \strpos($class_name, 'nbc-carousel-min-width')
+            || false === \strpos($class_name, 'abcs-min-width')
         ) {
             return;
         }
@@ -181,7 +181,7 @@ class Renderer implements ServiceInterface
         }
 
         if (null === $padding_left && null === $padding_right && null === $padding_top && null === $padding_bottom) {
-            if (\preg_match('/(<(?:div|ul|figure)[^>]*class="[^"]*\bnbc-carousel\b[^"]*"[^>]*?)(?:\s+style="([^"]*)")?/i', $block_content, $carousel_matches)) {
+            if (\preg_match('/(<(?:div|ul|figure)[^>]*class="[^"]*\babcs\b[^"]*"[^>]*?)(?:\s+style="([^"]*)")?/i', $block_content, $carousel_matches)) {
                 $style_attr = $carousel_matches[2] ?? '';
 
                 if (!empty($style_attr)) {
