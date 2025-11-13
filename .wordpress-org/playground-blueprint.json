@@ -11,8 +11,7 @@
 			"pluginData": {
 				"resource": "url",
 				"url": "https://github.com/WEBLAZER/any-block-carousel-slider/archive/refs/heads/main.zip"
-			},
-			"pluginPath": "any-block-carousel-slider-main"
+			}
 		},
 		{
 			"step": "activatePlugin",
