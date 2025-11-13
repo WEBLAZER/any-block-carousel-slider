@@ -6,7 +6,7 @@
  * Compatible with Block Editor and frontend
  *
  * @package NativeBlocksCarousel
- * @version 1.0.1
+ * @version 1.0.2
  * @author weblazer35
  */
 
@@ -24,44 +24,44 @@
 	--carousel-transition-duration: 0.3s;
 	--carousel-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
 
-	/* Couleurs - Détectées automatiquement par PHP depuis les styles du thème */
-	/* Les valeurs ci-dessous sont des fallbacks si aucun thème n'est détecté */
+	/* Colors - automatically detected from theme styles by PHP */
+	/* Values below act as fallbacks if no theme styles are found */
 	--carousel-button-bg: #007cba;
 	--carousel-button-color: #fff;
 	--carousel-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-	/* Padding du carousel - Défini automatiquement par PHP/JavaScript */
+	/* Carousel padding - automatically set by PHP/JavaScript */
 	--carousel-padding-left: 0px;
 	--carousel-padding-right: 0px;
 	--carousel-padding-top: 0px;
-	/* Padding-top par défaut du carousel */
+	/* Default carousel padding-top */
 	--carousel-padding-bottom: 0px;
-	/* Padding-bottom par défaut du carousel */
+	/* Default carousel padding-bottom */
 }
 
 /* ==========================================================================
    CAROUSEL PRINCIPAL
    ========================================================================== */
 
-/* Force TOUS les parents contenant un carousel à avoir position: relative */
-/* Nécessaire pour que ::scroll-button et ::scroll-marker se positionnent correctement */
-/* ::scroll-button semble se positionner par rapport à un ancêtre éloigné, pas au carousel lui-même */
+/* Force every parent containing a carousel to use position: relative */
+/* Required so ::scroll-button and ::scroll-marker are positioned correctly */
+/* ::scroll-button tends to position relative to a distant ancestor, not the carousel itself */
 :has(.nbc-carousel) {
 	position: relative !important;
 }
 
-/* Force aussi le parent direct à être en position relative */
-/* Important pour que les boutons se positionnent correctement par rapport au conteneur */
+/* Also force the direct parent to be positioned relative */
+/* Important to correctly anchor buttons to the container */
 .nbc-carousel {
 	position: relative !important;
 }
 
 /* S'assurer que le parent direct du carousel est aussi en position relative */
-/* Double sécurité pour les cas où :has() ne fonctionne pas partout */
-/* IMPORTANT: Le parent doit être le contexte de positionnement pour les boutons */
+/* Double safety for cases where :has() is not supported everywhere */
+/* IMPORTANT: the parent must be the positioning context for the buttons */
 *:has(> .nbc-carousel) {
 	position: relative !important;
-	/* S'assurer que le parent peut contenir les boutons positionnés */
+	/* Ensure the parent can contain positioned buttons */
 	overflow: visible;
 	/* S'assurer que le parent contraint la largeur du carousel */
 	max-width: 100%;
@@ -92,7 +92,7 @@
 	-webkit-overflow-scrolling: touch;
 
 	/* Scroll padding pour respecter le padding horizontal */
-	/* Défini automatiquement par PHP/JavaScript en fonction du padding-left/right */
+	/* Automatically set by PHP/JavaScript based on padding-left/right */
 	scroll-padding-left: var(--carousel-scroll-padding-left, 0);
 	scroll-padding-right: var(--carousel-scroll-padding-right, 0);
 
@@ -101,19 +101,19 @@
 	scrollbar-width: none;
 	-webkit-scrollbar: none;
 
-	/* Marqueurs (propriété CSS future) */
+	/* Scroll markers (future CSS feature) */
 	scroll-marker-group: after;
 
-	/* Force le carousel à être le contexte de positionnement pour ses pseudo-éléments */
-	/* Ces 3 propriétés créent un contexte de positionnement robuste */
+	/* Force the carousel to be the positioning context for its pseudo-elements */
+	/* These three properties create a robust positioning context */
 	isolation: isolate;
 	contain: layout !important;
 	transform: translateZ(0);
-	/* Force un nouveau contexte de positionnement + accélération GPU */
+	/* Forces a new positioning context + GPU acceleration */
 }
 
 /* ==========================================================================
-   ÉLÉMENTS DU CAROUSEL
+   CAROUSEL ITEMS
    ========================================================================== */
 
 .nbc-carousel>*,
@@ -143,7 +143,7 @@
 	padding-right: initial;
 }
 
-/* Arrière-plans */
+/* Backgrounds */
 .nbc-carousel .has-background,
 .block-editor-block-list__layout .nbc-carousel .has-background,
 .editor-styles-wrapper .nbc-carousel .has-background {
@@ -154,7 +154,7 @@
    GALERIES EN MODE CAROUSEL
    ========================================================================== */
 
-/* Désactiver le flex-wrap et le système de colonnes de la galerie */
+/* Disable flex-wrap and the gallery column system */
 .wp-block-gallery.nbc-carousel,
 .block-editor-block-list__layout .wp-block-gallery.nbc-carousel,
 .editor-styles-wrapper .wp-block-gallery.nbc-carousel {
@@ -167,7 +167,7 @@
 .block-editor-block-list__layout .wp-block-gallery.nbc-carousel>.wp-block-image,
 .editor-styles-wrapper .wp-block-gallery.nbc-carousel>.wp-block-image {
 	flex: 0 0 auto;
-	/* Largeur par défaut : 6 images visibles sur desktop large (> 1280px) */
+	/* Default width: 6 images visible on wide desktop (> 1280px) */
 	width: calc(16.666% - var(--wp--style--block-gap, 1rem) * 5 / 6);
 	min-width: calc(16.666% - var(--wp--style--block-gap, 1rem) * 5 / 6);
 	max-width: 100%;
@@ -196,14 +196,14 @@
 	flex-wrap: nowrap !important;
 }
 
-/* Éléments enfants dans une grille carousel */
-/* Les grilles en carousel affichent les éléments avec une largeur fixe */
-/* Utilisez --carousel-grid-item-width pour personnaliser */
+/* Child elements in a carousel grid */
+/* Grids in carousel mode display items with a fixed width */
+/* Use --carousel-grid-item-width to customise */
 .is-layout-grid.nbc-carousel>*,
 .block-editor-block-list__layout .is-layout-grid.nbc-carousel>*,
 .editor-styles-wrapper .is-layout-grid.nbc-carousel>* {
 	flex: 0 0 auto;
-	/* Largeur par défaut : adapté pour 3 colonnes visibles */
+	/* Default width sized for 3 visible columns */
 	width: var(--carousel-grid-item-width, calc(33.333% - var(--wp--style--block-gap, 1rem) * 2 / 3));
 	min-width: var(--carousel-grid-item-width, calc(33.333% - var(--wp--style--block-gap, 1rem) * 2 / 3));
 	max-width: 100%;
@@ -225,136 +225,136 @@
 	width: calc(var(--carousel-grid-item-width, 33.333%) * 4 + var(--wp--style--block-gap, 1rem) * 3) !important;
 }
 
-/* Classes helper pour définir le nombre de colonnes visibles dans le carousel Grid */
-/* Ajoutez ces classes au bloc Grid pour contrôler la largeur des éléments */
+/* Helper classes to define the number of visible columns in the carousel grid */
+/* Add these classes to the Grid block to control item width */
 
-/* nbc-carousel-cols-1 : 1 élément visible (pleine largeur) */
+/* nbc-carousel-cols-1: 1 visible item (full width) */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-1>* {
 	--carousel-grid-item-width: 100%;
 	width: 100%;
 	min-width: 100%;
 }
 
-/* nbc-carousel-cols-2 : 2 éléments visibles */
+/* nbc-carousel-cols-2: 2 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-2>* {
 	--carousel-grid-item-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2);
 	width: calc(50% - var(--wp--style--block-gap, 1rem) / 2);
 	min-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2);
 }
 
-/* nbc-carousel-cols-3 : 3 éléments visibles (par défaut) */
+/* nbc-carousel-cols-3: 3 visible items (default) */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-3>* {
 	--carousel-grid-item-width: calc(33.333% - var(--wp--style--block-gap, 1rem) * 2 / 3);
 	width: calc(33.333% - var(--wp--style--block-gap, 1rem) * 2 / 3);
 	min-width: calc(33.333% - var(--wp--style--block-gap, 1rem) * 2 / 3);
 }
 
-/* nbc-carousel-cols-4 : 4 éléments visibles */
+/* nbc-carousel-cols-4: 4 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-4>* {
 	--carousel-grid-item-width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4);
 	width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4);
 	min-width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4);
 }
 
-/* nbc-carousel-cols-5 : 5 éléments visibles */
+/* nbc-carousel-cols-5: 5 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-5>* {
 	--carousel-grid-item-width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5);
 	width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5);
 	min-width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5);
 }
 
-/* nbc-carousel-cols-6 : 6 éléments visibles */
+/* nbc-carousel-cols-6: 6 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-6>* {
 	--carousel-grid-item-width: calc(16.666% - var(--wp--style--block-gap, 1rem) * 5 / 6);
 	width: calc(16.666% - var(--wp--style--block-gap, 1rem) * 5 / 6);
 	min-width: calc(16.666% - var(--wp--style--block-gap, 1rem) * 5 / 6);
 }
 
-/* nbc-carousel-cols-7 : 7 éléments visibles */
+/* nbc-carousel-cols-7: 7 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-7>* {
 	--carousel-grid-item-width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7);
 	width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7);
 	min-width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7);
 }
 
-/* nbc-carousel-cols-8 : 8 éléments visibles */
+/* nbc-carousel-cols-8: 8 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-8>* {
 	--carousel-grid-item-width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8);
 	width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8);
 	min-width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8);
 }
 
-/* nbc-carousel-cols-9 : 9 éléments visibles */
+/* nbc-carousel-cols-9: 9 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-9>* {
 	--carousel-grid-item-width: calc(11.111% - var(--wp--style--block-gap, 1rem) * 8 / 9);
 	width: calc(11.111% - var(--wp--style--block-gap, 1rem) * 8 / 9);
 	min-width: calc(11.111% - var(--wp--style--block-gap, 1rem) * 8 / 9);
 }
 
-/* nbc-carousel-cols-10 : 10 éléments visibles */
+/* nbc-carousel-cols-10: 10 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-10>* {
 	--carousel-grid-item-width: calc(10% - var(--wp--style--block-gap, 1rem) * 9 / 10);
 	width: calc(10% - var(--wp--style--block-gap, 1rem) * 9 / 10);
 	min-width: calc(10% - var(--wp--style--block-gap, 1rem) * 9 / 10);
 }
 
-/* nbc-carousel-cols-11 : 11 éléments visibles */
+/* nbc-carousel-cols-11: 11 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-11>* {
 	--carousel-grid-item-width: calc(9.090% - var(--wp--style--block-gap, 1rem) * 10 / 11);
 	width: calc(9.090% - var(--wp--style--block-gap, 1rem) * 10 / 11);
 	min-width: calc(9.090% - var(--wp--style--block-gap, 1rem) * 10 / 11);
 }
 
-/* nbc-carousel-cols-12 : 12 éléments visibles */
+/* nbc-carousel-cols-12: 12 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-12>* {
 	--carousel-grid-item-width: calc(8.333% - var(--wp--style--block-gap, 1rem) * 11 / 12);
 	width: calc(8.333% - var(--wp--style--block-gap, 1rem) * 11 / 12);
 	min-width: calc(8.333% - var(--wp--style--block-gap, 1rem) * 11 / 12);
 }
 
-/* nbc-carousel-cols-13 : 13 éléments visibles */
+/* nbc-carousel-cols-13: 13 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-13>* {
 	--carousel-grid-item-width: calc(7.692% - var(--wp--style--block-gap, 1rem) * 12 / 13);
 	width: calc(7.692% - var(--wp--style--block-gap, 1rem) * 12 / 13);
 	min-width: calc(7.692% - var(--wp--style--block-gap, 1rem) * 12 / 13);
 }
 
-/* nbc-carousel-cols-14 : 14 éléments visibles */
+/* nbc-carousel-cols-14: 14 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-14>* {
 	--carousel-grid-item-width: calc(7.142% - var(--wp--style--block-gap, 1rem) * 13 / 14);
 	width: calc(7.142% - var(--wp--style--block-gap, 1rem) * 13 / 14);
 	min-width: calc(7.142% - var(--wp--style--block-gap, 1rem) * 13 / 14);
 }
 
-/* nbc-carousel-cols-15 : 15 éléments visibles */
+/* nbc-carousel-cols-15: 15 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-15>* {
 	--carousel-grid-item-width: calc(6.666% - var(--wp--style--block-gap, 1rem) * 14 / 15);
 	width: calc(6.666% - var(--wp--style--block-gap, 1rem) * 14 / 15);
 	min-width: calc(6.666% - var(--wp--style--block-gap, 1rem) * 14 / 15);
 }
 
-/* nbc-carousel-cols-16 : 16 éléments visibles */
+/* nbc-carousel-cols-16: 16 visible items */
 .is-layout-grid.nbc-carousel.nbc-carousel-cols-16>* {
 	--carousel-grid-item-width: calc(6.25% - var(--wp--style--block-gap, 1rem) * 15 / 16);
 	width: calc(6.25% - var(--wp--style--block-gap, 1rem) * 15 / 16);
 	min-width: calc(6.25% - var(--wp--style--block-gap, 1rem) * 15 / 16);
 }
 
-/* nbc-carousel-min-width : Utiliser la largeur minimale définie dans le Grid */
-/* WordPress génère : grid-template-columns: repeat(auto-fill, minmax(XXXpx, 1fr)) */
+/* nbc-carousel-min-width: use the minimum width defined in the grid */
+/* WordPress generates: grid-template-columns: repeat(auto-fill, minmax(XXXpx, 1fr)) */
 /* On doit extraire cette valeur et l'utiliser comme largeur fixe en mode Flexbox */
 .is-layout-grid.nbc-carousel.nbc-carousel-min-width>*,
 .block-editor-block-list__layout .is-layout-grid.nbc-carousel.nbc-carousel-min-width>*,
 .editor-styles-wrapper .is-layout-grid.nbc-carousel.nbc-carousel-min-width>* {
 	/* Largeur fixe avec adaptation sur mobile */
 	flex: 0 0 auto !important;
-	/* Utiliser min() pour respecter la largeur fixe sauf si l'écran est plus petit */
+	/* Use min() to respect the fixed width unless the viewport is smaller */
 	width: min(var(--carousel-min-width, 200px), 100%) !important;
 	min-width: min(var(--carousel-min-width, 200px), 100%) !important;
 	max-width: 100% !important;
 }
 
-/* Règles spécifiques pour Post Template (enfants sont des <li class="wp-block-post">) */
+/* Specific rules for Post Template (children are <li class="wp-block-post">) */
 .wp-block-post-template.nbc-carousel.nbc-carousel-min-width .wp-block-post,
 .block-editor-block-list__layout .wp-block-post-template.nbc-carousel.nbc-carousel-min-width .wp-block-post,
 .editor-styles-wrapper .wp-block-post-template.nbc-carousel.nbc-carousel-min-width .wp-block-post {
@@ -364,7 +364,7 @@
 	max-width: 100% !important;
 }
 
-/* Règles spécifiques pour Group (enfants peuvent être des <div> ou autres) */
+/* Specific rules for Group blocks (children can be <div> or other elements) */
 .wp-block-group.nbc-carousel.nbc-carousel-min-width>*,
 .block-editor-block-list__layout .wp-block-group.nbc-carousel.nbc-carousel-min-width>*,
 .editor-styles-wrapper .wp-block-group.nbc-carousel.nbc-carousel-min-width>* {
@@ -396,21 +396,21 @@
 	scroll-snap-align: center !important;
 }
 
-/* Règles spécifiques pour Post Template en mode Auto */
+/* Specific rules for Post Template in Auto mode */
 .wp-block-post-template.nbc-carousel.nbc-carousel-min-width .wp-block-post,
 .block-editor-block-list__layout .wp-block-post-template.nbc-carousel.nbc-carousel-min-width .wp-block-post,
 .editor-styles-wrapper .wp-block-post-template.nbc-carousel.nbc-carousel-min-width .wp-block-post {
 	scroll-snap-align: center !important;
 }
 
-/* Règles spécifiques pour Group en mode Auto */
+/* Specific rules for Group in Auto mode */
 .wp-block-group.nbc-carousel.nbc-carousel-min-width>*,
 .block-editor-block-list__layout .wp-block-group.nbc-carousel.nbc-carousel-min-width>*,
 .editor-styles-wrapper .wp-block-group.nbc-carousel.nbc-carousel-min-width>* {
 	scroll-snap-align: center !important;
 }
 
-/* Règles spécifiques pour Gallery en mode Auto */
+/* Specific rules for Gallery in Auto mode */
 .wp-block-gallery.nbc-carousel.nbc-carousel-min-width>.wp-block-image,
 .block-editor-block-list__layout .wp-block-gallery.nbc-carousel.nbc-carousel-min-width>.wp-block-image,
 .editor-styles-wrapper .wp-block-gallery.nbc-carousel.nbc-carousel-min-width>.wp-block-image {
@@ -449,6 +449,12 @@
 	opacity: 0.75;
 }
 
+:has(> .nbc-carousel.nbc-carousel-hide-arrows)::after,
+:has(> .nbc-carousel.nbc-carousel-hide-markers)::after {
+	display: none !important;
+	content: none !important;
+}
+
 
 
 /* Sur les navigateurs compatibles, masquer les fallbacks et afficher les vrais boutons */
@@ -484,11 +490,11 @@
 		box-shadow: var(--carousel-shadow);
 		transition: all var(--carousel-transition-duration) var(--carousel-transition-easing);
 
-		/* Préparer pour SVG */
+		/* Prepare for SVG */
 		font-size: 0px;
 		overflow: hidden;
 
-		/* S'assurer que left et right ne sont pas définis par défaut */
+		/* Ensure left and right are not set by default */
 		left: auto;
 		right: auto;
 	}
@@ -507,13 +513,13 @@
 	}
 
 	/* Boutons - Prendre en compte le padding pour TOUS les carrousels */
-	/* Solution simple : utiliser directement les variables de padding définies par JavaScript */
+	/* Simple approach: rely on padding variables already defined by JavaScript */
 	/* Le calcul se fait dans le CSS avec calc() */
 	.nbc-carousel::scroll-button(left) {
 		left: calc(var(--carousel-padding-left, 0px) + var(--carousel-button-offset, 0px));
 		content: '';
 		transform: translate(-50%, -50%);
-		/* Utiliser la variable CSS générée dynamiquement, avec fallback vers le SVG blanc */
+		/* Use the dynamically generated CSS variable with a fallback to the white SVG */
 		background-image: var(--carousel-button-arrow-left, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='white' d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z'/%3E%3C/svg%3E"));
 		background-repeat: no-repeat;
 		background-position: center;
@@ -525,11 +531,25 @@
 		left: auto;
 		content: '';
 		transform: translate(50%, -50%);
-		/* Utiliser la variable CSS générée dynamiquement, avec fallback vers le SVG blanc */
+		/* Use the dynamically generated CSS variable with a fallback to the white SVG */
 		background-image: var(--carousel-button-arrow-right, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='white' d='M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z'/%3E%3C/svg%3E"));
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: 50% 50%;
+	}
+
+	.nbc-carousel.nbc-carousel-hide-arrows::scroll-button(*) {
+		display: none !important;
+		opacity: 0 !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
+	}
+
+	.nbc-carousel.nbc-carousel-hide-markers::scroll-marker-group {
+		display: none !important;
+		opacity: 0 !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
 	}
 }
 
@@ -549,7 +569,7 @@
 		z-index: var(--carousel-z-index);
 		/* Positionner par rapport au contenu, en ignorant le padding-bottom */
 		/* bottom: offset + padding-bottom pour compenser le padding du carousel */
-		/* La variable --carousel-padding-bottom est définie dynamiquement par PHP/JavaScript */
+		/* The variable --carousel-padding-bottom is set dynamically by PHP/JavaScript */
 		bottom: calc(var(--carousel-marker-bottom-offset) + var(--carousel-padding-bottom, 1rem));
 		left: var(--carousel-padding-left, 0);
 		display: flex;
@@ -574,6 +594,12 @@
 		cursor: pointer;
 	}
 
+	.nbc-carousel.nbc-carousel-hide-markers>*::scroll-marker {
+		opacity: 0 !important;
+		cursor: default !important;
+		pointer-events: none !important;
+	}
+
 	.nbc-carousel>*::scroll-marker:hover {
 		opacity: 0.75;
 	}
@@ -585,115 +611,115 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN - HARMONISATION AVEC WORDPRESS
+   RESPONSIVE DESIGN - ALIGNMENT WITH WORDPRESS
    ========================================================================== */
 
 /* 
-   Règles basées sur l'analyse des fichiers CSS WordPress :
-   - Breakpoint principal : 600px (mobile/tablette)
-   - Breakpoint secondaire : 782px (tablette/desktop)
-   - Comportement identique aux blocs WordPress natifs
+   Rules derived from analysing WordPress CSS:
+   - Primary breakpoint: 600px (mobile/tablet)
+   - Secondary breakpoint: 782px (tablet/desktop)
+   - Behaviour matches native WordPress blocks
 */
 
 /* ==========================================================================
-   POST TEMPLATE - Comportement identique à WordPress
+   POST TEMPLATE - MATCHES WORDPRESS BEHAVIOUR
    ========================================================================== */
 
-/* Mobile (par défaut) - 1 colonne */
-/* Exclure le mode min-width qui a ses propres règles */
+/* Mobile (default) - 1 column */
+/* Exclude min-width mode which has its own rules */
 .wp-block-post-template.is-layout-grid.nbc-carousel:not(.nbc-carousel-min-width) .wp-block-post {
 	width: 100% !important;
 	min-width: 100% !important;
 }
 
-/* À partir de 600px - Comportement selon le nombre de colonnes */
+/* From 600px onwards - behaviour determined by column count */
 @media (min-width: 600px) {
 
-	/* 2 colonnes */
+	/* 2 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-2 .wp-block-post {
 		width: calc(50% - var(--wp--style--block-gap, 1.25em) / 2) !important;
 		min-width: calc(50% - var(--wp--style--block-gap, 1.25em) / 2) !important;
 	}
 
-	/* 3 colonnes */
+	/* 3 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-3 .wp-block-post {
 		width: calc(33.33333% - var(--wp--style--block-gap, 1.25em) * 2 / 3) !important;
 		min-width: calc(33.33333% - var(--wp--style--block-gap, 1.25em) * 2 / 3) !important;
 	}
 
-	/* 4 colonnes */
+	/* 4 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-4 .wp-block-post {
 		width: calc(25% - var(--wp--style--block-gap, 1.25em) * 3 / 4) !important;
 		min-width: calc(25% - var(--wp--style--block-gap, 1.25em) * 3 / 4) !important;
 	}
 
-	/* 5 colonnes */
+	/* 5 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-5 .wp-block-post {
 		width: calc(20% - var(--wp--style--block-gap, 1.25em) * 4 / 5) !important;
 		min-width: calc(20% - var(--wp--style--block-gap, 1.25em) * 4 / 5) !important;
 	}
 
-	/* 6 colonnes */
+	/* 6 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-6 .wp-block-post {
 		width: calc(16.66667% - var(--wp--style--block-gap, 1.25em) * 5 / 6) !important;
 		min-width: calc(16.66667% - var(--wp--style--block-gap, 1.25em) * 5 / 6) !important;
 	}
 
-	/* 7 colonnes */
+	/* 7 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-7 .wp-block-post {
 		width: calc(14.285% - var(--wp--style--block-gap, 1.25em) * 6 / 7) !important;
 		min-width: calc(14.285% - var(--wp--style--block-gap, 1.25em) * 6 / 7) !important;
 	}
 
-	/* 8 colonnes */
+	/* 8 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-8 .wp-block-post {
 		width: calc(12.5% - var(--wp--style--block-gap, 1.25em) * 7 / 8) !important;
 		min-width: calc(12.5% - var(--wp--style--block-gap, 1.25em) * 7 / 8) !important;
 	}
 
-	/* 9 colonnes */
+	/* 9 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-9 .wp-block-post {
 		width: calc(11.111% - var(--wp--style--block-gap, 1.25em) * 8 / 9) !important;
 		min-width: calc(11.111% - var(--wp--style--block-gap, 1.25em) * 8 / 9) !important;
 	}
 
-	/* 10 colonnes */
+	/* 10 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-10 .wp-block-post {
 		width: calc(10% - var(--wp--style--block-gap, 1.25em) * 9 / 10) !important;
 		min-width: calc(10% - var(--wp--style--block-gap, 1.25em) * 9 / 10) !important;
 	}
 
-	/* 11 colonnes */
+	/* 11 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-11 .wp-block-post {
 		width: calc(9.090% - var(--wp--style--block-gap, 1.25em) * 10 / 11) !important;
 		min-width: calc(9.090% - var(--wp--style--block-gap, 1.25em) * 10 / 11) !important;
 	}
 
-	/* 12 colonnes */
+	/* 12 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-12 .wp-block-post {
 		width: calc(8.333% - var(--wp--style--block-gap, 1.25em) * 11 / 12) !important;
 		min-width: calc(8.333% - var(--wp--style--block-gap, 1.25em) * 11 / 12) !important;
 	}
 
-	/* 13 colonnes */
+	/* 13 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-13 .wp-block-post {
 		width: calc(7.692% - var(--wp--style--block-gap, 1.25em) * 12 / 13) !important;
 		min-width: calc(7.692% - var(--wp--style--block-gap, 1.25em) * 12 / 13) !important;
 	}
 
-	/* 14 colonnes */
+	/* 14 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-14 .wp-block-post {
 		width: calc(7.142% - var(--wp--style--block-gap, 1.25em) * 13 / 14) !important;
 		min-width: calc(7.142% - var(--wp--style--block-gap, 1.25em) * 13 / 14) !important;
 	}
 
-	/* 15 colonnes */
+	/* 15 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-15 .wp-block-post {
 		width: calc(6.666% - var(--wp--style--block-gap, 1.25em) * 14 / 15) !important;
 		min-width: calc(6.666% - var(--wp--style--block-gap, 1.25em) * 14 / 15) !important;
 	}
 
-	/* 16 colonnes */
+	/* 16 columns */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-16 .wp-block-post {
 		width: calc(6.25% - var(--wp--style--block-gap, 1.25em) * 15 / 16) !important;
 		min-width: calc(6.25% - var(--wp--style--block-gap, 1.25em) * 15 / 16) !important;
@@ -701,10 +727,10 @@
 }
 
 /* Comportement responsive natif WordPress pour tablette */
-/* Entre 600px et 1200px, Post Template affiche toujours 2 colonnes */
+/* Between 600px and 1200px, Post Template always shows 2 columns */
 @media (min-width: 600px) and (max-width: 1200px) {
 
-	/* 3 colonnes et plus : forcer 2 colonnes sur tablette */
+	/* 3 columns and up: force 2 columns on tablets */
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-3 .wp-block-post,
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-4 .wp-block-post,
 	.wp-block-post-template.is-layout-grid.nbc-carousel.nbc-carousel-cols-5 .wp-block-post,
@@ -725,61 +751,61 @@
 }
 
 /* ==========================================================================
-   GALLERY - Comportement identique à WordPress
+   GALLERY - MATCHES WORDPRESS BEHAVIOUR
    ========================================================================== */
 
-/* Mobile (par défaut) - 2 colonnes pour les galeries */
+/* Mobile (default) - 2 columns for galleries */
 .wp-block-gallery.nbc-carousel .wp-block-image {
 	width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
 	min-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
 }
 
-/* À partir de 600px - Comportement selon le nombre de colonnes */
+/* From 600px onwards - behaviour determined by column count */
 @media (min-width: 600px) {
 
-	/* 1 colonne */
+	/* 1 column */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-1 .wp-block-image {
 		width: 100% !important;
 		min-width: 100% !important;
 	}
 
-	/* 2 colonnes */
+	/* 2 columns */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-2 .wp-block-image {
 		width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
 		min-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
 	}
 
-	/* 3 colonnes */
+	/* 3 columns */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-3 .wp-block-image {
 		width: calc(33.33333% - var(--wp--style--block-gap, 1rem) * 2 / 3) !important;
 		min-width: calc(33.33333% - var(--wp--style--block-gap, 1rem) * 2 / 3) !important;
 	}
 
-	/* 4 colonnes */
+	/* 4 columns */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-4 .wp-block-image {
 		width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4) !important;
 		min-width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4) !important;
 	}
 
-	/* 5 colonnes */
+	/* 5 columns */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-5 .wp-block-image {
 		width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5) !important;
 		min-width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5) !important;
 	}
 
-	/* 6 colonnes */
+	/* 6 columns */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-6 .wp-block-image {
 		width: calc(16.66667% - var(--wp--style--block-gap, 1rem) * 5 / 6) !important;
 		min-width: calc(16.66667% - var(--wp--style--block-gap, 1rem) * 5 / 6) !important;
 	}
 
-	/* 7 colonnes */
+	/* 7 columns */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-7 .wp-block-image {
 		width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7) !important;
 		min-width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7) !important;
 	}
 
-	/* 8 colonnes */
+	/* 8 columns */
 	.wp-block-gallery.nbc-carousel.nbc-carousel-cols-8 .wp-block-image {
 		width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8) !important;
 		min-width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8) !important;
@@ -787,104 +813,104 @@
 }
 
 /* ==========================================================================
-   GROUP - Comportement identique à WordPress
+   GROUP - MATCHES WORDPRESS BEHAVIOUR
    ========================================================================== */
 
-/* Mobile (par défaut) - 1 colonne */
-/* Exclure le mode min-width qui a ses propres règles */
+/* Mobile (default) - 1 column */
+/* Exclude min-width mode which has its own rules */
 .wp-block-group.is-layout-grid.nbc-carousel:not(.nbc-carousel-min-width)>* {
 	width: 100% !important;
 	min-width: 100% !important;
 }
 
-/* À partir de 600px - Comportement selon le nombre de colonnes */
+/* From 600px onwards - behaviour determined by column count */
 @media (min-width: 600px) {
 
-	/* 2 colonnes */
+	/* 2 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-2>* {
 		width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
 		min-width: calc(50% - var(--wp--style--block-gap, 1rem) / 2) !important;
 	}
 
-	/* 3 colonnes */
+	/* 3 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-3>* {
 		width: calc(33.33333% - var(--wp--style--block-gap, 1rem) * 2 / 3) !important;
 		min-width: calc(33.33333% - var(--wp--style--block-gap, 1rem) * 2 / 3) !important;
 	}
 
-	/* 4 colonnes */
+	/* 4 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-4>* {
 		width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4) !important;
 		min-width: calc(25% - var(--wp--style--block-gap, 1rem) * 3 / 4) !important;
 	}
 
-	/* 5 colonnes */
+	/* 5 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-5>* {
 		width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5) !important;
 		min-width: calc(20% - var(--wp--style--block-gap, 1rem) * 4 / 5) !important;
 	}
 
-	/* 6 colonnes */
+	/* 6 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-6>* {
 		width: calc(16.66667% - var(--wp--style--block-gap, 1rem) * 5 / 6) !important;
 		min-width: calc(16.66667% - var(--wp--style--block-gap, 1rem) * 5 / 6) !important;
 	}
 
-	/* 7 colonnes */
+	/* 7 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-7>* {
 		width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7) !important;
 		min-width: calc(14.285% - var(--wp--style--block-gap, 1rem) * 6 / 7) !important;
 	}
 
-	/* 8 colonnes */
+	/* 8 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-8>* {
 		width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8) !important;
 		min-width: calc(12.5% - var(--wp--style--block-gap, 1rem) * 7 / 8) !important;
 	}
 
-	/* 9 colonnes */
+	/* 9 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-9>* {
 		width: calc(11.111% - var(--wp--style--block-gap, 1rem) * 8 / 9) !important;
 		min-width: calc(11.111% - var(--wp--style--block-gap, 1rem) * 8 / 9) !important;
 	}
 
-	/* 10 colonnes */
+	/* 10 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-10>* {
 		width: calc(10% - var(--wp--style--block-gap, 1rem) * 9 / 10) !important;
 		min-width: calc(10% - var(--wp--style--block-gap, 1rem) * 9 / 10) !important;
 	}
 
-	/* 11 colonnes */
+	/* 11 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-11>* {
 		width: calc(9.090% - var(--wp--style--block-gap, 1rem) * 10 / 11) !important;
 		min-width: calc(9.090% - var(--wp--style--block-gap, 1rem) * 10 / 11) !important;
 	}
 
-	/* 12 colonnes */
+	/* 12 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-12>* {
 		width: calc(8.333% - var(--wp--style--block-gap, 1rem) * 11 / 12) !important;
 		min-width: calc(8.333% - var(--wp--style--block-gap, 1rem) * 11 / 12) !important;
 	}
 
-	/* 13 colonnes */
+	/* 13 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-13>* {
 		width: calc(7.692% - var(--wp--style--block-gap, 1rem) * 12 / 13) !important;
 		min-width: calc(7.692% - var(--wp--style--block-gap, 1rem) * 12 / 13) !important;
 	}
 
-	/* 14 colonnes */
+	/* 14 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-14>* {
 		width: calc(7.142% - var(--wp--style--block-gap, 1rem) * 13 / 14) !important;
 		min-width: calc(7.142% - var(--wp--style--block-gap, 1rem) * 13 / 14) !important;
 	}
 
-	/* 15 colonnes */
+	/* 15 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-15>* {
 		width: calc(6.666% - var(--wp--style--block-gap, 1rem) * 14 / 15) !important;
 		min-width: calc(6.666% - var(--wp--style--block-gap, 1rem) * 14 / 15) !important;
 	}
 
-	/* 16 colonnes */
+	/* 16 columns */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-16>* {
 		width: calc(6.25% - var(--wp--style--block-gap, 1rem) * 15 / 16) !important;
 		min-width: calc(6.25% - var(--wp--style--block-gap, 1rem) * 15 / 16) !important;
@@ -892,10 +918,10 @@
 }
 
 /* Comportement responsive natif WordPress pour tablette - GROUP */
-/* Entre 600px et 1200px, Group Grid affiche toujours 2 colonnes */
+/* Between 600px and 1200px, Group grids always display 2 columns */
 @media (min-width: 600px) and (max-width: 1200px) {
 
-	/* 3 colonnes et plus : forcer 2 colonnes sur tablette */
+	/* 3 columns and up: force 2 columns on tablets */
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-3>*,
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-4>*,
 	.wp-block-group.is-layout-grid.nbc-carousel.nbc-carousel-cols-5>*,
@@ -919,7 +945,7 @@
    OPTIMISATIONS RESPONSIVE
    ========================================================================== */
 
-/* Ajustements des boutons et marqueurs selon la taille d'écran */
+/* Button and marker adjustments based on screen size */
 @media (max-width: 782px) {
 	:root {
 		--carousel-button-size: 2.75rem;
@@ -936,7 +962,7 @@
 		--carousel-marker-gap: 0.4rem;
 	}
 
-	/* Réduire le gap pour mobile */
+	/* Reduce the gap on mobile */
 	.nbc-carousel {
 		gap: var(--wp--style--block-gap, 0.5rem);
 		padding: 0.75rem 0px;
@@ -952,7 +978,7 @@
 		--carousel-marker-bottom-offset: -1.5rem;
 	}
 
-	/* Réduire encore le gap */
+	/* Reduce the gap even further */
 	.nbc-carousel {
 		gap: var(--wp--style--block-gap, 0.25rem);
 		padding: 1rem 0px;
@@ -967,7 +993,7 @@
 }
 
 /* ==========================================================================
-   STYLES ÉDITEUR GUTENBERG
+   GUTENBERG EDITOR STYLES
    ========================================================================== */
 
 /* Toggle Control */
@@ -1005,7 +1031,7 @@
 	margin-bottom: 16px;
 }
 
-/* Correction clics éditeur */
+/* Fix editor click behaviour */
 .block-editor-block-list__layout .nbc-carousel>*:not(:first-child),
 .editor-styles-wrapper .nbc-carousel>*:not(:first-child) {
 	pointer-events: none;
@@ -1023,7 +1049,7 @@
 	contain: layout style;
 }
 
-/* Optimisation des éléments */
+/* Optimise rendered elements */
 .nbc-carousel>*,
 .block-editor-block-list__layout .nbc-carousel>*,
 .editor-styles-wrapper .nbc-carousel>* {
@@ -1031,10 +1057,10 @@
 }
 
 /* ==========================================================================
-   ACCESSIBILITÉ
+   ACCESSIBILITY
    ========================================================================== */
 
-/* Respect des préférences de mouvement réduit */
+/* Honour reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
 
 	.nbc-carousel,
@@ -1053,7 +1079,7 @@
 	}
 }
 
-/* Contraste élevé */
+/* High contrast */
 @media (prefers-contrast: high) {
 
 	.nbc-carousel::scroll-button(*),
@@ -1080,8 +1106,8 @@
 	.wp-block-gallery.nbc-carousel.nbc-carousel-min-width>.wp-block-image,
 	.block-editor-block-list__layout .wp-block-gallery.nbc-carousel.nbc-carousel-min-width>.wp-block-image,
 	.editor-styles-wrapper .wp-block-gallery.nbc-carousel.nbc-carousel-min-width>.wp-block-image {
-        width: 100% !important;
-        min-width: 100% !important;
-        max-width: 100% !important;
+		width: 100% !important;
+		min-width: 100% !important;
+		max-width: 100% !important;
 	}
 }

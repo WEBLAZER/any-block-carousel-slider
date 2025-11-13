@@ -31,3 +31,9 @@ vendor/
 dist/
 build/
 
+# Dossier de développement complet (JAMAIS publié)
+# Contient : docs/, scripts/, ARCHITECTURE.md, etc.
+dev/
+
+# WordPress.org SVN assets (géré séparément via SVN)
+.wordpress-org/

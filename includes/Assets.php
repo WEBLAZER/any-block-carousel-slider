@@ -1,6 +1,6 @@
 <?php
 /**
- * Gestion du chargement des assets pour Native Blocks Carousel.
+ * Handles asset loading for Native Blocks Carousel.
  *
  * @package NativeBlocksCarousel
  */
@@ -12,37 +12,37 @@ namespace Weblazer\NativeBlocksCarousel;
 use Weblazer\NativeBlocksCarousel\Contracts\ServiceInterface;
 
 /**
- * Charge les feuilles de style et scripts du plugin.
+ * Loads the plugin styles and scripts.
  */
 class Assets implements ServiceInterface
 {
     /**
-     * Version du plugin.
+     * Plugin version.
      *
      * @var string
      */
     private string $version;
 
     /**
-     * URL de base du plugin.
+     * Base plugin URL.
      *
      * @var string
      */
     private string $pluginUrl;
 
     /**
-     * Service responsable des styles hérités du thème.
+     * Service in charge of theme-inherited styles.
      *
      * @var ThemeStyles
      */
     private ThemeStyles $themeStyles;
 
     /**
-     * Constructeur.
+     * Constructor.
      *
-     * @param string      $version     Version du plugin.
-     * @param string      $plugin_url  URL de base du plugin.
-     * @param ThemeStyles $themeStyles Service de styles du thème.
+     * @param string      $version     Plugin version.
+     * @param string      $plugin_url  Base plugin URL.
+     * @param ThemeStyles $themeStyles Theme styles service.
      */
     public function __construct(string $version, string $plugin_url, ThemeStyles $themeStyles)
     {
@@ -52,7 +52,7 @@ class Assets implements ServiceInterface
     }
 
     /**
-     * Déclare les hooks nécessaires au chargement des assets.
+     * Registers hooks used to load assets.
      *
      * @return void
      */
@@ -63,7 +63,7 @@ class Assets implements ServiceInterface
     }
 
     /**
-     * Enqueue les styles et scripts partagés (frontend + éditeur).
+     * Enqueues shared styles and scripts (frontend + editor).
      *
      * @return void
      */
@@ -88,7 +88,7 @@ class Assets implements ServiceInterface
     }
 
     /**
-     * Enqueue les scripts spécifiques à l’éditeur Gutenberg.
+     * Enqueues Gutenberg editor specific scripts.
      *
      * @return void
      */
@@ -112,7 +112,7 @@ class Assets implements ServiceInterface
     }
 
     /**
-     * Enregistre les scripts du plugin avec leurs dépendances.
+     * Registers plugin scripts with dependencies.
      *
      * @return void
      */

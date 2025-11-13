@@ -1,6 +1,6 @@
 <?php
 /**
- * Contrat générique pour les services du plugin Native Blocks Carousel.
+ * Generic contract for Native Blocks Carousel services.
  *
  * @package NativeBlocksCarousel
  */

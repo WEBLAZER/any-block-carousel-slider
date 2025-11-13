@@ -1,6 +1,6 @@
 <?php
 /**
- * Autoloader basique pour les classes du plugin Native Blocks Carousel.
+ * Basic autoloader for Native Blocks Carousel classes.
  *
  * @package NativeBlocksCarousel
  */
@@ -10,21 +10,21 @@ declare(strict_types=1);
 namespace Weblazer\NativeBlocksCarousel;
 
 /**
- * Autoloader PSR-4 minimaliste pour le namespace du plugin.
+ * Minimal PSR-4 autoloader for the plugin namespace.
  */
 class Autoloader
 {
     /**
-     * Répertoire de base où se trouvent les classes.
+     * Base directory that contains the classes.
      *
      * @var string
      */
     private string $baseDir;
 
     /**
-     * Constructeur privé.
+     * Private constructor.
      *
-     * @param string $baseDir Répertoire de base.
+     * @param string $baseDir Base directory.
      */
     private function __construct(string $baseDir)
     {
@@ -32,9 +32,9 @@ class Autoloader
     }
 
     /**
-     * Enregistre l'autoloader et retourne l'instance créée.
+     * Registers the autoloader and returns the created instance.
      *
-     * @param string $baseDir Répertoire de base pour les classes.
+     * @param string $baseDir Base directory for classes.
      *
      * @return self
      */
@@ -47,9 +47,9 @@ class Autoloader
     }
 
     /**
-     * Charge le fichier correspondant à la classe demandée si elle appartient au namespace du plugin.
+     * Loads the file corresponding to the requested class if it belongs to the plugin namespace.
      *
-     * @param string $class Nom complet de la classe.
+     * @param string $class Fully-qualified class name.
      *
      * @return void
      */

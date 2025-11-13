@@ -1,5 +1,5 @@
 /*
- * Styles éditeur Gutenberg pour Native Blocks Carousel
+ * Gutenberg editor styles for Native Blocks Carousel
  * @package NativeBlocksCarousel
  */
 
@@ -27,6 +27,16 @@
 	font-weight: 600;
 }
 
+.nbc-arrow-style-panel .components-base-control__field,
+.nbc-arrow-style-panel .components-toggle-group-control {
+	display: grid;
+	justify-content: center;
+}
+
+.nbc-arrow-style-panel .components-toggle-group-control {
+	width: 100%;
+}
+
 .nbc-arrow-style-panel .nbc-arrow-style-group {
 	gap: 8px;
 }
@@ -37,10 +47,14 @@
 }
 
 .nbc-arrow-style-group .components-toggle-group-control__option {
-	width: 48px;
-	height: 48px;
+	--nbc-arrow-option-size: 44px;
+	width: var(--nbc-arrow-option-size);
+	height: var(--nbc-arrow-option-size);
+	min-width: var(--nbc-arrow-option-size);
+	min-height: var(--nbc-arrow-option-size);
+	flex: 0 0 var(--nbc-arrow-option-size);
 	padding: 0;
-	border-radius: 6px;
+	border-radius: 10px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -48,7 +62,17 @@
 	border: 1px solid rgba(0, 0, 0, 0.08);
 	background: #f8f9fa;
 	color: #1e1e1e;
-	transition: box-shadow .2s ease, transform .2s ease;
+	transition: box-shadow .2s ease, transform .2s ease, color .2s ease;
+	box-sizing: border-box;
+}
+
+.nbc-arrow-style-group .components-toggle-group-control__option>span {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	line-height: 0;
 }
 
 .nbc-arrow-style-group .components-toggle-group-control__option:hover {
@@ -62,6 +86,21 @@
 	color: #fff;
 	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 	transform: none;
+}
+
+.nbc-arrow-style-group .components-toggle-group-control__option.is-selected .nbc-arrow-style-icon__button {
+	background: rgba(255, 255, 255, 0.2);
+	border-color: rgba(255, 255, 255, 0.7);
+	box-shadow: none;
+	color: #fff;
+}
+
+.nbc-arrow-style-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
 }
 
 .nbc-arrow-style-icon svg {
@@ -92,5 +131,41 @@
 
 	.cfg-nbc-carousel-toggle-control .components-base-control__help {
 		color: #ccc;
+	}
+}
+
+:has(> .nbc-carousel.nbc-carousel-hide-arrows)::after {
+	display: none !important;
+	content: none !important;
+}
+
+:has(> .nbc-carousel.nbc-carousel-hide-markers)::after {
+	display: none !important;
+	content: none !important;
+}
+
+@supports selector(::scroll-button(*)) {
+	.nbc-carousel.nbc-carousel-hide-arrows::scroll-button(*) {
+		display: none !important;
+		opacity: 0 !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
+	}
+}
+
+@supports selector(::scroll-marker-group) {
+	.nbc-carousel.nbc-carousel-hide-markers::scroll-marker-group {
+		display: none !important;
+		opacity: 0 !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
+	}
+}
+
+@supports selector(::scroll-marker) {
+	.nbc-carousel.nbc-carousel-hide-markers>*::scroll-marker {
+		opacity: 0 !important;
+		cursor: default !important;
+		pointer-events: none !important;
 	}
 }

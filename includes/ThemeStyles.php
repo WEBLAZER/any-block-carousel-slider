@@ -1,6 +1,6 @@
 <?php
 /**
- * Gestion des styles hérités du thème pour Native Blocks Carousel.
+ * Handles theme-inherited styles for Native Blocks Carousel.
  *
  * @package NativeBlocksCarousel
  */
@@ -10,16 +10,15 @@ declare(strict_types=1);
 namespace Weblazer\NativeBlocksCarousel;
 
 /**
- * Récupère et injecte les couleurs des boutons du thème actif.
+ * Retrieves and injects button colors from the active theme.
  */
 class ThemeStyles
 {
     /**
-     * Injecter les couleurs des boutons du thème dans le CSS du plugin.
+     * Injects the theme's button colours into the plugin CSS.
      *
-     * Cette méthode recherche les couleurs configurées pour les boutons
-     * dans le fichier theme.json ou dans les feuilles de style compilées
-     * par WordPress, puis ajoute ces valeurs sous forme de variables CSS.
+     * Looks for button colours defined in theme.json or compiled styles,
+     * then exposes them as CSS variables.
      *
      * @return void
      */
@@ -69,10 +68,10 @@ class ThemeStyles
     }
 
     /**
-     * Résout une variable CSS éventuelle pour en obtenir la valeur réelle.
+     * Resolves a CSS variable to its concrete value when possible.
      *
-     * @param string $value  Valeur potentielle d'une variable CSS.
-     * @param string $styles Feuille de styles dans laquelle rechercher.
+     * @param string $value  Potential CSS variable value.
+     * @param string $styles Stylesheet contents to inspect.
      *
      * @return string
      */

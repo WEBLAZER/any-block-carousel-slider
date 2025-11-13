@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe principale du plugin Native Blocks Carousel.
+ * Main class for the Native Blocks Carousel plugin.
  *
  * @package NativeBlocksCarousel
  */
@@ -13,28 +13,28 @@ use Weblazer\NativeBlocksCarousel\Contracts\ServiceInterface;
 use Weblazer\NativeBlocksCarousel\Translations;
 
 /**
- * Point d'entrée orchestrant les différents services du plugin.
+ * Entry point coordinating the different plugin services.
  */
 class Plugin
 {
     /**
-     * Instance unique de la classe.
+     * Singleton instance.
      *
      * @var Plugin|null
      */
     private static ?Plugin $instance = null;
 
     /**
-     * Liste des services enregistrés.
+     * Registered services.
      *
      * @var ServiceInterface[]
      */
     private array $services;
 
     /**
-     * Constructeur privé.
+     * Public constructor.
      *
-     * @param ServiceInterface[] $services Liste des services du plugin.
+     * @param ServiceInterface[] $services Plugin services.
      */
     public function __construct(array $services)
     {
@@ -42,7 +42,7 @@ class Plugin
     }
 
     /**
-     * Récupère l'instance unique du plugin.
+     * Retrieves the singleton instance of the plugin.
      *
      * @return Plugin
      */
@@ -67,7 +67,7 @@ class Plugin
     }
 
     /**
-     * Initialise le plugin en déclarant les hooks requis.
+     * Boots the plugin by registering required hooks.
      *
      * @return void
      */
@@ -77,7 +77,7 @@ class Plugin
     }
 
     /**
-     * Hook init : prépare les traductions et les services.
+     * Init hook: prepares translations and services.
      *
      * @return void
      */

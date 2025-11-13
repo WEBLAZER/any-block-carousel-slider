@@ -1,9 +1,9 @@
 /**
- * Script frontend pour Native Blocks Carousel
- * Injecte les variables CSS manquantes pour le mode minimumColumnWidth
+ * Frontend script for Native Blocks Carousel
+ * Injects missing CSS variables for the minimumColumnWidth mode.
  *
  * @package NativeBlocksCarousel
- * @version 1.0.1
+ * @version 1.0.2
  * @author weblazer35
  */
 
@@ -16,13 +16,14 @@
 
 	const FALLBACK_ICON_BASE = {
 		chevron: {
-			viewBox: '0 0 320 512',
+			viewBox: '0 0 640 640',
 			paths: {
-				left: {
-					d: 'M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5 45.3 0l-160 160z'
-				},
 				right: {
-					d: 'M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l-160 160z'
+					d: 'M471.1 297.4C483.6 309.9 483.6 330.2 471.1 342.7L279.1 534.7C266.6 547.2 246.3 547.2 233.8 534.7C221.3 522.2 221.3 501.9 233.8 489.4L403.2 320L233.9 150.6C221.4 138.1 221.4 117.8 233.9 105.3C246.4 92.8 266.7 92.8 279.2 105.3L471.2 297.3z'
+				},
+				left: {
+					d: 'M471.1 297.4C483.6 309.9 483.6 330.2 471.1 342.7L279.1 534.7C266.6 547.2 246.3 547.2 233.8 534.7C221.3 522.2 221.3 501.9 233.8 489.4L403.2 320L233.9 150.6C221.4 138.1 221.4 117.8 233.9 105.3C246.4 92.8 266.7 92.8 279.2 105.3L471.2 297.3z',
+					transform: 'scale(-1 1) translate(-640 0)'
 				}
 			}
 		},
@@ -37,19 +38,33 @@
 					transform: 'scale(-1 1) translate(-640 0)'
 				}
 			}
+		},
+		angles: {
+			viewBox: '0 0 640 640',
+			paths: {
+				right: {
+					d: 'M535.1 342.6C547.6 330.1 547.6 309.8 535.1 297.3L375.1 137.3C362.6 124.8 342.3 124.8 329.8 137.3C317.3 149.8 317.3 170.1 329.8 182.6L467.2 320L329.9 457.4C317.4 469.9 317.4 490.2 329.9 502.7C342.4 515.2 362.7 515.2 375.2 502.7L535.2 342.7zM183.1 502.6L343.1 342.6C355.6 330.1 355.6 309.8 343.1 297.3L183.1 137.3C170.6 124.8 150.3 124.8 137.8 137.3C125.3 149.8 125.3 170.1 137.8 182.6L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7z'
+				},
+				left: {
+					d: 'M535.1 342.6C547.6 330.1 547.6 309.8 535.1 297.3L375.1 137.3C362.6 124.8 342.3 124.8 329.8 137.3C317.3 149.8 317.3 170.1 329.8 182.6L467.2 320L329.9 457.4C317.4 469.9 317.4 490.2 329.9 502.7C342.4 515.2 362.7 515.2 375.2 502.7L535.2 342.7zM183.1 502.6L343.1 342.6C355.6 330.1 355.6 309.8 343.1 297.3L183.1 137.3C170.6 124.8 150.3 124.8 137.8 137.3C125.3 149.8 125.3 170.1 137.8 182.6L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7z',
+					transform: 'scale(-1 1) translate(-640 0)'
+				}
+			}
 		}
 	};
 
 	const FALLBACK_ICON_ALIASES = {
 		classic: 'chevron',
 		'solid-full': 'arrow',
-		arrowfull: 'arrow'
+		arrowfull: 'arrow',
+		'angles-right-solid-full': 'angles'
 	};
 
 	const FALLBACK_ARROW_ICONS = {
 		...FALLBACK_ICON_BASE,
 		classic: FALLBACK_ICON_BASE.chevron,
 		'solid-full': FALLBACK_ICON_BASE.arrow,
+		angles: FALLBACK_ICON_BASE.angles,
 	};
 
 	const fallbackNormalizeStyleKey = (styleKey) => {
@@ -105,14 +120,14 @@
 
 	/**
 	 * Extrait la valeur minimumColumnWidth depuis grid-template-columns
-	 * WordPress génère : grid-template-columns: repeat(auto-fill, minmax(min(38rem, 100%), 1fr))
+	 * WordPress generates: grid-template-columns: repeat(auto-fill, minmax(min(38rem, 100%), 1fr))
 	 */
 	function extractMinWidthFromGridTemplateColumns(gridTemplateColumns) {
 		if (!gridTemplateColumns || gridTemplateColumns === 'none') {
 			return null;
 		}
 
-		// Chercher minmax(min(XXX, 100%), 1fr)
+		// Look for minmax(min(XXX, 100%), 1fr)
 		const match = gridTemplateColumns.match(/minmax\(min\(([^,]+),\s*100%\)/);
 		if (match && match[1]) {
 			return match[1].trim();
@@ -122,10 +137,10 @@
 	}
 
 	/**
-	 * Trouve la règle CSS grid-template-columns pour un carousel depuis les stylesheets
+	 * Finds the grid-template-columns CSS rule for a carousel from the stylesheets.
 	 */
 	function findGridTemplateColumnsRule(carousel) {
-		// Chercher une classe wp-container unique sur le carousel
+		// Look for a unique wp-container class on the carousel
 		const containerClass = Array.from(carousel.classList).find(function (cls) {
 			return cls.startsWith('wp-container-');
 		});
@@ -134,7 +149,7 @@
 			return null;
 		}
 
-		// Parcourir toutes les feuilles de style
+		// Iterate over every stylesheet
 		const styleSheets = Array.from(document.styleSheets);
 
 		for (var i = 0; i < styleSheets.length; i++) {
@@ -152,7 +167,7 @@
 					}
 				}
 			} catch (e) {
-				// Ignorer les erreurs CORS pour les stylesheets externes
+				// Ignore CORS errors for external stylesheets
 				continue;
 			}
 		}
@@ -161,44 +176,44 @@
 	}
 
 	/**
-	 * Injecte --carousel-min-width pour les carousels en mode minimumColumnWidth
+	 * Injects --carousel-min-width for carousels using minimumColumnWidth mode.
 	 */
 	function injectMinWidthVariables() {
-		// Trouver tous les carousels avec la classe nbc-carousel-min-width
+		// Find all carousels with the nbc-carousel-min-width class
 		const carousels = document.querySelectorAll('.nbc-carousel.nbc-carousel-min-width');
 
 		carousels.forEach(function (carousel) {
-			// Vérifier si la variable est déjà définie
+			// Check whether the variable is already defined
 			const computedStyle = window.getComputedStyle(carousel);
 			const currentMinWidth = computedStyle.getPropertyValue('--carousel-min-width');
 
-			// Si déjà définie (par PHP), ne rien faire
+			// If already defined (by PHP), do nothing
 			if (currentMinWidth && currentMinWidth.trim() !== '') {
 				return;
 			}
 
-			// Trouver la règle CSS grid-template-columns dans les stylesheets
+			// Locate the grid-template-columns rule inside stylesheets
 			const gridTemplateColumns = findGridTemplateColumnsRule(carousel);
 
 			if (!gridTemplateColumns) {
-				// Silencieux en production - la variable sera peut-être définie par PHP
+				// Silent in production—the variable might eventually be set by PHP
 				return;
 			}
 
-			// Extraire la valeur minimumColumnWidth
+			// Extract the minimumColumnWidth value
 			const minWidth = extractMinWidthFromGridTemplateColumns(gridTemplateColumns);
 
 			if (minWidth) {
-				// Injecter la variable CSS
+				// Inject the CSS variable
 				carousel.style.setProperty('--carousel-min-width', minWidth);
 			}
 		});
 	}
 
 	/**
-	 * Injecte les variables de padding en lisant directement le padding calculé
-	 * Solution optimale : lire le padding calculé par le navigateur (qui inclut tous les styles)
-	 * et l'injecter comme variable CSS. Cela fonctionne même si PHP n'a pas réussi à extraire le padding.
+	 * Injects padding variables by reading computed padding directly.
+	 * Optimal approach: rely on the browser’s computed values (which include every style)
+	 * and inject them as CSS variables. Works even when PHP fails to extract padding.
 	 */
 	function injectPaddingVariables() {
 		const carousels = document.querySelectorAll('.nbc-carousel');
@@ -206,13 +221,13 @@
 		carousels.forEach(function (carousel) {
 			const computedStyle = window.getComputedStyle(carousel);
 
-			// Lire le gap calculé pour corriger les largeurs
+			// Read the computed gap to adjust widths
 			const computedGap = computedStyle.gap || computedStyle.columnGap || computedStyle.rowGap;
 			if (computedGap && computedGap !== 'normal' && computedGap.trim() !== '') {
 				carousel.style.setProperty('--wp--style--block-gap', computedGap);
 			}
 
-			// Lire le padding calculé directement (fonctionne même si défini via style inline)
+			// Read computed padding directly (works even when defined via inline style)
 			const paddingLeft = computedStyle.paddingLeft;
 			const paddingRight = computedStyle.paddingRight;
 			const paddingTop = computedStyle.paddingTop;
@@ -237,7 +252,7 @@
 			const paddingTopValue = normalizePadding(paddingTop, '1rem', 'paddingTop');
 			const paddingBottomValue = normalizePadding(paddingBottom, '1rem', 'paddingBottom');
 
-			// Injecter sur le carousel
+			// Apply to the carousel
 			carousel.style.setProperty('--carousel-padding-left', paddingLeftValue);
 			carousel.style.setProperty('--carousel-padding-right', paddingRightValue);
 			carousel.style.setProperty('--carousel-padding-top', paddingTopValue);
@@ -245,7 +260,7 @@
 			carousel.style.setProperty('--carousel-scroll-padding-left', paddingLeftValue);
 			carousel.style.setProperty('--carousel-scroll-padding-right', paddingRightValue);
 
-			// Copier sur le parent pour les boutons fallback
+			// Mirror the values on the parent for fallback buttons
 			if (parent) {
 				parent.style.setProperty('--carousel-padding-left', paddingLeftValue);
 				parent.style.setProperty('--carousel-padding-right', paddingRightValue);
@@ -255,7 +270,7 @@
 	}
 
 	/**
-	 * Convertit une couleur CSS en hexadécimal pour les SVG
+	 * Converts a CSS color to hexadecimal for SVGs.
 	 */
 	function convertColorToHexForSvg(color) {
 		if (!color) return '#ffffff';
@@ -277,7 +292,7 @@
 			}
 		}
 
-		// Fallback : créer un élément temporaire pour obtenir la valeur hex
+		// Fallback: create a temporary element to retrieve the hex value
 		const temp = document.createElement('div');
 		temp.style.color = color;
 		temp.style.position = 'absolute';
@@ -381,7 +396,7 @@
 						}
 					});
 				} catch (e) {
-					// Ignorer les contextes non accessibles
+					// Ignore contexts that are not accessible
 				}
 			});
 		}
@@ -395,6 +410,22 @@
 		const arrowColorCache = new WeakMap();
 
 		Array.prototype.forEach.call(carousels, function (carousel) {
+			if (!carousel) {
+				return;
+			}
+
+			const parent = carousel.parentElement;
+
+			if (carousel.classList && carousel.classList.contains('nbc-carousel-hide-arrows')) {
+				carousel.style.setProperty('--carousel-button-arrow-left', 'none');
+				carousel.style.setProperty('--carousel-button-arrow-right', 'none');
+				if (parent) {
+					parent.style.setProperty('--carousel-button-arrow-left', 'none');
+					parent.style.setProperty('--carousel-button-arrow-right', 'none');
+				}
+				return;
+			}
+
 			const docForCarousel = carousel && carousel.ownerDocument ? carousel.ownerDocument : baseDoc;
 			const explicitStyle = overrideConfig && overrideConfig.styleKey ? overrideConfig.styleKey : null;
 			const normalizedKey = normalizeStyleKey(explicitStyle || resolveCarouselArrowStyleFromElement(carousel));
@@ -410,7 +441,6 @@
 			carousel.style.setProperty('--carousel-button-arrow-left', 'url("' + leftArrowSvg + '")');
 			carousel.style.setProperty('--carousel-button-arrow-right', 'url("' + rightArrowSvg + '")');
 
-			const parent = carousel.parentElement;
 			if (parent) {
 				parent.style.setProperty('--carousel-button-arrow-left', 'url("' + leftArrowSvg + '")');
 				parent.style.setProperty('--carousel-button-arrow-right', 'url("' + rightArrowSvg + '")');
@@ -419,47 +449,47 @@
 	}
 
 	/**
-	 * Injecte les SVG des flèches avec la couleur du texte des boutons
-	 * Lit la variable --carousel-button-color injectée par PHP et génère les SVG
+	 * Injects arrow SVGs using the button text color.
+	 * Reads the --carousel-button-color variable injected by PHP and generates SVGs.
 	 */
 	function injectArrowSvgs() {
 		const root = document.documentElement;
 		const rootStyle = window.getComputedStyle(root);
 
-		// Lire la couleur du texte des boutons depuis la variable CSS
+		// Read the button text colour from the CSS variable
 		const buttonColor = rootStyle.getPropertyValue('--carousel-button-color').trim();
 
-		// Si la variable n'est pas définie, essayer de la lire depuis un bouton WordPress réel
+		// If the variable is missing, try to read it from a real WordPress button
 		let actualColor = buttonColor;
 		if (!actualColor || actualColor === '') {
-			// Chercher un bouton WordPress sur la page
+			// Look for a WordPress button on the page
 			const wpButton = document.querySelector('.wp-element-button, button.wp-element-button');
 			if (wpButton) {
 				const buttonStyle = window.getComputedStyle(wpButton);
 				actualColor = buttonStyle.color;
 			} else {
-				// Fallback vers blanc
+				// Fallback to white
 				actualColor = '#ffffff';
 			}
 		}
 
-		// Générer les SVG avec la couleur trouvée
+		// Generate SVGs with the retrieved color
 		if (actualColor && actualColor !== 'rgba(0, 0, 0, 0)' && actualColor !== '') {
 			const arrowColor = convertColorToHexForSvg(actualColor);
 			const defaultLeftArrow = generateArrowSvg('left', arrowColor, DEFAULT_ARROW_STYLE);
 			const defaultRightArrow = generateArrowSvg('right', arrowColor, DEFAULT_ARROW_STYLE);
 
-			// Injecter les variables CSS sur :root
+			// Inject CSS variables on :root
 			root.style.setProperty('--carousel-button-arrow-left', 'url("' + defaultLeftArrow + '")');
 			root.style.setProperty('--carousel-button-arrow-right', 'url("' + defaultRightArrow + '")');
 		}
 
-		// ne pas forcer le style sur chaque carousel ici, ils seront normalisés plus loin
+		// Do not force the style on each carousel here; they are normalised later
 	}
 
-	// Fonction d'initialisation principale
-	// Le padding est maintenant géré en PHP, mais on utilise JavaScript comme fallback
-	// pour lire le padding calculé directement (plus fiable que d'essayer de l'extraire en PHP)
+	// Main initialisation function
+	// Padding is now handled in PHP, but we keep JavaScript as a fallback
+	// to read computed padding directly (more reliable than extracting it in PHP)
 	function initCarousel() {
 		injectMinWidthVariables();
 		injectPaddingVariables();
@@ -467,18 +497,18 @@
 		applyArrowIconsToCarousels(null, document);
 	}
 
-	// Exécuter au chargement du DOM
-	// Utiliser requestAnimationFrame pour s'assurer que le CSS est chargé
+	// Run on DOM ready
+	// Use requestAnimationFrame to make sure CSS has loaded
 	function initWhenReady() {
 		if (document.readyState === 'loading') {
 			document.addEventListener('DOMContentLoaded', function () {
-				// Attendre que le CSS soit appliqué
+				// Wait for CSS to settle
 				requestAnimationFrame(function () {
 					requestAnimationFrame(initCarousel);
 				});
 			});
 		} else {
-			// DOM déjà chargé, attendre que le CSS soit appliqué
+			// DOM already loaded; still wait for CSS to settle
 			requestAnimationFrame(function () {
 				requestAnimationFrame(initCarousel);
 			});
@@ -487,9 +517,9 @@
 
 	initWhenReady();
 
-	// Ré-exécuter après le chargement complet (au cas où des styles seraient chargés en différé)
+	// Run again after load (in case styles were loaded later)
 	window.addEventListener('load', function () {
-		// Vérifier si --carousel-min-width est manquant pour certains carousels
+		// Check whether --carousel-min-width is missing on some carousels
 		const carousels = document.querySelectorAll('.nbc-carousel.nbc-carousel-min-width');
 		let needsMinWidthUpdate = false;
 		carousels.forEach(function (carousel) {
@@ -500,8 +530,8 @@
 			}
 		});
 
-		// Toujours ré-injecter les variables de padding au cas où des styles seraient chargés en différé
-		// Cela garantit que les variables sont toujours à jour
+		// Always re-inject padding variables in case styles were deferred.
+		// This keeps variables fresh.
 		if (needsMinWidthUpdate) {
 			requestAnimationFrame(function () {
 				requestAnimationFrame(function () {
@@ -509,7 +539,7 @@
 				});
 			});
 		} else {
-			// Si seulement le padding et les SVG doivent être mis à jour
+			// If only padding and SVGs need an update
 			requestAnimationFrame(function () {
 				requestAnimationFrame(function () {
 					injectPaddingVariables();

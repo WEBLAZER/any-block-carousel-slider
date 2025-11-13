@@ -1,6 +1,6 @@
 <?php
 /**
- * Logique d'injection des variables CSS dans le rendu des blocs.
+ * Logic responsible for injecting CSS variables into rendered blocks.
  *
  * @package NativeBlocksCarousel
  */
@@ -12,12 +12,12 @@ namespace Weblazer\NativeBlocksCarousel;
 use Weblazer\NativeBlocksCarousel\Contracts\ServiceInterface;
 
 /**
- * Ajoute les variables CSS nécessaires au fonctionnement du carousel.
+ * Adds the CSS variables required for the carousel to operate.
  */
 class Renderer implements ServiceInterface
 {
     /**
-     * Déclare le hook de rendu des blocs.
+     * Registers the render hook for blocks.
      *
      * @return void
      */
@@ -27,10 +27,10 @@ class Renderer implements ServiceInterface
     }
 
     /**
-     * Injecte les variables CSS nécessaires au carousel dans le HTML rendu.
+     * Injects the CSS variables required by the carousel into the rendered HTML.
      *
-     * @param string $block_content Contenu HTML du bloc.
-     * @param array  $block         Données du bloc.
+     * @param string $block_content Block HTML content.
+     * @param array  $block         Block data.
      *
      * @return string
      */
@@ -88,12 +88,12 @@ class Renderer implements ServiceInterface
     }
 
     /**
-     * Ajoute les variables liées au mode minimumColumnWidth le cas échéant.
+     * Adds variables related to minimumColumnWidth mode when needed.
      *
-     * @param array  $custom_styles Référence vers le tableau de styles à injecter.
-     * @param array  $block         Données du bloc.
-     * @param string $class_name    Classes du bloc.
-     * @param string $block_content HTML du bloc.
+     * @param array  $custom_styles Reference to the styles array to inject.
+     * @param array  $block         Block data.
+     * @param string $class_name    Block class names.
+     * @param string $block_content Block HTML.
      *
      * @return void
      */
@@ -124,10 +124,10 @@ class Renderer implements ServiceInterface
     }
 
     /**
-     * Ajoute la variable de spacing blockGap si elle est présente.
+     * Adds the blockGap spacing variable when available.
      *
-     * @param array $custom_styles Référence vers le tableau de styles à injecter.
-     * @param array $block         Données du bloc.
+     * @param array $custom_styles Reference to the styles array to inject.
+     * @param array $block         Block data.
      *
      * @return void
      */
@@ -150,11 +150,11 @@ class Renderer implements ServiceInterface
     }
 
     /**
-     * Ajoute les variables de padding utilisées par le carousel.
+     * Adds the padding variables used by the carousel.
      *
-     * @param array  $custom_styles Référence vers le tableau de styles à injecter.
-     * @param array  $block         Données du bloc.
-     * @param string $block_content HTML du bloc.
+     * @param array  $custom_styles Reference to the styles array to inject.
+     * @param array  $block         Block data.
+     * @param string $block_content Block HTML.
      *
      * @return void
      */
@@ -217,9 +217,9 @@ class Renderer implements ServiceInterface
     }
 
     /**
-     * Construit la chaîne de styles inline à injecter.
+     * Builds the inline style string to inject.
      *
-     * @param array $custom_styles Liste des styles à ajouter.
+     * @param array $custom_styles List of styles to add.
      *
      * @return string
      */
@@ -241,10 +241,10 @@ class Renderer implements ServiceInterface
     }
 
     /**
-     * Récupère une valeur CSS dans un attribut style.
+     * Retrieves a CSS value from a style attribute.
      *
-     * @param string $style_attr Chaîne complète de l'attribut style.
-     * @param string $property   Propriété CSS recherchée.
+     * @param string $style_attr Full style attribute string.
+     * @param string $property   CSS property to find.
      *
      * @return string|null
      */
@@ -258,9 +258,9 @@ class Renderer implements ServiceInterface
     }
 
     /**
-     * Convertit une valeur de preset WordPress en variable CSS utilisable.
+     * Converts a WordPress preset value into a usable CSS variable.
      *
-     * @param string|null $value Valeur à convertir.
+     * @param string|null $value Value to convert.
      *
      * @return string|null
      */
@@ -279,10 +279,10 @@ class Renderer implements ServiceInterface
     }
 
     /**
-     * S'assure qu'une valeur possède une unité CSS.
+     * Ensures a value has a CSS unit.
      *
-     * @param string|null $value           Valeur d'origine.
-     * @param string      $defaultFallback Valeur de secours si rien n'a été défini.
+     * @param string|null $value           Original value.
+     * @param string      $defaultFallback Fallback value when nothing is defined.
      *
      * @return string
      */
@@ -300,10 +300,10 @@ class Renderer implements ServiceInterface
     }
 
     /**
-     * Fusionne l'attribut style existant avec les variables générées.
+     * Merges the existing style attribute with the generated variables.
      *
-     * @param string|null $existing_style Style existant.
-     * @param string      $styles_string  Styles à ajouter.
+     * @param string|null $existing_style Original style attribute.
+     * @param string      $styles_string  Styles to append.
      *
      * @return string
      */

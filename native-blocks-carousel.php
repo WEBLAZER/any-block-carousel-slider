@@ -3,7 +3,7 @@
  * Plugin Name: Native Blocks Carousel
  * Plugin URI: https://github.com/WEBLAZER/native-blocks-carousel
  * Description: Transform any WordPress block into a performant carousel with pure CSS. Zero JavaScript, works with Gallery, Grid, Post Template, and Group blocks.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: weblazer35
  * Author URI: https://weblazer.fr
  * License: GPL v2 or later
@@ -27,7 +27,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('NATIVE_BLOCKS_CAROUSEL_VERSION', '1.0.1');
+define('NATIVE_BLOCKS_CAROUSEL_VERSION', '1.0.2');
 define('NATIVE_BLOCKS_CAROUSEL_PLUGIN_FILE', __FILE__);
 define('NATIVE_BLOCKS_CAROUSEL_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('NATIVE_BLOCKS_CAROUSEL_PLUGIN_PATH', plugin_dir_path(__FILE__));

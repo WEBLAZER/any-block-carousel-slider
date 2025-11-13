@@ -4,7 +4,7 @@ Donate link: https://weblazer.github.io/
 Tags: carousel, gutenberg, query-loop, woocommerce, css-only
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -149,12 +149,18 @@ Visual arrows remain visible (disabled state) and users navigate via touch scrol
 == Screenshots ==
 
 1. "Carousel" option in the Gutenberg sidebar panel.
-2. Query Loop carousel displaying latest posts.
-3. WooCommerce products carousel 100% CSS.
-4. Mixed carousel (image + testimonial + button).
+2. WooCommerce products carousel rendered with 100% CSS.
+3. Block Grid converted into a responsive carousel.
+4. Native Gallery displayed in carousel mode.
 5. Custom CSS variables to adapt the design.
 
 == Changelog ==
+
+= 1.0.2 - 2025-11-13 =
+* ✨ Added dedicated toggles in the inspector to show or hide arrows and pagination markers independently.
+* 🎯 Introduced `carouselShowArrows` and `carouselShowMarkers` block attributes for fine-grained carousel controls.
+* 🎨 Synced editor and frontend behaviors for the `nbc-carousel-hide-arrows` and `nbc-carousel-hide-markers` classes.
+* 🛠️ Bumped plugin version and refreshed asset headers.
 
 = 1.0.1 - 2025-01-24 =
 * ✨ Added Auto mode (fixed width) for Grid, Post Template, and WooCommerce Products.
@@ -179,8 +185,8 @@ Visual arrows remain visible (disabled state) and users navigate via touch scrol
 
 == Upgrade Notice ==
 
-= 1.0.1 =
-Recommended update: Auto mode, advanced padding management, alignment fixes, and improved editor performance.
+= 1.0.2 =
+Recommended update: manage arrow and marker visibility directly from the editor with consistent styling on both admin and frontend.
 
 == Developer Notes ==
 

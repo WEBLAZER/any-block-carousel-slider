@@ -1,17 +1,17 @@
 /**
- * Ajoute un bouton "Carousel" dans les paramètres des blocs Group, Post Template et Gallery
- * pour activer/désactiver facilement la classe .nbc-carousel
+ * Adds a "Carousel" toggle to Group, Post Template and Gallery blocks
+ * to easily enable/disable the .nbc-carousel class.
  */
 (function (wp) {
   const { addFilter } = wp.hooks;
   const { createHigherOrderComponent } = wp.compose;
-  const { Fragment, useEffect, useMemo, createElement } = wp.element;
+  const { Fragment, useEffect, useMemo, createElement, RawHTML } = wp.element;
   const { InspectorControls, BlockListBlock } = wp.blockEditor;
-  const { PanelBody, ToggleControl, Tooltip, __experimentalToggleGroupControl: ToggleGroupControl, __experimentalToggleGroupControlOption: ToggleGroupControlOption } = wp.components;
+  const { PanelBody, ToggleControl, Tooltip, __experimentalToggleGroupControl: ToggleGroupControl, __experimentalToggleGroupControlOption: ToggleGroupControlOption, __experimentalToggleGroupControlOptionIcon: ToggleGroupControlOptionIcon } = wp.components;
   const { __ } = wp.i18n;
 
   /**
-   * Blocs supportés pour le carousel
+   * Supported blocks for the carousel.
    */
   const SUPPORTED_BLOCKS = ['core/group', 'core/post-template', 'core/gallery'];
 
@@ -21,13 +21,14 @@
 
   const FALLBACK_ICON_BASE = {
     chevron: {
-      viewBox: '0 0 320 512',
+      viewBox: '0 0 640 640',
       paths: {
-        left: {
-          d: 'M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5 45.3 0l-160 160z'
-        },
         right: {
-          d: 'M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l-160 160z'
+          d: 'M471.1 297.4C483.6 309.9 483.6 330.2 471.1 342.7L279.1 534.7C266.6 547.2 246.3 547.2 233.8 534.7C221.3 522.2 221.3 501.9 233.8 489.4L403.2 320L233.9 150.6C221.4 138.1 221.4 117.8 233.9 105.3C246.4 92.8 266.7 92.8 279.2 105.3L471.2 297.3z'
+        },
+        left: {
+          d: 'M471.1 297.4C483.6 309.9 483.6 330.2 471.1 342.7L279.1 534.7C266.6 547.2 246.3 547.2 233.8 534.7C221.3 522.2 221.3 501.9 233.8 489.4L403.2 320L233.9 150.6C221.4 138.1 221.4 117.8 233.9 105.3C246.4 92.8 266.7 92.8 279.2 105.3L471.2 297.3z',
+          transform: 'scale(-1 1) translate(-640 0)'
         }
       }
     },
@@ -42,6 +43,18 @@
           transform: 'scale(-1 1) translate(-640 0)'
         }
       }
+    },
+    angles: {
+      viewBox: '0 0 640 640',
+      paths: {
+        right: {
+          d: 'M535.1 342.6C547.6 330.1 547.6 309.8 535.1 297.3L375.1 137.3C362.6 124.8 342.3 124.8 329.8 137.3C317.3 149.8 317.3 170.1 329.8 182.6L467.2 320L329.9 457.4C317.4 469.9 317.4 490.2 329.9 502.7C342.4 515.2 362.7 515.2 375.2 502.7L535.2 342.7zM183.1 502.6L343.1 342.6C355.6 330.1 355.6 309.8 343.1 297.3L183.1 137.3C170.6 124.8 150.3 124.8 137.8 137.3C125.3 149.8 125.3 170.1 137.8 182.6L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7z'
+        },
+        left: {
+          d: 'M535.1 342.6C547.6 330.1 547.6 309.8 535.1 297.3L375.1 137.3C362.6 124.8 342.3 124.8 329.8 137.3C317.3 149.8 317.3 170.1 329.8 182.6L467.2 320L329.9 457.4C317.4 469.9 317.4 490.2 329.9 502.7C342.4 515.2 362.7 515.2 375.2 502.7L535.2 342.7zM183.1 502.6L343.1 342.6C355.6 330.1 355.6 309.8 343.1 297.3L183.1 137.3C170.6 124.8 150.3 124.8 137.8 137.3C125.3 149.8 125.3 170.1 137.8 182.6L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7z',
+          transform: 'scale(-1 1) translate(-640 0)'
+        }
+      }
     }
   };
 
@@ -49,12 +62,14 @@
     classic: 'chevron',
     'solid-full': 'arrow',
     arrowfull: 'arrow',
+    'angles-right-solid-full': 'angles',
   };
 
   const FALLBACK_ARROW_ICONS = {
     ...FALLBACK_ICON_BASE,
     classic: FALLBACK_ICON_BASE.chevron,
     'solid-full': FALLBACK_ICON_BASE.arrow,
+    angles: FALLBACK_ICON_BASE.angles,
   };
 
   const fallbackNormalizeStyleKey = (styleKey) => {
@@ -109,7 +124,7 @@
   const isValidArrowStyle = (styleKey) => !!getIconDefinition(styleKey);
 
   /**
-   * Ajoute l'attribut 'carouselEnabled' aux blocs supportés
+   * Registers the `carouselEnabled` attribute on supported blocks.
    */
   function addCarouselAttribute(settings, name) {
     if (!SUPPORTED_BLOCKS.includes(name)) {
@@ -128,23 +143,36 @@
           type: 'string',
           default: DEFAULT_ARROW_STYLE,
         },
+        carouselShowArrows: {
+          type: 'boolean',
+          default: true,
+        },
+        carouselShowMarkers: {
+          type: 'boolean',
+          default: true,
+        },
       },
     };
   }
 
   /**
-   * Ajoute le contrôle Toggle dans l'Inspector
+   * Adds the toggle to the block inspector.
    */
   const withCarouselControl = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
       const { attributes, setAttributes, name, clientId } = props;
 
-      // Ne s'applique qu'aux blocs supportés
+      // Applies only to supported blocks
       if (!SUPPORTED_BLOCKS.includes(name)) {
         return createElement(BlockEdit, props);
       }
 
-      const { carouselEnabled, carouselArrowStyle = DEFAULT_ARROW_STYLE } = attributes;
+      const {
+        carouselEnabled,
+        carouselArrowStyle = DEFAULT_ARROW_STYLE,
+        carouselShowArrows = true,
+        carouselShowMarkers = true,
+      } = attributes;
       const normalizedArrowStyle = wp.element.useMemo(
         () => normalizeStyleKey(carouselArrowStyle),
         [carouselArrowStyle]
@@ -163,23 +191,35 @@
         },
         {
           value: 'arrow',
-          label: __('Flèche', 'native-blocks-carousel'),
+          label: __('Arrow', 'native-blocks-carousel'),
+        },
+        {
+          value: 'angles',
+          label: __('Angles', 'native-blocks-carousel'),
         },
       ];
 
-      const buildIconSvg = (styleKey) => {
-        return generateArrowMarkup('right', 'currentColor', styleKey);
+      const ArrowOptionComponent = ToggleGroupControlOptionIcon || ToggleGroupControlOption;
+
+      const buildIconElement = (styleKey) => {
+        const rightArrow = generateArrowMarkup('right', 'currentColor', styleKey);
+
+        return createElement(
+          'span',
+          { className: 'nbc-arrow-style-icon' },
+          createElement(RawHTML, { children: rightArrow })
+        );
       };
 
-      // Mémoriser la sérialisation du layout pour éviter les re-renders inutiles
+      // Memoize the layout serialization to avoid unnecessary re-renders
       const layoutKey = useMemo(
         () => JSON.stringify(attributes.layout),
         [attributes.layout?.type, attributes.layout?.columnCount, attributes.layout?.minimumColumnWidth, attributes.layout?.gridItemPosition]
       );
 
       /**
-       * Toggle le carousel : ajoute/retire la classe 'carousel'
-       * Pour les grilles, détecte automatiquement le nombre de colonnes
+       * Toggle the carousel: add/remove the 'carousel' class.
+       * For grids, automatically detect the number of columns.
        */
       const toggleCarousel = (enabled) => {
         setAttributes({ carouselEnabled: enabled });
@@ -193,42 +233,44 @@
           }
         }
 
-        // Gérer la classe CSS
+        // Handle the CSS classes
         const currentClasses = attributes.className || '';
         const classArray = currentClasses.split(' ').filter(Boolean);
 
-        // Retirer toutes les classes carousel-* existantes (nouvelles ET anciennes)
+        // Remove all existing carousel-* classes (new and legacy)
         const filteredClasses = classArray.filter(
           (cls) =>
             !cls.startsWith('nbc-carousel-cols-') &&
             cls !== 'nbc-carousel-min-width' &&
-            // Retirer aussi les anciennes classes pour migration
+            // Remove legacy classes kept for migration purposes
             !cls.startsWith('carousel-cols-') &&
             cls !== 'carousel-min-width' &&
-            !cls.startsWith('nbc-carousel-icon-')
+            !cls.startsWith('nbc-carousel-icon-') &&
+            cls !== 'nbc-carousel-hide-arrows' &&
+            cls !== 'nbc-carousel-hide-markers'
         );
 
         if (enabled) {
-          // Ajouter la classe 'nbc-carousel' si elle n'existe pas
+          // Add the 'nbc-carousel' class if it is not already present
           if (!filteredClasses.includes('nbc-carousel')) {
             filteredClasses.push('nbc-carousel');
           }
 
-          // Pour les galeries, détecter et ajouter la classe nbc-carousel-cols-X
+          // For galleries, detect and add the nbc-carousel-cols-X class
           if (name === 'core/gallery') {
             const columnCount = attributes.columns;
 
-            // Si un nombre de colonnes est défini (jusqu'à 8 colonnes)
+            // If a column count is defined (up to 8 columns)
             if (columnCount && columnCount >= 1 && columnCount <= 8) {
               filteredClasses.push(`nbc-carousel-cols-${columnCount}`);
             }
-            // Sinon, utiliser 3 colonnes par défaut
+            // Otherwise default to 3 columns
             else {
               filteredClasses.push('nbc-carousel-cols-3');
             }
           }
 
-          // Pour les grilles (Group et Post Template), détecter et ajouter la classe nbc-carousel-cols-X
+          // For grids (Group and Post Template), detect and add the nbc-carousel-cols-X class
           if (
             (name === 'core/group' || name === 'core/post-template') &&
             attributes.layout?.type === 'grid'
@@ -237,25 +279,25 @@
             const minimumColumnWidth = attributes.layout?.minimumColumnWidth;
             const gridItemPosition = attributes.layout?.gridItemPosition;
 
-            // Vérifier si on est en mode Auto (gridItemPosition === 'auto')
-            // ou si minimumColumnWidth est défini (mode Auto implicite)
+            // Check whether we are in Auto mode (gridItemPosition === 'auto')
+            // or if minimumColumnWidth is defined (implicit Auto mode)
             const isAutoMode = gridItemPosition === 'auto' || (minimumColumnWidth && !columnCount);
 
-            // Si un nombre de colonnes est défini (jusqu'à 16 colonnes) ET qu'on n'est pas en mode Auto
+            // If a column count is defined (up to 16 columns) and we are not in Auto mode
             if (columnCount && columnCount >= 1 && columnCount <= 16 && !isAutoMode) {
               filteredClasses.push(`nbc-carousel-cols-${columnCount}`);
             }
-            // Si une largeur minimale est définie OU qu'on est en mode Auto
+            // If a minimum width is defined or we are in Auto mode
             else if (minimumColumnWidth || isAutoMode) {
               filteredClasses.push('nbc-carousel-min-width');
             }
-            // Sinon, utiliser 3 colonnes par défaut
+            // Otherwise default to 3 columns
             else {
               filteredClasses.push('nbc-carousel-cols-3');
             }
           }
         } else {
-          // Retirer la classe 'nbc-carousel'
+          // Remove the 'nbc-carousel' class
           const index = filteredClasses.indexOf('nbc-carousel');
           if (index > -1) {
             filteredClasses.splice(index, 1);
@@ -268,8 +310,7 @@
       };
 
       /**
-       * Synchroniser automatiquement la classe nbc-carousel-cols-X
-       * quand le nombre de colonnes change
+       * Keep the nbc-carousel-cols-X class in sync when column counts change.
        */
       useEffect(() => {
         if (!carouselEnabled) {
@@ -279,7 +320,7 @@
         const currentClasses = attributes.className || '';
         const classArray = currentClasses.split(' ').filter(Boolean);
 
-        // Trouver la classe nbc-carousel-cols-* actuelle
+        // Find the current nbc-carousel-cols-* class
         const currentColsClass = classArray.find((cls) =>
           cls.startsWith('nbc-carousel-cols-')
         );
@@ -288,21 +329,21 @@
         let expectedColsClass = null;
         let shouldHaveMinWidthClass = false;
 
-        // Gestion des galeries
+        // Gallery handling
         if (name === 'core/gallery') {
           const columnCount = attributes.columns;
 
-          // Si un nombre de colonnes est défini (jusqu'à 8 colonnes)
+          // If a column count is defined (up to 8 columns)
           if (columnCount && columnCount >= 1 && columnCount <= 8) {
             expectedColsClass = `nbc-carousel-cols-${columnCount}`;
           }
-          // Sinon, utiliser 3 colonnes par défaut
+          // Otherwise default to 3 columns
           else {
             expectedColsClass = 'nbc-carousel-cols-3';
           }
         }
 
-        // Gestion des grilles (Group et Post Template)
+        // Grid handling (Group and Post Template)
         if (
           (name === 'core/group' || name === 'core/post-template') &&
           attributes.layout?.type === 'grid'
@@ -311,39 +352,43 @@
           const minimumColumnWidth = attributes.layout?.minimumColumnWidth;
           const gridItemPosition = attributes.layout?.gridItemPosition;
 
-          // Vérifier si on est en mode Auto (gridItemPosition === 'auto')
-          // ou si minimumColumnWidth est défini (mode Auto implicite)
-          const isAutoMode = gridItemPosition === 'auto' || (minimumColumnWidth && !columnCount);
-
-          // Si un nombre de colonnes est défini (jusqu'à 16 colonnes) ET qu'on n'est pas en mode Auto
-          if (columnCount && columnCount >= 1 && columnCount <= 16 && !isAutoMode) {
+          // IMPORTANT: if columnCount is defined, ignore minimumColumnWidth and gridItemPosition
+          // because they may originate from a previous list layout and must not affect manual grids
+          if (columnCount && columnCount >= 1 && columnCount <= 16) {
+            // Manual grid mode: ignore minimumColumnWidth and gridItemPosition
             expectedColsClass = `nbc-carousel-cols-${columnCount}`;
             shouldHaveMinWidthClass = false;
           }
-          // Si une largeur minimale est définie OU qu'on est en mode Auto
-          else if (minimumColumnWidth || isAutoMode) {
-            expectedColsClass = null;
-            shouldHaveMinWidthClass = true;
-          }
-          // Sinon, utiliser 3 colonnes par défaut
+          // If no columnCount, check whether we are in Auto mode
           else {
-            expectedColsClass = 'nbc-carousel-cols-3';
-            shouldHaveMinWidthClass = false;
+            // Check if we are in Auto mode (gridItemPosition === 'auto')
+            // or if minimumColumnWidth is defined (implicit Auto mode)
+            const isAutoMode = gridItemPosition === 'auto' || minimumColumnWidth;
+
+            if (isAutoMode) {
+              expectedColsClass = null;
+              shouldHaveMinWidthClass = true;
+            }
+            // Otherwise default to 3 columns
+            else {
+              expectedColsClass = 'nbc-carousel-cols-3';
+              shouldHaveMinWidthClass = false;
+            }
           }
         }
 
-        // Si les classes ne correspondent pas, les mettre à jour
+        // If the classes do not match expectations, update them
         if (currentColsClass !== expectedColsClass || hasMinWidthClass !== shouldHaveMinWidthClass) {
           const filteredClasses = classArray.filter(
             (cls) =>
               !cls.startsWith('nbc-carousel-cols-') &&
               cls !== 'nbc-carousel-min-width' &&
-              // Retirer aussi les anciennes classes pour migration
+              // Remove legacy classes kept for migration purposes
               !cls.startsWith('carousel-cols-') &&
               cls !== 'carousel-min-width'
           );
 
-          // Ajouter la nouvelle classe si nécessaire
+          // Add the new class if needed
           if (expectedColsClass) {
             filteredClasses.push(expectedColsClass);
           }
@@ -358,22 +403,35 @@
       }, [
         carouselEnabled,
         name,
-        attributes.columns, // Pour les galeries
-        layoutKey, // Pour les grids
+        attributes.columns, // For galleries
+        layoutKey, // For grids
       ]);
 
       useEffect(() => {
         const currentClasses = attributes.className || '';
         const classArray = currentClasses.split(' ').filter(Boolean);
-        const withoutIconClasses = classArray.filter((cls) => !cls.startsWith('nbc-carousel-icon-'));
+        const baseClasses = classArray.filter(
+          (cls) =>
+            !cls.startsWith('nbc-carousel-icon-') &&
+            cls !== 'nbc-carousel-hide-arrows' &&
+            cls !== 'nbc-carousel-hide-markers'
+        );
         const normalizedStyle = normalizedArrowStyle;
         const desiredClass = `nbc-carousel-icon-${normalizedStyle}`;
 
-        let nextClasses = withoutIconClasses;
+        let nextClasses = [...baseClasses];
 
         if (carouselEnabled) {
-          if (!withoutIconClasses.includes(desiredClass)) {
-            nextClasses = [...withoutIconClasses, desiredClass];
+          if (carouselShowArrows) {
+            if (!nextClasses.includes(desiredClass)) {
+              nextClasses.push(desiredClass);
+            }
+          } else if (!nextClasses.includes('nbc-carousel-hide-arrows')) {
+            nextClasses.push('nbc-carousel-hide-arrows');
+          }
+
+          if (!carouselShowMarkers && !nextClasses.includes('nbc-carousel-hide-markers')) {
+            nextClasses.push('nbc-carousel-hide-markers');
           }
         }
 
@@ -384,6 +442,10 @@
           setAttributes({
             className: nextClassName,
           });
+        }
+
+        if (!carouselEnabled || !carouselShowArrows) {
+          return;
         }
 
         if (typeof window !== 'undefined') {
@@ -422,7 +484,7 @@
             });
           }
         }
-      }, [carouselEnabled, carouselArrowStyle, clientId, attributes.className]);
+      }, [carouselEnabled, carouselArrowStyle, carouselShowArrows, carouselShowMarkers, clientId, attributes.className]);
 
       const ensureArrowStyleControlsCss = () => {
         if (typeof document === 'undefined') {
@@ -438,6 +500,14 @@
         style.id = styleId;
         style.type = 'text/css';
         style.textContent = `
+          .nbc-arrow-style-panel .components-base-control__field,
+          .nbc-arrow-style-panel .components-toggle-group-control {
+            display: grid;
+            justify-content: center;
+          }
+          .nbc-arrow-style-panel .components-toggle-group-control {
+            width: 100%;
+          }
           .nbc-arrow-style-panel .nbc-arrow-style-group {
             gap: 8px;
           }
@@ -446,10 +516,14 @@
             flex-wrap: wrap;
           }
           .nbc-arrow-style-group .components-toggle-group-control__option {
-            width: 48px;
-            height: 48px;
+            --nbc-arrow-option-size: 44px;
+            width: var(--nbc-arrow-option-size);
+            height: var(--nbc-arrow-option-size);
+            min-width: var(--nbc-arrow-option-size);
+            min-height: var(--nbc-arrow-option-size);
+            flex: 0 0 var(--nbc-arrow-option-size);
             padding: 0;
-            border-radius: 6px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -457,7 +531,16 @@
             border: 1px solid rgba(0, 0, 0, 0.08);
             background: #f8f9fa;
             color: #1e1e1e;
-            transition: box-shadow .2s ease, transform .2s ease;
+            transition: box-shadow .2s ease, transform .2s ease, color .2s ease;
+            box-sizing: border-box;
+          }
+          .nbc-arrow-style-group .components-toggle-group-control__option > span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            line-height: 0;
           }
           .nbc-arrow-style-group .components-toggle-group-control__option:hover {
             box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
@@ -469,6 +552,13 @@
             color: #fff;
             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
             transform: none;
+          }
+          .nbc-arrow-style-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
           }
           .nbc-arrow-style-icon svg {
             width: 20px;
@@ -496,46 +586,83 @@
               initialOpen: true,
             },
             createElement(ToggleControl, {
-              label: __('Activer le carousel', 'native-blocks-carousel'),
+              label: __('Enable carousel', 'native-blocks-carousel'),
               checked: carouselEnabled,
               __nextHasNoMarginBottom: true,
               onChange: toggleCarousel,
               help: carouselEnabled
                 ? name === 'core/gallery'
                   ? __(
-                    'Le carousel est activé. Le nombre de colonnes visibles est détecté automatiquement depuis les paramètres de la galerie.',
+                    'Carousel is enabled. The number of visible columns is detected automatically from the gallery settings.',
                     'native-blocks-carousel'
                   )
                   : (name === 'core/group' || name === 'core/post-template') && attributes.layout?.type === 'grid'
                     ? attributes.layout?.minimumColumnWidth
                       ? __(
-                        'Le carousel est activé en mode Auto. La largeur des slides est définie par la "Largeur minimale de colonne" (' + attributes.layout.minimumColumnWidth + ').',
+                        'Carousel is enabled in Auto mode. Slide width is set by the "Minimum column width" (' + attributes.layout.minimumColumnWidth + ').',
                         'native-blocks-carousel'
                       )
                       : attributes.layout?.columnCount
                         ? __(
-                          'Le carousel est activé en mode Manual. Le nombre de colonnes visibles (' + attributes.layout.columnCount + ') est détecté depuis les paramètres de la grille.',
+                          'Carousel is enabled in Manual mode. The number of visible columns (' + attributes.layout.columnCount + ') is taken from the grid settings.',
                           'native-blocks-carousel'
                         )
                         : __(
-                          'Le carousel est activé. Configurez le nombre de colonnes ou la largeur minimale dans les paramètres de la grille.',
+                          'Carousel is enabled. Configure the column count or minimum width in the grid settings.',
                           'native-blocks-carousel'
                         )
                     : __(
-                      'Le carousel est activé. Les éléments défilent horizontalement.',
+                      'Carousel is enabled. Items scroll horizontally.',
                       'native-blocks-carousel'
                     )
                 : __(
-                  'Activez pour transformer ce bloc en carousel avec navigation. Vous pouvez ensuite choisir entre le mode Manual (nombre de colonnes) ou Auto (largeur minimale de colonne).',
+                  'Enable to convert this block into a carousel with navigation. You can then choose Manual mode (column count) or Auto mode (minimum column width).',
                   'native-blocks-carousel'
                 ),
-            })
-            ,
+            }),
             carouselEnabled
+              ? createElement(ToggleControl, {
+                label: __('Display navigation arrows', 'native-blocks-carousel'),
+                checked: carouselShowArrows,
+                __nextHasNoMarginBottom: true,
+                onChange: (value) => {
+                  setAttributes({ carouselShowArrows: value });
+                },
+                help: carouselShowArrows
+                  ? __(
+                    'Navigation arrows are visible on the carousel.',
+                    'native-blocks-carousel'
+                  )
+                  : __(
+                    'Arrows are hidden. Users can navigate via swipe or scroll.',
+                    'native-blocks-carousel'
+                  ),
+              })
+              : null,
+            carouselEnabled
+              ? createElement(ToggleControl, {
+                label: __('Display pagination markers', 'native-blocks-carousel'),
+                checked: carouselShowMarkers,
+                __nextHasNoMarginBottom: true,
+                onChange: (value) => {
+                  setAttributes({ carouselShowMarkers: value });
+                },
+                help: carouselShowMarkers
+                  ? __(
+                    'Pagination markers are displayed below the carousel.',
+                    'native-blocks-carousel'
+                  )
+                  : __(
+                    'Pagination markers are hidden for a cleaner layout.',
+                    'native-blocks-carousel'
+                  ),
+              })
+              : null,
+            carouselEnabled && carouselShowArrows
               ? createElement(
                 PanelBody,
                 {
-                  title: __('Style de flèches', 'native-blocks-carousel'),
+                  title: __('Arrow style', 'native-blocks-carousel'),
                   initialOpen: true,
                   className: 'nbc-arrow-style-panel',
                 },
@@ -553,24 +680,15 @@
                     },
                   },
                   arrowStyleOptions.map((option) =>
-                    createElement(
-                      ToggleGroupControlOption,
-                      {
-                        key: option.value,
-                        value: option.value,
-                        label: option.label,
-                        className: 'nbc-arrow-style-option',
-                      },
-                      createElement(
-                        'span',
-                        {
-                          className: 'nbc-arrow-style-icon',
-                          dangerouslySetInnerHTML: { __html: buildIconSvg(option.value) },
-                          role: 'img',
-                          'aria-hidden': true,
-                        }
-                      )
-                    )
+                    createElement(ArrowOptionComponent, {
+                      key: option.value,
+                      value: option.value,
+                      label: option.label,
+                      icon: buildIconElement(option.value),
+                      className: 'nbc-arrow-style-option',
+                      'aria-label': option.label,
+                      showTooltip: true,
+                    })
                   )
                 )
               )
@@ -582,21 +700,21 @@
   }, 'withCarouselControl');
 
   /**
-   * Wrapper pour injecter les styles inline du carousel dans l'éditeur
-   * (minimumColumnWidth, blockGap, etc.)
+   * Wrapper to inject carousel inline styles in the editor
+   * (minimumColumnWidth, blockGap, etc.).
    */
   const withCarouselStyles = createHigherOrderComponent((BlockListBlock) => {
     return (props) => {
       const { attributes, name } = props;
 
-      // Ne s'applique qu'aux blocs avec carousel activé
+      // Applies only to blocks with the carousel enabled
       if (!attributes.carouselEnabled) {
         return createElement(BlockListBlock, props);
       }
 
       const customStyles = {};
 
-      // Corriger le gap en utilisant la valeur calculée en direct
+      // Adjust the gap using the computed value directly
       if (typeof window !== 'undefined' && window.getComputedStyle) {
         const node = props?.clientId ? document.querySelector(`[data-block="${props.clientId}"]`) : null;
         const carouselNode = node && node.classList.contains('nbc-carousel') ? node : node?.querySelector?.('.nbc-carousel');
@@ -608,7 +726,7 @@
         }
       }
 
-      // 1. Injecter --carousel-min-width pour les Grids avec minimumColumnWidth
+      // 1. Inject --carousel-min-width for grids using minimumColumnWidth
       if (
         (name === 'core/group' || name === 'core/post-template') &&
         attributes.layout?.type === 'grid' &&
@@ -617,31 +735,31 @@
         customStyles['--carousel-min-width'] = attributes.layout.minimumColumnWidth;
       }
 
-      // 2. Injecter --wp--style--block-gap pour tous les carousels
+      // 2. Inject --wp--style--block-gap for every carousel
       let blockGap = attributes.style?.spacing?.blockGap;
 
-      // Exception pour Gallery : utiliser le gap horizontal (left) pour le carousel
+      // Exception for Gallery: use the horizontal gap (left) for the carousel
       if (name === 'core/gallery' && blockGap && typeof blockGap === 'object') {
         blockGap = blockGap.left || blockGap.top || null;
       }
 
-      // Si c'est un preset WordPress (ex: "var:preset|spacing|50"), le convertir
+      // If it is a WordPress preset (e.g. "var:preset|spacing|50"), convert it
       if (blockGap && typeof blockGap === 'string' && blockGap.startsWith('var:preset|spacing|')) {
         const presetSlug = blockGap.replace('var:preset|spacing|', '');
         blockGap = `var(--wp--preset--spacing--${presetSlug})`;
       }
 
-      // Injecter le gap (même si c'est "0" pour None)
+      // Inject the gap (even when it is "0" for None)
       if (blockGap !== undefined && blockGap !== null && blockGap !== '' && !customStyles['--wp--style--block-gap']) {
-        // Convertir "0" en "0px" pour les calculs CSS
+        // Convert "0" to "0px" for CSS calculations
         customStyles['--wp--style--block-gap'] = (blockGap === '0' || blockGap === 0) ? '0px' : blockGap;
       }
 
-      // 3. Injecter les variables de padding depuis les attributs du bloc
+      // 3. Inject padding variables from the block attributes
       const spacing = attributes.style?.spacing || {};
       const padding = spacing.padding || null;
 
-      // Fonction pour convertir les presets WordPress
+      // Helper to convert WordPress presets
       const convertPreset = (value) => {
         if (typeof value === 'string' && value.startsWith('var:preset|spacing|')) {
           const presetSlug = value.replace('var:preset|spacing|', '');
@@ -650,7 +768,7 @@
         return value;
       };
 
-      // Extraire padding-left, padding-right, padding-top et padding-bottom
+      // Extract padding-left, padding-right, padding-top and padding-bottom
       let paddingLeft = null;
       let paddingRight = null;
       let paddingTop = null;
@@ -663,7 +781,7 @@
           paddingTop = padding.top || null;
           paddingBottom = padding.bottom || null;
         } else if (typeof padding === 'string' && padding !== '') {
-          // Si c'est une valeur unique (appliquée à tous les côtés)
+          // If it is a single value (applied to every side)
           paddingLeft = padding;
           paddingRight = padding;
           paddingTop = padding;
@@ -671,7 +789,7 @@
         }
       }
 
-      // Injecter les variables de padding
+      // Inject padding variables
       if (paddingLeft !== null) {
         paddingLeft = convertPreset(paddingLeft);
         customStyles['--carousel-padding-left'] = (paddingLeft === '0' || paddingLeft === 0) ? '0px' : paddingLeft;
@@ -704,12 +822,12 @@
         customStyles['--carousel-padding-bottom'] = '1rem';
       }
 
-      // Si aucun style à injecter, retourner le bloc tel quel
+      // If there is nothing to inject, return the block as-is
       if (Object.keys(customStyles).length === 0) {
         return createElement(BlockListBlock, props);
       }
 
-      // Créer le wrapper avec les styles inline
+      // Create the wrapper with inline styles
       const wrapperProps = {
         ...props,
         wrapperProps: {
@@ -726,7 +844,7 @@
     };
   }, 'withCarouselStyles');
 
-  // Enregistrer les filtres
+  // Register filters
   addFilter(
     'blocks.registerBlockType',
     'native-blocks-carousel/add-carousel-attribute',
@@ -746,20 +864,20 @@
   );
 
   /**
-   * Copie les variables CSS de padding du carousel vers le parent
-   * (nécessaire pour les boutons fallback qui sont sur le parent)
-   * Les variables sont déjà injectées depuis les attributs React via withCarouselStyles
+   * Copies carousel padding variables to the parent element
+   * (required for fallback buttons positioned on the parent).
+   * Variables are already injected from React attributes via withCarouselStyles.
    */
   function copyPaddingVariablesToParent() {
     const carousels = document.querySelectorAll('.nbc-carousel');
     carousels.forEach(function (carousel) {
       const computedStyle = window.getComputedStyle(carousel);
 
-      // Lire les variables CSS déjà injectées depuis les attributs React
+      // Read CSS variables already injected through React attributes
       const paddingLeft = computedStyle.getPropertyValue('--carousel-padding-left').trim() || '0px';
       const paddingRight = computedStyle.getPropertyValue('--carousel-padding-right').trim() || '0px';
 
-      // Copier les variables sur le parent pour les boutons fallback
+      // Copy the variables to the parent element for fallback buttons
       const parent = carousel.parentElement;
       if (parent) {
         parent.style.setProperty('--carousel-padding-left', paddingLeft);
@@ -769,11 +887,11 @@
   }
 
   /**
-   * Initialise la copie des variables de padding dans l'éditeur
+   * Initialise copying of padding variables inside the editor.
    */
   function applyScrollPaddingInEditor() {
 
-    // Exécuter après le rendu initial avec requestAnimationFrame
+    // Run after the initial render using requestAnimationFrame
     function runUpdate() {
       requestAnimationFrame(function () {
         requestAnimationFrame(copyPaddingVariablesToParent);
@@ -786,7 +904,7 @@
       runUpdate();
     }
 
-    // Observer les mutations DOM dans l'éditeur pour copier les variables quand elles changent
+    // Observe DOM mutations in the editor to copy variables when they change
     if (window.MutationObserver) {
       let timeout;
       const observer = new MutationObserver(function () {
@@ -801,7 +919,7 @@
         }, 50);
       });
 
-      // Observer le body de l'éditeur
+      // Observe the editor body
       const editorBody = document.querySelector('.editor-styles-wrapper') || document.body;
       if (editorBody) {
         observer.observe(editorBody, {
@@ -814,19 +932,19 @@
     }
   }
 
-  // Initialiser pour l'éditeur
-  // Utiliser un hook WordPress pour s'assurer que les blocs sont rendus
+  // Initialise for the editor
+  // Use a WordPress hook to ensure blocks are rendered
   if (wp && wp.domReady) {
     wp.domReady(applyScrollPaddingInEditor);
   } else if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', applyScrollPaddingInEditor);
   } else {
-    // Attendre un peu pour que WordPress applique les styles
+    // Wait briefly so WordPress can apply styles
     setTimeout(applyScrollPaddingInEditor, 100);
   }
 
-  // Écouter les changements de blocs dans l'éditeur WordPress avec debounce
-  // Pour copier les variables sur le parent quand les attributs changent
+  // Listen to block changes in the editor with debounce
+  // Copy variables to the parent whenever attributes change
   if (wp && wp.data && wp.data.subscribe) {
     let debounceTimeout;
     wp.data.subscribe(function () {
@@ -843,22 +961,22 @@
   }
 
   /**
-   * Met à jour dynamiquement les couleurs des boutons depuis les styles calculés
-   * Reproduit le comportement de WordPress qui lit directement les styles calculés
+   * Dynamically updates button colors based on computed styles.
+   * Mirrors WordPress behaviour that reads computed styles directly.
    */
   function updateButtonColorsFromTheme() {
     const root = document.documentElement;
     let buttonBg = '';
     let buttonColor = '#fff';
 
-    // Méthode principale : Lire depuis un bouton WordPress réel dans l'éditeur
-    // C'est la méthode la plus fiable car elle lit exactement ce que WordPress applique
+    // Main method: read from a real WordPress button inside the editor
+    // This is the most reliable approach because it matches what WordPress applies
     const editorWrapper = document.querySelector('.editor-styles-wrapper');
     if (editorWrapper) {
-      // Chercher un bouton existant dans l'éditeur
+      // Look for an existing button in the editor
       let referenceButton = editorWrapper.querySelector('.wp-element-button, button.wp-element-button');
 
-      // Si pas de bouton trouvé, en créer un temporaire dans le contexte de l'éditeur
+      // If no button is found, create a temporary one within the editor context
       if (!referenceButton) {
         referenceButton = document.createElement('button');
         referenceButton.className = 'wp-element-button';
@@ -867,16 +985,16 @@
         referenceButton.style.pointerEvents = 'none';
         referenceButton.style.top = '-9999px';
         referenceButton.style.left = '-9999px';
-        referenceButton.textContent = 'Button'; // Nécessaire pour que les styles s'appliquent
+        referenceButton.textContent = 'Button'; // Required so that styles are applied
         editorWrapper.appendChild(referenceButton);
       }
 
-      // Lire les styles calculés (comme WordPress le fait)
+      // Read the computed styles (as WordPress does)
       const buttonComputedStyle = window.getComputedStyle(referenceButton);
       const computedBg = buttonComputedStyle.backgroundColor;
       const computedColor = buttonComputedStyle.color;
 
-      // Utiliser les couleurs calculées si elles sont valides
+      // Use computed colors when they are valid
       if (computedBg && computedBg !== 'rgba(0, 0, 0, 0)' && computedBg !== 'transparent') {
         buttonBg = computedBg;
       }
@@ -885,7 +1003,7 @@
         buttonColor = computedColor;
       }
 
-      // Nettoyer le bouton temporaire si on l'a créé
+      // Remove the temporary button if we created one
       if (referenceButton.parentNode === editorWrapper && referenceButton.style.position === 'absolute') {
         editorWrapper.removeChild(referenceButton);
       }
@@ -907,7 +1025,7 @@
       }
     }
 
-    // Appliquer les couleurs trouvées aux variables CSS du carousel
+    // Apply the retrieved colors to the carousel CSS variables
     if (buttonBg && buttonBg !== 'rgba(0, 0, 0, 0)' && buttonBg !== 'transparent' && buttonBg !== '') {
       root.style.setProperty('--carousel-button-bg', buttonBg);
     }
@@ -917,7 +1035,7 @@
     if (buttonColor && buttonColor !== 'rgba(0, 0, 0, 0)' && buttonColor !== '') {
       root.style.setProperty('--carousel-button-color', buttonColor);
 
-      // Générer les SVG des flèches avec la couleur du texte des boutons
+      // Generate arrow SVGs using the button text color
       const arrowColor = convertColorToHexForSvg(buttonColor, docContext);
       const defaultLeftArrow = generateArrowSvg('left', arrowColor, DEFAULT_ARROW_STYLE);
       const defaultRightArrow = generateArrowSvg('right', arrowColor, DEFAULT_ARROW_STYLE);
@@ -929,7 +1047,7 @@
     applyArrowIconsToCarousels(buttonColor, docContext);
   }
 
-  // Fonction utilitaire pour convertir une couleur en hexadécimal
+  // Utility to convert a color to hexadecimal
   function convertColorToHexForSvg(color, docContext) {
     if (!color) return '#ffffff';
 
@@ -1044,7 +1162,7 @@
         docsToSearch.add(baseDoc);
       }
 
-      // Lorsque le script s'exécute dans le back-office, les blocs sont rendus dans une iframe
+      // When the script runs in the admin, blocks are rendered inside an iframe
       if (baseDoc === document) {
         const iframeSelectors = [
           '.editor-canvas iframe',
@@ -1080,12 +1198,28 @@
       return;
     }
 
-    // Supprimer les doublons éventuels
+    // Remove potential duplicates
     carousels = Array.from(new Set(carousels));
 
     const arrowColorCache = new WeakMap();
 
     carousels.forEach((carousel) => {
+      if (!carousel) {
+        return;
+      }
+
+      const parent = carousel.parentElement;
+
+      if (carousel.classList && carousel.classList.contains('nbc-carousel-hide-arrows')) {
+        carousel.style.setProperty('--carousel-button-arrow-left', 'none');
+        carousel.style.setProperty('--carousel-button-arrow-right', 'none');
+        if (parent) {
+          parent.style.setProperty('--carousel-button-arrow-left', 'none');
+          parent.style.setProperty('--carousel-button-arrow-right', 'none');
+        }
+        return;
+      }
+
       const carouselDoc = carousel?.ownerDocument || baseDoc;
       let arrowColor = arrowColorCache.get(carouselDoc);
       if (!arrowColor) {
@@ -1106,7 +1240,6 @@
       carousel.style.setProperty('--carousel-button-arrow-left', `url("${leftArrowSvg}")`);
       carousel.style.setProperty('--carousel-button-arrow-right', `url("${rightArrowSvg}")`);
 
-      const parent = carousel.parentElement;
       if (parent) {
         if (parent.dataset) {
           parent.dataset.nbcCarouselArrowStyle = styleKey;
@@ -1118,15 +1251,15 @@
   }
 
   /**
-   * Initialise la mise à jour dynamique des couleurs dans l'éditeur de thème (Site Editor)
-   * Observe les changements dans les balises <style> de .editor-styles-wrapper
+   * Initialises dynamic color syncing within the Site Editor.
+   * Observes changes to <style> tags under .editor-styles-wrapper.
    */
   function initThemeEditorColorSync() {
     let lastButtonBg = '';
     let lastButtonColor = '';
     let referenceButton = null;
 
-    // Fonction pour obtenir l'iframe de l'aperçu dans le Site Editor
+    // Helper to retrieve the preview iframe in the Site Editor
     function getPreviewIframe() {
       const iframeElement = document.querySelector('.edit-site-visual-editor__editor-canvas, iframe[name="editor-canvas"]');
       if (iframeElement && iframeElement.contentDocument) {
@@ -1142,7 +1275,7 @@
       return null;
     }
 
-    // Fonction pour créer/maintenir un bouton de référence
+    // Helper to create or keep a reference button
     function getReferenceButton() {
       // D'abord essayer dans l'iframe (Site Editor)
       let doc = getPreviewIframe();
@@ -1160,11 +1293,11 @@
         return null;
       }
 
-      // Chercher un bouton existant
+      // Try to find an existing button
       if (!referenceButton || !editorWrapper.contains(referenceButton)) {
         referenceButton = editorWrapper.querySelector('.wp-element-button, button.wp-element-button');
 
-        // Si pas trouvé, en créer un
+        // If none is found, create one
         if (!referenceButton) {
           referenceButton = doc.createElement('button');
           referenceButton.className = 'wp-element-button';
@@ -1177,7 +1310,7 @@
       return { button: referenceButton, doc: doc };
     }
 
-    // Fonction de mise à jour avec détection de changement
+    // Update routine with change detection
     function checkAndUpdateColors() {
       const buttonData = getReferenceButton();
       if (!buttonData || !buttonData.button) {
@@ -1188,12 +1321,12 @@
       const doc = buttonData.doc;
       const root = doc.documentElement;
 
-      // Lire les styles calculés actuels
+      // Read current computed styles
       const buttonComputedStyle = doc.defaultView.getComputedStyle(button);
       const currentBg = buttonComputedStyle.backgroundColor;
       const currentColor = buttonComputedStyle.color;
 
-      // Vérifier si les couleurs ont changé
+      // Check whether the colors changed
       const bgChanged = currentBg !== lastButtonBg &&
         currentBg !== 'rgba(0, 0, 0, 0)' &&
         currentBg !== 'transparent' &&
@@ -1202,12 +1335,12 @@
         currentColor !== 'rgba(0, 0, 0, 0)' &&
         currentColor !== '';
 
-      // Mettre à jour si changement détecté
+      // Update if a change is detected
       if (bgChanged || colorChanged || !lastButtonBg) {
         lastButtonBg = currentBg;
         lastButtonColor = currentColor;
 
-        // Appliquer les nouvelles couleurs dans le bon document (iframe ou page principale)
+        // Apply colors inside the appropriate document (iframe or main page)
         if (currentBg && currentBg !== 'rgba(0, 0, 0, 0)' && currentBg !== 'transparent') {
           root.style.setProperty('--carousel-button-bg', currentBg);
         }
@@ -1215,7 +1348,7 @@
         if (currentColor && currentColor !== 'rgba(0, 0, 0, 0)') {
           root.style.setProperty('--carousel-button-color', currentColor);
 
-          // Générer les SVG des flèches avec la couleur du texte des boutons
+          // Generate arrow SVGs using the button text color
           const arrowColor = convertColorToHexForSvg(currentColor, doc);
           const leftArrowSvg = generateArrowSvg('left', arrowColor, DEFAULT_ARROW_STYLE);
           const rightArrowSvg = generateArrowSvg('right', arrowColor, DEFAULT_ARROW_STYLE);
@@ -1229,20 +1362,20 @@
     }
 
 
-    // Mise à jour initiale après un court délai pour laisser WordPress charger les styles
+    // Initial update after a short delay so WordPress can load styles
     setTimeout(function () {
       updateButtonColorsFromTheme();
       checkAndUpdateColors();
     }, 500);
 
-    // Observer spécifiquement les balises <style> dans .editor-styles-wrapper
-    // WordPress met à jour ces balises quand les styles changent
+    // Observe <style> tags in .editor-styles-wrapper
+    // WordPress updates those tags whenever styles change
     if (window.MutationObserver) {
       const observer = new MutationObserver(function (mutations) {
         let shouldUpdate = false;
 
         mutations.forEach(function (mutation) {
-          // Si une balise <style> a été ajoutée/modifiée
+          // If a <style> tag has been added or modified
           if (mutation.type === 'childList') {
             mutation.addedNodes.forEach(function (node) {
               if (node.nodeName === 'STYLE' || (node.nodeType === 1 && node.tagName === 'STYLE')) {
@@ -1254,7 +1387,7 @@
             });
           }
 
-          // Si le contenu d'une balise <style> a changé
+          // If the contents of a <style> tag change
           if (mutation.type === 'characterData' ||
             (mutation.type === 'attributes' && (mutation.target.tagName === 'STYLE' || mutation.attributeName === 'class'))) {
             shouldUpdate = true;
@@ -1262,7 +1395,7 @@
         });
 
         if (shouldUpdate) {
-          // Attendre un peu pour que WordPress finisse d'appliquer les styles
+          // Wait briefly for WordPress to finish applying styles
           setTimeout(function () {
             requestAnimationFrame(function () {
               requestAnimationFrame(checkAndUpdateColors);
@@ -1271,7 +1404,7 @@
         }
       });
 
-      // Observer .editor-styles-wrapper dans l'iframe ET dans la page principale
+      // Observe .editor-styles-wrapper inside the iframe and the main page
       function observeEditorWrapper(doc) {
         const editorWrapper = doc.querySelector('.editor-styles-wrapper');
         if (editorWrapper) {
@@ -1283,7 +1416,7 @@
             attributeFilter: ['style', 'class']
           });
 
-          // Observer aussi toutes les balises <style> existantes
+          // Also observe every existing <style> tag
           const styleTags = editorWrapper.querySelectorAll('style');
           styleTags.forEach(function (styleTag) {
             observer.observe(styleTag, {
@@ -1295,16 +1428,16 @@
         }
       }
 
-      // Observer dans l'iframe (Site Editor)
+      // Watch the iframe (Site Editor)
       const iframeDoc = getPreviewIframe();
       if (iframeDoc) {
         observeEditorWrapper(iframeDoc);
       }
 
-      // Observer aussi dans la page principale (Block Editor normal)
+      // Watch the main page (regular Block Editor)
       observeEditorWrapper(document);
 
-      // Observer aussi l'iframe lui-même pour détecter quand il se recharge
+      // Observe the iframe itself to detect reloads
       const iframeElement = document.querySelector('.edit-site-visual-editor__editor-canvas, iframe[name="editor-canvas"]');
       if (iframeElement) {
         iframeElement.addEventListener('load', function () {
@@ -1319,21 +1452,21 @@
       }
     }
 
-    // Polling de secours toutes les 200ms (moins agressif)
+    // Fallback polling every 200ms (less aggressive)
     const pollingInterval = setInterval(function () {
       requestAnimationFrame(checkAndUpdateColors);
     }, 200);
 
-    // Nettoyer l'intervalle quand on quitte la page
+    // Clear the interval when leaving the page
     window.addEventListener('beforeunload', function () {
       clearInterval(pollingInterval);
     });
   }
 
-  // Initialiser la synchronisation des couleurs dans l'éditeur de thème
-  // Utiliser plusieurs méthodes pour s'assurer que ça fonctionne
+  // Initialise color synchronisation in the Site Editor
+  // Use multiple mechanisms to keep it reliable
 
-  // Méthode 1 : Via wp.domReady
+  // Method 1: via wp.domReady
   if (wp && wp.domReady) {
     wp.domReady(initThemeEditorColorSync);
   } else if (document.readyState === 'loading') {
@@ -1342,30 +1475,30 @@
     setTimeout(initThemeEditorColorSync, 200);
   }
 
-  // Méthode 2 : Écouter les changements via wp.data (store Redux)
-  // WordPress utilise Redux pour gérer l'état de l'éditeur
+  // Method 2: listen to changes through wp.data (Redux store)
+  // WordPress relies on Redux to manage editor state
   if (wp && wp.data && wp.data.subscribe) {
     let settingsCheckInterval = null;
 
-    // Attendre que le store soit prêt
+    // Wait for the store to be ready
     const initDataListener = function () {
       try {
         const select = wp.data.select('core/block-editor');
         if (select && select.getSettings) {
           let lastStylesString = '';
 
-          // Vérifier périodiquement les settings
+          // Check the settings periodically
           settingsCheckInterval = setInterval(function () {
             try {
               const settings = select.getSettings();
               if (settings && settings.styles) {
-                // Convertir les styles en string pour comparer
+                // Convert styles to string for comparison
                 const currentStylesString = JSON.stringify(settings.styles.elements?.button || {});
 
                 if (currentStylesString !== lastStylesString) {
                   lastStylesString = currentStylesString;
 
-                  // Déclencher une mise à jour
+                  // Trigger an update
                   requestAnimationFrame(function () {
                     requestAnimationFrame(function () {
                       const button = document.querySelector('.editor-styles-wrapper .wp-element-button, .editor-styles-wrapper button.wp-element-button');
@@ -1388,17 +1521,17 @@
                 }
               }
             } catch (e) {
-              // Ignorer les erreurs
+              // Ignore errors
             }
           }, 150);
         }
       } catch (e) {
-        // Le store n'est pas encore disponible, réessayer plus tard
+        // Store not ready yet; retry later
         setTimeout(initDataListener, 500);
       }
     };
 
-    // Démarrer après un délai pour laisser WordPress initialiser
+    // Start after a delay so WordPress can initialise
     setTimeout(initDataListener, 1000);
   }
 

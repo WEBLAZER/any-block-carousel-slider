@@ -1,6 +1,6 @@
 <?php
 /**
- * Gestion de l'activation et la désactivation du plugin.
+ * Handles plugin activation and deactivation.
  *
  * @package NativeBlocksCarousel
  */
@@ -10,12 +10,12 @@ declare(strict_types=1);
 namespace Weblazer\NativeBlocksCarousel;
 
 /**
- * Vérifie la compatibilité lors de l'activation du plugin.
+ * Checks compatibility during plugin activation.
  */
 class Activator
 {
     /**
-     * Exécuté lors de l'activation du plugin.
+     * Runs on plugin activation.
      *
      * @return void
      */
@@ -23,26 +23,26 @@ class Activator
     {
         if (\version_compare(\get_bloginfo('version'), '6.0', '<')) {
             \wp_die(
-                \esc_html__('Ce plugin nécessite WordPress 6.0 ou plus récent.', 'native-blocks-carousel'),
-                \esc_html__('Version WordPress insuffisante', 'native-blocks-carousel')
+                \esc_html__('This plugin requires WordPress 6.0 or later.', 'native-blocks-carousel'),
+                \esc_html__('WordPress version too low', 'native-blocks-carousel')
             );
         }
 
         if (\version_compare(\PHP_VERSION, '7.4', '<')) {
             \wp_die(
-                \esc_html__('Ce plugin nécessite PHP 7.4 ou plus récent.', 'native-blocks-carousel'),
-                \esc_html__('Version PHP insuffisante', 'native-blocks-carousel')
+                \esc_html__('This plugin requires PHP 7.4 or later.', 'native-blocks-carousel'),
+                \esc_html__('PHP version too low', 'native-blocks-carousel')
             );
         }
     }
 
     /**
-     * Exécuté lors de la désactivation du plugin.
+     * Runs on plugin deactivation.
      *
      * @return void
      */
     public static function deactivate(): void
     {
-        // Nettoyage futur si nécessaire.
+        // Reserved for future cleanup if required.
     }
 }
