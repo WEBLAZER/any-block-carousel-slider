@@ -19,8 +19,12 @@ Unlike many all-in-one carousel slider blocks that require you to add a dedicate
 
 = Try it now =
 
-Test **Any Block Carousel Slider** dans WordPress Playground via ce lien direct : [https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/WEBLAZER/any-block-carousel-slider/main/.wordpress-org/playground-blueprint.json](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/WEBLAZER/any-block-carousel-slider/main/.wordpress-org/playground-blueprint.json).  
-Le plugin est déjà activé et 6 articles fictifs avec images (Picsum) sont générés automatiquement, prêts à être transformés en carrousels via la bascule Gutenberg.
+Test **Any Block Carousel Slider** dans WordPress Playground :
+
+* **Version Lite** (plugin actif + 6 posts à configurer toi-même)  
+  [https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/WEBLAZER/any-block-carousel-slider/main/.wordpress-org/playground-blueprint-lite.json](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/WEBLAZER/any-block-carousel-slider/main/.wordpress-org/playground-blueprint-lite.json)
+* **Version Complète** (ancien blueprint avec contenu démo étendu)  
+  [https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/WEBLAZER/any-block-carousel-slider/main/.wordpress-org/playground-blueprint.json](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/WEBLAZER/any-block-carousel-slider/main/.wordpress-org/playground-blueprint.json)
 
 = Why Any Block Carousel Slider instead of a dedicated carousel slider block? =
 
