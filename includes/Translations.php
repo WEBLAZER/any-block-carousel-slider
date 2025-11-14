@@ -18,7 +18,8 @@ class Translations implements TranslationServiceInterface
      */
     public function register(): void
     {
-        add_action('plugins_loaded', [$this, 'loadTranslations']);
+        // Since WordPress 4.6, translation files for plugins hosted on WordPress.org
+        // are loaded automatically based on the plugin headers. No action is required here.
     }
 
     /**
@@ -26,10 +27,6 @@ class Translations implements TranslationServiceInterface
      */
     public function loadTranslations(): void
     {
-        load_plugin_textdomain(
-            'any-block-carousel-slider',
-            false,
-            dirname(plugin_basename(ANY_BLOCK_CAROUSEL_SLIDER_PLUGIN_FILE)) . '/languages'
-        );
+        // Intentionally left blank: WordPress loads translations automatically.
     }
 }

@@ -1,18 +1,25 @@
 {
 	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"landingPage": "/wp-admin/edit.php?post_type=page",
+	"preferredVersions": {
+		"wp": "6.6",
+		"php": "8.2"
+	},
 	"steps": [
 		{
-			"step": "login",
-			"username": "admin",
-			"password": "password"
-		},
-		{
-			"step": "runPHP",
-			"code": "<?php\nrequire_once ABSPATH . 'wp-admin/includes/file.php';\nrequire_once ABSPATH . 'wp-admin/includes/plugin-install.php';\nrequire_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';\nrequire_once ABSPATH . 'wp-admin/includes/plugin.php';\n\n// Download and install plugin from GitHub\n$plugin_url = 'https://github.com/WEBLAZER/any-block-carousel-slider/archive/refs/heads/main.zip';\n$upgrader = new Plugin_Upgrader();\n$result = $upgrader->install($plugin_url);\n\n// Rename directory if needed\n$old_dir = WP_PLUGIN_DIR . '/any-block-carousel-slider-main';\n$new_dir = WP_PLUGIN_DIR . '/any-block-carousel-slider';\nif (file_exists($old_dir) && !file_exists($new_dir)) {\n    rename($old_dir, $new_dir);\n}\n"
+			"step": "installPlugin",
+			"pluginZipFile": {
+				"resource": "url",
+				"url": "https://raw.githubusercontent.com/WEBLAZER/any-block-carousel-slider/main/.wordpress-org/any-block-carousel-slider-playground.zip"
+			}
 		},
 		{
 			"step": "activatePlugin",
 			"pluginName": "any-block-carousel-slider/any-block-carousel-slider.php"
+		},
+		{
+			"step": "runWpCli",
+			"command": "wp site empty --yes --uploads"
 		},
 		{
 			"step": "importWxr",

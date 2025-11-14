@@ -233,15 +233,15 @@
       const arrowStyleOptions = [
         {
           value: 'chevron',
-          label: __('Chevron', 'any-block-carousel-slider'),
+          label: __('Chevron', 'native-blocks-carousel'),
         },
         {
           value: 'arrow',
-          label: __('Arrow', 'any-block-carousel-slider'),
+          label: __('Arrow', 'native-blocks-carousel'),
         },
         {
           value: 'angles',
-          label: __('Angles', 'any-block-carousel-slider'),
+          label: __('Angles', 'native-blocks-carousel'),
         },
       ];
 
@@ -661,11 +661,11 @@
           createElement(
             PanelBody,
             {
-              title: __('Carousel', 'any-block-carousel-slider'),
+              title: __('Carousel', 'native-blocks-carousel'),
               initialOpen: true,
             },
             createElement(ToggleControl, {
-              label: __('Enable carousel', 'any-block-carousel-slider'),
+              label: __('Enable carousel', 'native-blocks-carousel'),
               checked: carouselEnabled,
               __nextHasNoMarginBottom: true,
               onChange: toggleCarousel,
@@ -673,35 +673,35 @@
                 ? name === 'core/gallery'
                   ? __(
                     'Carousel is enabled. The number of visible columns is detected automatically from the gallery settings.',
-                    'any-block-carousel-slider'
+                    'native-blocks-carousel'
                   )
                   : (name === 'core/group' || name === 'core/post-template') && attributes.layout?.type === 'grid'
                     ? attributes.layout?.minimumColumnWidth
                       ? __(
                         'Carousel is enabled in Auto mode. Slide width is set by the "Minimum column width" (' + attributes.layout.minimumColumnWidth + ').',
-                        'any-block-carousel-slider'
+                        'native-blocks-carousel'
                       )
                       : attributes.layout?.columnCount
                         ? __(
                           'Carousel is enabled in Manual mode. The number of visible columns (' + attributes.layout.columnCount + ') is taken from the grid settings.',
-                          'any-block-carousel-slider'
+                          'native-blocks-carousel'
                         )
                         : __(
                           'Carousel is enabled. Configure the column count or minimum width in the grid settings.',
-                          'any-block-carousel-slider'
+                          'native-blocks-carousel'
                         )
                     : __(
                       'Carousel is enabled. Items scroll horizontally.',
-                      'any-block-carousel-slider'
+                      'native-blocks-carousel'
                     )
                 : __(
                   'Enable to convert this block into a carousel with navigation. You can then choose Manual mode (column count) or Auto mode (minimum column width).',
-                  'any-block-carousel-slider'
+                  'native-blocks-carousel'
                 ),
             }),
             carouselEnabled
               ? createElement(ToggleControl, {
-                label: __('Display navigation arrows', 'any-block-carousel-slider'),
+                label: __('Display navigation arrows', 'native-blocks-carousel'),
                 checked: carouselShowArrows,
                 __nextHasNoMarginBottom: true,
                 onChange: (value) => {
@@ -710,17 +710,17 @@
                 help: carouselShowArrows
                   ? __(
                     'Navigation arrows are visible on the carousel.',
-                    'any-block-carousel-slider'
+                    'native-blocks-carousel'
                   )
                   : __(
                     'Arrows are hidden. Users can navigate via swipe or scroll.',
-                    'any-block-carousel-slider'
+                    'native-blocks-carousel'
                   ),
               })
               : null,
             carouselEnabled
               ? createElement(ToggleControl, {
-                label: __('Display pagination markers', 'any-block-carousel-slider'),
+                label: __('Display pagination markers', 'native-blocks-carousel'),
                 checked: carouselShowMarkers,
                 __nextHasNoMarginBottom: true,
                 onChange: (value) => {
@@ -729,11 +729,11 @@
                 help: carouselShowMarkers
                   ? __(
                     'Pagination markers are displayed below the carousel.',
-                    'any-block-carousel-slider'
+                    'native-blocks-carousel'
                   )
                   : __(
                     'Pagination markers are hidden for a cleaner layout.',
-                    'any-block-carousel-slider'
+                    'native-blocks-carousel'
                   ),
               })
               : null,
@@ -741,7 +741,7 @@
               ? createElement(
                 PanelBody,
                 {
-                  title: __('Arrow style', 'any-block-carousel-slider'),
+                  title: __('Arrow style', 'native-blocks-carousel'),
                   initialOpen: true,
                   className: 'abcs-arrow-style-panel',
                 },

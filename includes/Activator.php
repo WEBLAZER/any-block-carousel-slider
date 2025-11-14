@@ -23,15 +23,15 @@ class Activator
     {
         if (\version_compare(\get_bloginfo('version'), '6.0', '<')) {
             \wp_die(
-                \esc_html__('This plugin requires WordPress 6.0 or later.', 'any-block-carousel-slider'),
-                \esc_html__('WordPress version too low', 'any-block-carousel-slider')
+                \esc_html__('This plugin requires WordPress 6.0 or later.', 'native-blocks-carousel'),
+                \esc_html__('WordPress version too low', 'native-blocks-carousel')
             );
         }
 
         if (\version_compare(\PHP_VERSION, '7.4', '<')) {
             \wp_die(
-                \esc_html__('This plugin requires PHP 7.4 or later.', 'any-block-carousel-slider'),
-                \esc_html__('PHP version too low', 'any-block-carousel-slider')
+                \esc_html__('This plugin requires PHP 7.4 or later.', 'native-blocks-carousel'),
+                \esc_html__('PHP version too low', 'native-blocks-carousel')
             );
         }
     }

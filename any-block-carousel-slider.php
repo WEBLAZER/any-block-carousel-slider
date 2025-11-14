@@ -8,7 +8,7 @@
  * Author URI: https://weblazer.fr
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: any-block-carousel-slider
+ * Text Domain: native-blocks-carousel
  * Domain Path: /languages
  * Requires at least: 6.0
  * Tested up to: 6.8
