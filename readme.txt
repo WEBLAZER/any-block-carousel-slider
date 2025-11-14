@@ -4,7 +4,7 @@ Donate link: https://weblazer.github.io/
 Tags: carousel, slider, block, gutenberg, woocommerce
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 1.0.3.4
+Stable tag: 1.0.3.5
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -167,6 +167,13 @@ Visual arrows remain visible (disabled state) and users navigate via touch scrol
 5. Custom CSS variables to adapt the carousel slider design.
 
 == Changelog ==
+
+= 1.0.3.5 - 2025-11-14 =
+* ♻️ Align plugin text domain with official WordPress.org slug.
+* 🧼 Renamed local plugin/SVN directories to remove text-domain lint warnings.
+
+= 1.0.3.4 - 2025-11-14 =
+* 🏷️ Published the 1.0.3.4 release tag on WordPress.org.
 
 = 1.0.3.3 - 2025-11-13 =
 * 🔗 Simplified WordPress Playground link in "Try it now" section.
