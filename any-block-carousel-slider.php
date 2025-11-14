@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Any Block Carousel Slider
- * Plugin URI: https://github.com/WEBLAZER/any-block-carousel-slider
+ * Plugin URI: https://wordpress.org/plugins/native-blocks-carousel/
  * Description: Transform any WordPress block into a performant carousel with pure CSS. Zero JavaScript, works with Gallery, Grid, Post Template, and Group blocks.
  * Version: 1.0.3.3
  * Author: weblazer35

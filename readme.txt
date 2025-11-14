@@ -21,7 +21,7 @@ Unlike many all-in-one carousel slider blocks that require you to add a dedicate
 
 Test **Any Block Carousel Slider** dans WordPress Playground :
 
-[https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/WEBLAZER/any-block-carousel-slider/main/.wordpress-org/playground-blueprint-v4.json](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/WEBLAZER/any-block-carousel-slider/main/.wordpress-org/playground-blueprint-v4.json)
+[https://playground.wordpress.net/?blueprint-url=https://native-blocks-carousel.weblazer.fr/wp-content/plugins/any-block-carousel-slider/playground-blueprint-v4.json](https://playground.wordpress.net/?blueprint-url=https://native-blocks-carousel.weblazer.fr/wp-content/plugins/any-block-carousel-slider/playground-blueprint-v4.json)
 
 = Why Any Block Carousel Slider instead of a dedicated carousel slider block? =
 
@@ -230,7 +230,7 @@ Recommended update: manage arrow and marker visibility directly from the editor 
 
 = GitHub Repository =
 
-Source code is available on GitHub: [https://github.com/WEBLAZER/any-block-carousel-slider](https://github.com/WEBLAZER/any-block-carousel-slider)
+Source code is available on GitHub: [https://github.com/WEBLAZER/native-blocks-carousel](https://github.com/WEBLAZER/native-blocks-carousel)
 
 = Contributions =
 
