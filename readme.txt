@@ -17,12 +17,6 @@ Gutenberg carousel slider block: transform any WordPress block into a responsive
 
 Unlike many all-in-one carousel slider blocks that require you to add a dedicated "Carousel" block and rebuild every slide, **Any Block Carousel Slider** hooks straight into the Gutenberg blocks you already use. The result: a Query Loop/Post Template, Group, or Gallery block can become a carousel slider in one click, without content duplication or extra maintenance.
 
-= Try it now =
-
-Test **Any Block Carousel Slider** dans WordPress Playground :
-
-[https://playground.wordpress.net/?blueprint-url=https://native-blocks-carousel.weblazer.fr/wp-content/plugins/any-block-carousel-slider/playground-blueprint-v4.json](https://playground.wordpress.net/?blueprint-url=https://native-blocks-carousel.weblazer.fr/wp-content/plugins/any-block-carousel-slider/playground-blueprint-v4.json)
-
 = Why Any Block Carousel Slider instead of a dedicated carousel slider block? =
 
 * **WordPress loops without friction** – Transform Query Loop and Post Template Gutenberg blocks into a "loop slider" without creating a block per slide.
